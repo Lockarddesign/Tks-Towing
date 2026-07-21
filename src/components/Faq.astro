@@ -1,0 +1,52 @@
+---
+import SectionHead from './SectionHead.astro';
+import Accordion from './Accordion.astro';
+import Icon from './Icon.astro';
+import { faq, business } from '../site.config';
+---
+
+<section id="faq" class="bg-bone-100 py-24 sm:py-28 lg:py-36">
+  <div class="mx-auto max-w-7xl px-5 sm:px-8">
+    <div class="grid gap-12 lg:grid-cols-12 lg:gap-16">
+      <div class="lg:col-span-4">
+        <SectionHead eyebrow={faq.eyebrow} heading={faq.heading} tone="light" />
+        <div
+          data-reveal="120"
+          class="mt-10 rounded-2xl border border-steel-900/10 bg-white p-7"
+        >
+          <p class="text-[0.95rem] leading-relaxed text-steel-600">
+            Not seeing your question? Call and ask — someone is on the line 24
+            hours a day.
+          </p>
+          <a
+            href={business.phoneHref}
+            class="mt-5 inline-flex items-center gap-2 rounded-full bg-steel-900 px-6 py-3.5 font-display font-bold tracking-tight text-white transition hover:bg-brand-500"
+          >
+            <Icon name="phone" class="h-4 w-4" />
+            {business.phone}
+          </a>
+        </div>
+      </div>
+
+      <div data-reveal class="lg:col-span-8">
+        <div class="divide-y divide-steel-900/10 border-y border-steel-900/10">
+          {
+            faq.items.map((item) => (
+              <Accordion tone="light" class="border-0">
+                <h3
+                  slot="summary"
+                  class="pr-2 font-display text-lg leading-snug font-bold tracking-tight text-steel-900 sm:text-xl"
+                >
+                  {item.q}
+                </h3>
+                <p class="max-w-2xl text-[0.95rem] leading-relaxed text-steel-600">
+                  {item.a}
+                </p>
+              </Accordion>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

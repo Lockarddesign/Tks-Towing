@@ -1,0 +1,96 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import { business, hero } from '../site.config';
+import heroImg from '../assets/hero-truck.jpg';
+---
+
+<section id="top" class="relative isolate flex min-h-[100svh] flex-col justify-end overflow-hidden bg-steel-950">
+  <!-- Full-bleed hero photo -->
+  <div class="absolute inset-0 -z-10">
+    <Image
+      src={heroImg}
+      alt={hero.imageAlt}
+      widths={[800, 1280, 1920, 2400]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+      decoding="sync"
+      class="h-full w-full object-cover object-center"
+    />
+    <div class="absolute inset-0 bg-steel-950/70"></div>
+    <div
+      class="absolute inset-0 bg-gradient-to-t from-steel-950 via-steel-950/60 to-steel-950/30"
+    >
+    </div>
+    <div
+      class="absolute inset-0 bg-gradient-to-r from-steel-950/90 via-steel-950/30 to-transparent"
+    >
+    </div>
+  </div>
+
+  <div class="mx-auto w-full max-w-7xl px-5 pt-28 pb-14 sm:px-8 lg:pt-32 lg:pb-20">
+    <p
+      data-reveal
+      class="flex items-center gap-3 font-mono text-xs tracking-[0.22em] text-signal-400 uppercase sm:text-sm"
+    >
+      <span class="relative flex h-2 w-2">
+        <span
+          class="absolute inline-flex h-full w-full animate-ping rounded-full bg-signal-400 opacity-75"
+        ></span>
+        <span class="relative inline-flex h-2 w-2 rounded-full bg-signal-400"
+        ></span>
+      </span>
+      {hero.eyebrow}
+    </p>
+
+    <h1
+      data-reveal="80"
+      class="mt-6 max-w-4xl font-display text-[clamp(2.75rem,8.5vw,6.5rem)] leading-[0.92] font-extrabold tracking-[-0.035em] text-white text-balance"
+    >
+      {hero.heading}
+    </h1>
+
+    <p
+      data-reveal="160"
+      class="mt-7 max-w-xl text-lg leading-relaxed text-steel-200 text-pretty sm:text-xl"
+    >
+      {hero.sub}
+    </p>
+
+    <div data-reveal="240" class="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+      <a
+        href={business.phoneHref}
+        class="group inline-flex items-center justify-center gap-3 rounded-full bg-signal-400 px-8 py-5 font-display text-xl font-extrabold tracking-tight text-steel-950 shadow-2xl shadow-signal-500/25 transition hover:bg-signal-300 hover:shadow-signal-400/40 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-signal-300 sm:text-2xl"
+      >
+        <Icon name="phone" class="h-6 w-6" />
+        {hero.primaryCta}
+      </a>
+      <a
+        href={hero.secondaryCtaHref}
+        class="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 px-8 py-5 font-display text-lg font-bold tracking-tight text-white transition hover:border-white/40 hover:bg-white/5"
+      >
+        {hero.secondaryCta}
+        <Icon name="chevron" class="h-5 w-5" />
+      </a>
+    </div>
+
+    <ul
+      data-reveal="320"
+      class="mt-12 flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-white/10 pt-7 font-mono text-[0.7rem] tracking-[0.16em] text-steel-300 uppercase sm:gap-x-5 sm:text-xs"
+    >
+      {
+        hero.trustLine.map((item, i) => (
+          <>
+            {i > 0 && (
+              <li aria-hidden="true" class="text-signal-400/60">
+                ·
+              </li>
+            )}
+            <li>{item}</li>
+          </>
+        ))
+      }
+    </ul>
+  </div>
+</section>

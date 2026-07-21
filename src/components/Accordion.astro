@@ -1,0 +1,110 @@
+---
+import Icon from './Icon.astro';
+
+/**
+ * Semantic <details>/<summary> disclosure. Content is always in the DOM, so
+ * it is indexable and readable without JS; the JS below only adds the
+ * open/close height animation, and it is skipped under prefers-reduced-motion.
+ */
+interface Props {
+  tone?: 'dark' | 'light';
+  open?: boolean;
+  class?: string;
+  /** Groups accordions so only one is open at a time (native `name` attr). */
+  name?: string;
+}
+
+const { tone = 'dark', open = false, class: className = '', name } = Astro.props;
+
+const isDark = tone === 'dark';
+---
+
+<details
+  data-accordion
+  name={name}
+  open={open}
+  class:list={[
+    'group',
+    isDark
+      ? 'border-white/10 [&[open]]:border-signal-400/40'
+      : 'border-steel-900/10 [&[open]]:border-brand-500/40',
+    className,
+  ]}
+>
+  <summary
+    class:list={[
+      'flex cursor-pointer list-none items-start gap-5 py-6 transition-colors [&::-webkit-details-marker]:hidden',
+      isDark ? 'hover:text-white' : 'hover:text-steel-900',
+    ]}
+  >
+    <div class="min-w-0 flex-1">
+      <slot name="summary" />
+    </div>
+    <span
+      class:list={[
+        'mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-full border transition-all duration-300 group-open:rotate-180',
+        isDark
+          ? 'border-white/15 text-signal-400 group-open:border-signal-400/50 group-open:bg-signal-400/10'
+          : 'border-steel-900/15 text-brand-500 group-open:border-brand-500/40 group-open:bg-brand-500/8',
+      ]}
+      aria-hidden="true"
+    >
+      <Icon name="chevron" class="h-5 w-5" />
+    </span>
+  </summary>
+
+  <div data-accordion-panel class="overflow-hidden">
+    <div class="pb-7">
+      <slot />
+    </div>
+  </div>
+</details>
+
+<script>
+  // Height animation for <details>. Runs once, delegated to the document.
+  (() => {
+    const w = window as unknown as { __tkAccordionInit?: boolean };
+    if (w.__tkAccordionInit) return;
+    w.__tkAccordionInit = true;
+
+    const reduced = () =>
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    document.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement | null;
+      const summary = target?.closest('summary');
+      if (!summary) return;
+
+      const details = summary.parentElement as HTMLDetailsElement | null;
+      if (!details || !details.hasAttribute('data-accordion')) return;
+
+      const panel = details.querySelector<HTMLElement>(
+        '[data-accordion-panel]'
+      );
+      if (!panel || reduced()) return;
+
+      event.preventDefault();
+
+      const opening = !details.open;
+      const easing = 'cubic-bezier(0.22, 1, 0.36, 1)';
+
+      if (opening) {
+        details.open = true;
+        const height = panel.scrollHeight;
+        panel.animate(
+          { height: ['0px', `${height}px`], opacity: [0, 1] },
+          { duration: 340, easing }
+        );
+      } else {
+        const height = panel.scrollHeight;
+        const animation = panel.animate(
+          { height: [`${height}px`, '0px'], opacity: [1, 0] },
+          { duration: 260, easing }
+        );
+        animation.onfinish = () => {
+          details.open = false;
+        };
+      }
+    });
+  })();
+</script>

@@ -1,0 +1,62 @@
+---
+import Icon from './Icon.astro';
+import { trustBar } from '../site.config';
+---
+
+<section
+  aria-label="Trust signals"
+  class="border-y border-white/8 bg-steel-900"
+>
+  <div class="mx-auto max-w-7xl px-5 py-10 sm:px-8 lg:py-14">
+    <dl
+      class="grid grid-cols-2 gap-x-6 gap-y-8 lg:grid-cols-4 lg:divide-x lg:divide-white/8"
+    >
+      {
+        trustBar.items.map((item, i) => (
+          <div data-reveal={i * 70} class="lg:px-8 lg:first:pl-0 lg:last:pr-0">
+            <dt class="font-display text-3xl leading-none font-extrabold tracking-tight text-signal-400 sm:text-4xl">
+              {item.stat}
+            </dt>
+            <dd class="mt-2.5 text-sm leading-snug text-steel-400">
+              {item.label}
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+
+    <div
+      data-reveal="280"
+      class="mt-10 flex flex-col items-start gap-4 border-t border-white/8 pt-7 sm:flex-row sm:items-center sm:justify-between"
+    >
+      <p class="flex items-center gap-2.5 text-sm text-steel-400">
+        <span class="flex gap-0.5 text-signal-400" aria-hidden="true">
+          {
+            Array.from({ length: 5 }).map(() => (
+              <Icon name="star" class="h-4 w-4" />
+            ))
+          }
+        </span>
+        {trustBar.reviewNote}
+      </p>
+      <ul class="flex flex-wrap items-center gap-2">
+        {
+          trustBar.reviewLinks.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                target={link.href.startsWith('http') ? '_blank' : undefined}
+                rel={
+                  link.href.startsWith('http') ? 'noopener noreferrer' : undefined
+                }
+                class="inline-flex items-center rounded-full border border-white/10 px-4 py-2 font-mono text-[0.65rem] tracking-[0.14em] text-steel-300 uppercase transition hover:border-signal-400/50 hover:text-white"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>

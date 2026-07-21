@@ -1,0 +1,78 @@
+@import 'tailwindcss';
+
+/* Fonts are self-hosted and imported from src/layouts/Base.astro so that Vite
+   fingerprints and rewrites the .woff2 asset URLs. Importing them here via
+   CSS @import inlines the rules but leaves the font paths unresolved. */
+
+@theme {
+  /* ---- Type -------------------------------------------------------- */
+  --font-display: 'Archivo Variable', 'Archivo', system-ui, sans-serif;
+  --font-sans: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  /* ---- Steel: the dark industrial base ----------------------------- */
+  --color-steel-950: #070a0e;
+  --color-steel-900: #0d1219;
+  --color-steel-850: #131a23;
+  --color-steel-800: #1a2430;
+  --color-steel-700: #263444;
+  --color-steel-600: #35485c;
+  --color-steel-500: #536679;
+  --color-steel-400: #7d8d9e;
+  --color-steel-300: #a7b3c0;
+  --color-steel-200: #cfd6de;
+  --color-steel-100: #e6eaee;
+
+  /* ---- Bone: the warm light sections ------------------------------- */
+  --color-bone-50: #faf9f7;
+  --color-bone-100: #f4f2ee;
+  --color-bone-200: #e8e5df;
+
+  /* ---- Signal: the action accent. Reserved for CALL/CTA. ----------- */
+  --color-signal-300: #ffcf6b;
+  --color-signal-400: #ffbb33;
+  --color-signal-500: #ffa60d;
+  --color-signal-600: #e08c00;
+
+  /* ---- Brand blue: carried over from the old site (#0074e0) -------- */
+  --color-brand-300: #6bb6ff;
+  --color-brand-400: #2a93ff;
+  --color-brand-500: #0074e0;
+  --color-brand-600: #005cb3;
+
+  /* ---- Motion ------------------------------------------------------ */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-rise: rise 0.7s var(--ease-out-soft) both;
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 1.25rem, 0);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/* Reveal-on-scroll: elements start hidden only when JS + motion are on. */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}

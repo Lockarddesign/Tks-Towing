@@ -1,0 +1,71 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import { business, emergency } from '../site.config';
+import bandImg from '../assets/truck-silhouette.jpg';
+---
+
+<section
+  class="relative isolate overflow-hidden bg-steel-950 py-24 sm:py-28 lg:py-32"
+>
+  <div class="absolute inset-0 -z-10">
+    <Image
+      src={bandImg}
+      alt=""
+      widths={[900, 1600, 2200]}
+      sizes="100vw"
+      class="h-full w-full object-cover object-center"
+    />
+    <div class="absolute inset-0 bg-steel-950/85"></div>
+    <div
+      class="absolute inset-0 bg-gradient-to-b from-steel-950 via-steel-950/60 to-steel-950"
+    >
+    </div>
+  </div>
+
+  <div class="mx-auto max-w-4xl px-5 text-center sm:px-8">
+    <p
+      data-reveal
+      class="inline-flex items-center gap-2.5 rounded-full border border-signal-400/30 bg-signal-400/8 px-4 py-2 font-mono text-[0.7rem] tracking-[0.2em] text-signal-400 uppercase"
+    >
+      <span class="relative flex h-1.5 w-1.5">
+        <span
+          class="absolute inline-flex h-full w-full animate-ping rounded-full bg-signal-400 opacity-75"
+        ></span>
+        <span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-signal-400"
+        ></span>
+      </span>
+      {emergency.eyebrow}
+    </p>
+
+    <h2
+      data-reveal="80"
+      class="mt-7 font-display text-[clamp(2.25rem,7vw,4.75rem)] leading-[0.95] font-extrabold tracking-[-0.03em] text-white text-balance"
+    >
+      {emergency.heading}
+    </h2>
+
+    <p
+      data-reveal="140"
+      class="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-steel-300 text-pretty"
+    >
+      {emergency.body}
+    </p>
+
+    <a
+      data-reveal="200"
+      href={business.phoneHref}
+      class="mt-10 inline-flex items-center justify-center gap-3 rounded-full bg-signal-400 px-8 py-6 font-display text-[clamp(1.35rem,4vw,2rem)] leading-none font-extrabold tracking-tight text-steel-950 shadow-2xl shadow-signal-500/30 transition hover:bg-signal-300 hover:shadow-signal-400/45 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-signal-300 sm:px-12"
+    >
+      <Icon name="phone" class="h-7 w-7 shrink-0" />
+      {emergency.cta}
+    </a>
+
+    <p
+      data-reveal="260"
+      class="mt-7 font-mono text-[0.7rem] tracking-[0.14em] text-steel-500 uppercase"
+    >
+      {emergency.note}
+    </p>
+  </div>
+</section>

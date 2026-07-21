@@ -1,0 +1,52 @@
+---
+import SectionHead from './SectionHead.astro';
+import PlaceholderFigure from './PlaceholderFigure.astro';
+import { gallery } from '../site.config';
+
+import flatbedSilver from '../assets/flatbed-silver-car.jpg';
+import chains from '../assets/chains-secured.jpg';
+import operator from '../assets/operator-blue-car.jpg';
+import rural from '../assets/flatbed-rural-road.jpg';
+import silhouette from '../assets/truck-silhouette.jpg';
+import hauled from '../assets/car-hauled-away.jpg';
+
+// Masonry-ish: each tile declares its own span so the grid stays lively.
+const tiles = [
+  { src: flatbedSilver, label: gallery.captions.a, span: 'sm:col-span-2 sm:row-span-2', ratio: 'aspect-4/3 sm:aspect-auto sm:h-full' },
+  { src: chains, label: gallery.captions.b, span: '', ratio: 'aspect-square' },
+  { src: operator, label: gallery.captions.c, span: '', ratio: 'aspect-square' },
+  { src: rural, label: gallery.captions.d, span: 'sm:col-span-2', ratio: 'aspect-16/9' },
+  { src: silhouette, label: gallery.captions.e, span: '', ratio: 'aspect-square' },
+  { src: hauled, label: gallery.captions.f, span: '', ratio: 'aspect-square' },
+];
+---
+
+<section id="gallery" class="bg-steel-900 py-24 sm:py-28 lg:py-36">
+  <div class="mx-auto max-w-7xl px-5 sm:px-8">
+    <SectionHead
+      eyebrow={gallery.eyebrow}
+      heading={gallery.heading}
+      intro={gallery.intro}
+      tone="dark"
+    />
+
+    <div
+      class="mt-14 grid auto-rows-auto grid-cols-1 gap-3 sm:mt-18 sm:grid-cols-4"
+    >
+      {
+        tiles.map((tile, i) => (
+          <div data-reveal={i * 60} class={`group ${tile.span}`}>
+            <PlaceholderFigure
+              src={tile.src}
+              label={tile.label}
+              class={`h-full rounded-xl border border-white/10 ${tile.ratio}`}
+              imgClass="h-full w-full object-cover transition-transform duration-700 ease-out motion-safe:group-hover:scale-105"
+              sizes="(min-width: 640px) 40vw, 100vw"
+              widths={[480, 800, 1200]}
+            />
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

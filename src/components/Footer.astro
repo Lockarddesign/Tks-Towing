@@ -1,0 +1,113 @@
+---
+import Icon from './Icon.astro';
+import { business, footer } from '../site.config';
+---
+
+<footer class="border-t border-white/8 bg-steel-900">
+  <div class="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:py-20">
+    <div class="grid gap-12 lg:grid-cols-12 lg:gap-10">
+      <!-- Brand -->
+      <div class="lg:col-span-4">
+        <div class="flex items-center gap-3">
+          <span
+            class="grid h-11 w-11 place-items-center rounded-lg border border-signal-400/40 bg-signal-400/10 font-display text-sm font-extrabold tracking-tight text-signal-400"
+            >TK</span
+          >
+          <span
+            class="font-display text-xl font-extrabold tracking-tight text-white"
+            >TK&rsquo;S TOWING</span
+          >
+        </div>
+        <p class="sr-only">PLACEHOLDER — {footer.logoPlaceholder}</p>
+        <p class="mt-5 max-w-xs text-[0.95rem] leading-relaxed text-steel-400">
+          {footer.tagline}
+        </p>
+        <p
+          class="mt-5 font-mono text-[0.65rem] tracking-[0.18em] text-steel-500 uppercase"
+        >
+          {footer.meta}
+        </p>
+      </div>
+
+      <!-- Link columns -->
+      {
+        footer.columns.map((column) => (
+          <nav class="lg:col-span-2" aria-label={column.heading}>
+            <h2 class="font-mono text-[0.65rem] tracking-[0.18em] text-steel-500 uppercase">
+              {column.heading}
+            </h2>
+            <ul class="mt-5 space-y-3">
+              {column.links.map((link) => (
+                <li>
+                  <a
+                    href={link.href}
+                    class="text-[0.95rem] text-steel-300 transition hover:text-signal-400"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))
+      }
+
+      <!-- Contact column -->
+      <div class="lg:col-span-2">
+        <h2
+          class="font-mono text-[0.65rem] tracking-[0.18em] text-steel-500 uppercase"
+        >
+          {footer.contactHeading}
+        </h2>
+        <ul class="mt-5 space-y-4">
+          <li>
+            <a
+              href={business.phoneHref}
+              class="inline-flex items-center gap-2 font-display text-lg font-bold tracking-tight text-white transition hover:text-signal-400"
+            >
+              <Icon name="phone" class="h-4 w-4 text-signal-400" />
+              {business.phone}
+            </a>
+          </li>
+          <li>
+            <address class="text-[0.95rem] leading-relaxed text-steel-300 not-italic">
+              {business.address.street}<br />
+              {business.address.city}, {business.address.state}
+              {business.address.zip}
+            </address>
+          </li>
+          <li class="text-[0.95rem] text-steel-300">{business.hoursShort}</li>
+          <li class="flex gap-2 pt-1">
+            {
+              business.socials.map((social) => (
+                <a
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="grid h-10 w-10 place-items-center rounded-full border border-white/12 text-steel-300 transition hover:border-signal-400/50 hover:text-signal-400"
+                >
+                  <Icon name={social.label.toLowerCase()} class="h-4 w-4" />
+                  <span class="sr-only">{social.label}</span>
+                </a>
+              ))
+            }
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div
+      class="mt-14 flex flex-col gap-3 border-t border-white/8 pt-8 text-sm text-steel-500 sm:flex-row sm:items-center sm:justify-between"
+    >
+      <p>{footer.copyright}</p>
+      <p>
+        <a
+          href={footer.creditHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="transition hover:text-steel-300">{footer.credit}</a
+        >
+      </p>
+    </div>
+  </div>
+</footer>

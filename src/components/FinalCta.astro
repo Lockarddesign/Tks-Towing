@@ -1,0 +1,26 @@
+---
+import Icon from './Icon.astro';
+import { business, finalCta } from '../site.config';
+---
+
+<section class="border-t border-white/8 bg-steel-950 py-20 sm:py-24">
+  <div
+    class="mx-auto flex max-w-7xl flex-col items-start gap-8 px-5 sm:px-8 lg:flex-row lg:items-center lg:justify-between"
+  >
+    <h2
+      data-reveal
+      class="font-display text-[clamp(1.9rem,4.5vw,3.25rem)] leading-[1.02] font-extrabold tracking-[-0.03em] text-white text-balance"
+    >
+      {finalCta.heading}
+      <span class="text-signal-400">{finalCta.sub}</span>
+    </h2>
+    <a
+      data-reveal="100"
+      href={business.phoneHref}
+      class="inline-flex shrink-0 items-center gap-3 rounded-full bg-signal-400 px-8 py-5 font-display text-xl font-extrabold tracking-tight text-steel-950 shadow-xl shadow-signal-500/20 transition hover:bg-signal-300 sm:text-2xl"
+    >
+      <Icon name="phone" class="h-6 w-6" />
+      {finalCta.cta}
+    </a>
+  </div>
+</section>
