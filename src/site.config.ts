@@ -88,6 +88,35 @@ export const hero = {
   ],
   imageAlt: 'PLACEHOLDER — TOW TRUCK HERO PHOTO (replace with a real TK\'s truck)',
   imageCaption: 'PLACEHOLDER — TOW TRUCK HERO PHOTO',
+
+  // Left utility rail (vintage framed shell)
+  rail: {
+    vertical: 'Haddon Township, NJ — Family Owned Since 1996',
+  },
+
+  // Ken Burns slideshow — captions per frame. Images are wired in Hero.astro.
+  // Kicker sits above each service label. Real TK's work, no invented claims.
+  slideshow: {
+    kicker: 'On the job',
+    slides: [
+      { label: 'Flatbed Towing' },
+      { label: 'Auto & Light-Truck Towing' },
+      { label: 'Roadside Assistance' },
+      { label: 'Long-Distance Towing' },
+      { label: 'Recovery & Hauling' },
+    ],
+  },
+
+  // Proof strip beneath the slideshow — real facts only.
+  proof: [
+    { label: 'Established', value: 'Since 1996', note: 'Family owned & operated' },
+    { label: 'Availability', value: 'Open 24/7', note: '365 days a year' },
+    {
+      label: 'Service Area',
+      value: 'Camden County',
+      note: '+ Burlington & Gloucester',
+    },
+  ],
 } as const;
 
 /* ------------------------------------------------------------------ */

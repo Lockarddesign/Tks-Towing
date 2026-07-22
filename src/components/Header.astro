@@ -5,41 +5,42 @@ import { business, nav } from '../site.config';
 import logo from '../assets/tks-logo.png';
 ---
 
+<!--
+  Condensed sticky header. Matches the hero shell's dark topnav styling, but is
+  hidden while the hero is on screen and slides down once you scroll past it —
+  so the top of the page shows the framed hero nav, and the rest of the long
+  page keeps a persistent bar.
+-->
 <header
   id="site-header"
-  class="fixed inset-x-0 top-0 z-50 border-b border-line/70 bg-cream/85 backdrop-blur-xl transition-all duration-300"
+  class="fixed inset-x-0 top-0 z-50 -translate-y-full border-b border-cream/12 bg-navy-900/95 backdrop-blur-xl transition-transform duration-500 ease-out"
+  data-hidden="true"
 >
   <div
-    class="mx-auto flex h-18 max-w-7xl items-center gap-4 px-5 sm:px-8 lg:h-20"
+    class="mx-auto flex h-16 max-w-7xl items-center gap-4 px-5 sm:px-8 lg:h-18"
   >
     <!-- Logo -->
     <a href="#top" class="group flex shrink-0 items-center gap-3">
       <Image
         src={logo}
-        alt="TK's Towing — fast, reliable, professional. Since 1996."
-        widths={[80, 120, 160]}
-        sizes="56px"
-        loading="eager"
-        class="h-12 w-auto lg:h-14"
+        alt="TK's Towing badge logo"
+        widths={[72, 108]}
+        sizes="40px"
+        class="h-10 w-auto"
       />
-      <span class="hidden leading-none sm:block">
-        <span
-          class="block font-display text-xl font-bold tracking-tight text-navy-700 lg:text-2xl"
-          >TK&rsquo;S TOWING</span
-        >
-        <span class="label-caps mt-1 block text-[0.6rem] text-brick-500"
-          >Since 1996 · Haddon Twp, NJ</span
-        >
-      </span>
+      <span
+        class="hidden font-display text-lg font-bold tracking-wide text-cream uppercase sm:block"
+        >TK&rsquo;S <span class="text-brick-300">Towing</span></span
+      >
     </a>
 
     <!-- Desktop nav -->
-    <nav class="ml-auto hidden items-center gap-1 lg:flex" aria-label="Main">
+    <nav class="ml-auto hidden items-center gap-7 lg:flex" aria-label="Main">
       {
         nav.links.map((link) => (
           <a
             href={link.href}
-            class="rounded-md px-4 py-2 text-sm font-semibold text-navy-700 transition-colors hover:bg-navy-700/6 hover:text-brick-500"
+            class="relative pb-1 font-display text-[0.78rem] font-medium tracking-[0.12em] text-cream/65 uppercase transition-colors after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-brick-300 after:transition-all after:duration-300 hover:text-cream hover:after:w-full"
           >
             {link.label}
           </a>
@@ -50,7 +51,7 @@ import logo from '../assets/tks-logo.png';
     <!-- Desktop call CTA -->
     <a
       href={business.phoneHref}
-      class="ml-auto hidden items-center gap-2 rounded-md bg-brick-500 px-5 py-3 font-display text-sm font-bold tracking-tight text-cream uppercase shadow-sm transition hover:bg-brick-600 focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-brick-500 lg:ml-4 lg:inline-flex"
+      class="ml-auto hidden items-center gap-2 border border-cream/25 px-5 py-2.5 font-display text-[0.78rem] font-semibold tracking-[0.1em] text-cream uppercase transition hover:border-brick-500 hover:bg-brick-500 lg:ml-6 lg:inline-flex"
     >
       <Icon name="phone" class="h-4 w-4" />
       {nav.callCta}
@@ -60,7 +61,7 @@ import logo from '../assets/tks-logo.png';
     <div class="ml-auto flex items-center gap-2 lg:hidden">
       <a
         href={business.phoneHref}
-        class="inline-flex items-center gap-2 rounded-md bg-brick-500 px-4 py-2.5 font-display text-sm font-bold tracking-tight text-cream uppercase"
+        class="inline-flex items-center gap-2 bg-brick-500 px-4 py-2.5 font-display text-sm font-bold tracking-tight text-cream uppercase"
       >
         <Icon name="phone" class="h-4 w-4" />
         <span class="hidden sm:inline">Call</span>
@@ -71,7 +72,7 @@ import logo from '../assets/tks-logo.png';
         id="menu-toggle"
         aria-expanded="false"
         aria-controls="mobile-menu"
-        class="grid h-11 w-11 place-items-center rounded-md border border-line text-navy-700 transition hover:bg-navy-700/6"
+        class="grid h-11 w-11 place-items-center border border-cream/20 text-cream transition hover:bg-cream/8"
       >
         <Icon name="menu" class="h-6 w-6" />
         <span class="sr-only">Open menu</span>
@@ -83,20 +84,20 @@ import logo from '../assets/tks-logo.png';
   <div
     id="mobile-menu"
     hidden
-    class="border-t border-line/70 bg-cream/98 backdrop-blur-xl lg:hidden"
+    class="border-t border-cream/12 bg-navy-900/98 backdrop-blur-xl lg:hidden"
   >
     <nav class="mx-auto max-w-7xl px-5 py-4 sm:px-8" aria-label="Mobile">
-      <ul class="divide-y divide-line/70">
+      <ul class="divide-y divide-cream/10">
         {
           nav.links.map((link) => (
             <li>
               <a
                 href={link.href}
                 data-menu-link
-                class="flex items-center justify-between py-4 font-display text-lg font-bold tracking-tight text-navy-700"
+                class="flex items-center justify-between py-4 font-display text-lg font-bold tracking-wide text-cream uppercase"
               >
                 {link.label}
-                <Icon name="arrow" class="h-5 w-5 text-brick-500" />
+                <Icon name="arrow" class="h-5 w-5 text-brick-300" />
               </a>
             </li>
           ))
@@ -104,14 +105,11 @@ import logo from '../assets/tks-logo.png';
       </ul>
       <a
         href={business.phoneHref}
-        class="mt-4 flex items-center justify-center gap-2 rounded-md bg-brick-500 px-6 py-4 font-display text-base font-bold tracking-tight text-cream uppercase"
+        class="mt-4 flex items-center justify-center gap-2 bg-brick-500 px-6 py-4 font-display text-base font-bold tracking-tight text-cream uppercase"
       >
         <Icon name="phone" class="h-5 w-5" />
         {nav.callCta}
       </a>
-      <p class="label-caps mt-3 text-center text-xs text-navy-500">
-        {business.hoursShort}
-      </p>
     </nav>
   </div>
 </header>
@@ -120,33 +118,31 @@ import logo from '../assets/tks-logo.png';
   (() => {
     const toggle = document.getElementById('menu-toggle');
     const menu = document.getElementById('mobile-menu');
-    if (!toggle || !menu) return;
+    const header = document.getElementById('site-header');
+    if (!toggle || !menu || !header) return;
 
     const setOpen = (open) => {
       menu.hidden = !open;
       toggle.setAttribute('aria-expanded', String(open));
     };
 
-    toggle.addEventListener('click', () => {
-      setOpen(menu.hidden);
-    });
-
+    toggle.addEventListener('click', () => setOpen(menu.hidden));
     menu.querySelectorAll('[data-menu-link]').forEach((link) => {
       link.addEventListener('click', () => setOpen(false));
     });
-
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && !menu.hidden) setOpen(false);
     });
 
-    // Solidify the header once the hero is behind it.
-    const header = document.getElementById('site-header');
+    // Reveal the sticky bar only after the hero is mostly scrolled past.
+    const revealAt = () => Math.max(320, window.innerHeight * 0.82);
     const onScroll = () => {
-      const scrolled = window.scrollY > 24;
-      header.classList.toggle('bg-cream/95', scrolled);
-      header.classList.toggle('shadow-lg', scrolled);
-      header.classList.toggle('shadow-navy-950/10', scrolled);
-      header.classList.toggle('border-line', scrolled);
+      const show = window.scrollY > revealAt();
+      header.classList.toggle('-translate-y-full', !show);
+      header.classList.toggle('translate-y-0', show);
+      header.classList.toggle('shadow-2xl', show);
+      header.classList.toggle('shadow-navy-950/40', show);
+      if (!show && !menu.hidden) setOpen(false);
     };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
