@@ -159,7 +159,10 @@ export const intro = {
   primaryCta: 'Read our story',
   primaryHref: '#story',
   secondaryCta: `Call ${business.phone}`,
-  imageCaption: 'PLACEHOLDER — TK’S TRUCK / CREW PHOTO',
+  imageAlt:
+    'A volunteer firefighter in full turnout gear kneeling after a call — the community-service roots behind TK’s Towing',
+  imageKicker: 'On & off the job',
+  imageCaption: `HTFD volunteer firefighter since 2009 ${CONFIRM}`,
 } as const;
 
 /* ------------------------------------------------------------------ */

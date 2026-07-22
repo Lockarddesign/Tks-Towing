@@ -2,7 +2,7 @@
 import Icon from './Icon.astro';
 import PlaceholderFigure from './PlaceholderFigure.astro';
 import { intro, business } from '../site.config';
-import aboutImg from '../assets/flatbed-silver-car.jpg';
+import aboutImg from '../assets/about-firefighter.png';
 ---
 
 <section id="about" class="relative overflow-hidden bg-paper py-24 sm:py-28 lg:py-32">
@@ -13,17 +13,31 @@ import aboutImg from '../assets/flatbed-silver-car.jpg';
   >
   </div>
 
-  <div class="mx-auto max-w-7xl px-5 sm:px-8">
-    <div class="grid items-center gap-14 lg:grid-cols-12 lg:gap-16">
+  <div class="mx-auto max-w-[1300px] px-5 sm:px-8">
+    <div class="grid items-stretch gap-14 lg:grid-cols-12 lg:gap-16">
       <!-- Image + seal -->
       <div data-reveal class="relative lg:col-span-5">
-        <div class="relative rounded-xl border border-line bg-cream p-2.5 shadow-sm">
+        <div
+          class="relative rounded-xl border border-line bg-cream p-2.5 shadow-sm lg:flex lg:h-full"
+        >
           <PlaceholderFigure
             src={aboutImg}
-            label={intro.imageCaption}
-            class="aspect-4/5 rounded-lg"
+            label=""
+            alt={intro.imageAlt}
+            class="aspect-4/5 rounded-lg lg:aspect-auto lg:h-full lg:flex-1"
             sizes="(min-width: 1024px) 40vw, 100vw"
           />
+          <!-- Brand caption tying the image to the community-service story -->
+          <div
+            class="absolute right-5 bottom-5 left-5 rounded-lg border border-cream/15 bg-navy-950/70 px-4 py-3 backdrop-blur-sm"
+          >
+            <p class="label-caps text-[0.6rem] text-brick-300">
+              {intro.imageKicker}
+            </p>
+            <p class="mt-1 font-display text-sm font-bold tracking-wide text-cream uppercase">
+              {intro.imageCaption}
+            </p>
+          </div>
         </div>
 
         <!-- Vintage seal stamp -->
