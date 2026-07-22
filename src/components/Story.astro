@@ -8,12 +8,12 @@ import fireImg from '../assets/firefighter.jpg';
 
 <section
   id="story"
-  class="relative isolate overflow-hidden bg-steel-900 py-24 sm:py-28 lg:py-36"
+  class="relative isolate overflow-hidden bg-navy-800 py-24 sm:py-28 lg:py-36"
 >
   <!-- Warm ambient glow behind the story, hinting at the fire-service angle -->
   <div
     aria-hidden="true"
-    class="pointer-events-none absolute -top-40 -right-40 -z-10 h-[36rem] w-[36rem] rounded-full bg-signal-500/8 blur-3xl"
+    class="pointer-events-none absolute -top-40 -right-40 -z-10 h-[36rem] w-[36rem] rounded-full bg-brick-500/12 blur-3xl"
   >
   </div>
 
@@ -26,13 +26,13 @@ import fireImg from '../assets/firefighter.jpg';
             src={ownerImg}
             label={story.ownerImageCaption}
             alt={story.ownerImageAlt}
-            class="aspect-4/5 rounded-2xl border border-white/10"
+            class="aspect-4/5 rounded-xl border border-cream/12"
             sizes="(min-width: 1024px) 38vw, 100vw"
           />
           <PlaceholderFigure
             src={fireImg}
             label={story.secondaryImageCaption}
-            class="absolute -right-4 -bottom-10 aspect-square w-40 rounded-2xl border-4 border-steel-900 shadow-2xl shadow-black/50 sm:-right-8 sm:w-52 lg:-right-12"
+            class="absolute -right-4 -bottom-10 aspect-square w-40 rounded-xl border-4 border-navy-800 shadow-2xl shadow-navy-950/50 sm:-right-8 sm:w-52 lg:-right-12"
             sizes="220px"
             widths={[220, 440]}
           />
@@ -41,17 +41,14 @@ import fireImg from '../assets/firefighter.jpg';
 
       <!-- Copy -->
       <div class="lg:col-span-7 lg:pl-6">
-        <p
-          data-reveal
-          class="flex items-center gap-3 font-mono text-xs tracking-[0.22em] text-signal-400 uppercase"
-        >
+        <p data-reveal class="label-caps flex items-center gap-3 text-xs text-brick-300">
           <Icon name="flame" class="h-4 w-4" />
           {story.eyebrow}
         </p>
 
         <h2
           data-reveal="80"
-          class="mt-5 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[0.98] font-extrabold tracking-[-0.025em] text-white text-balance"
+          class="mt-5 font-display text-[clamp(2.25rem,5.5vw,4rem)] leading-[0.98] font-bold tracking-tight text-cream uppercase text-balance"
         >
           {story.heading}
         </h2>
@@ -59,7 +56,7 @@ import fireImg from '../assets/firefighter.jpg';
         <div data-reveal="140" class="mt-8 space-y-5">
           {
             story.paragraphs.map((p) => (
-              <p class="text-lg leading-relaxed text-steel-300 text-pretty">
+              <p class="text-lg leading-relaxed text-navy-100 text-pretty">
                 {p}
               </p>
             ))
@@ -68,31 +65,29 @@ import fireImg from '../assets/firefighter.jpg';
 
         <blockquote
           data-reveal="200"
-          class="mt-10 border-l-2 border-signal-400 pl-6 sm:pl-8"
+          class="mt-10 border-l-4 border-brick-400 pl-6 sm:pl-8"
         >
           <p
-            class="font-display text-[clamp(1.5rem,3vw,2.25rem)] leading-[1.15] font-bold tracking-[-0.02em] text-white text-balance"
+            class="font-display text-[clamp(1.6rem,3.2vw,2.5rem)] leading-[1.1] font-medium tracking-tight text-cream text-balance"
           >
             &ldquo;{story.pullQuote}&rdquo;
           </p>
-          <footer
-            class="mt-5 font-mono text-[0.7rem] leading-relaxed tracking-[0.14em] text-steel-400 uppercase"
-          >
+          <footer class="label-caps mt-5 text-[0.7rem] leading-relaxed text-brick-300">
             {story.pullQuoteAttribution}
           </footer>
         </blockquote>
 
         <dl
           data-reveal="260"
-          class="mt-12 grid gap-x-8 gap-y-6 border-t border-white/10 pt-8 sm:grid-cols-2"
+          class="mt-12 grid gap-x-8 gap-y-6 border-t border-cream/12 pt-8 sm:grid-cols-2"
         >
           {
             story.facts.map((fact) => (
               <div>
-                <dt class="font-mono text-[0.65rem] tracking-[0.18em] text-steel-500 uppercase">
+                <dt class="label-caps text-[0.65rem] text-navy-300">
                   {fact.label}
                 </dt>
-                <dd class="mt-1.5 font-display text-lg font-bold tracking-tight text-white">
+                <dd class="mt-1.5 font-display text-lg font-bold tracking-tight text-cream uppercase">
                   {fact.value}
                 </dd>
               </div>

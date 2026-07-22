@@ -1,10 +1,7 @@
 ---
 // Self-hosted fonts — no external requests.
-import '@fontsource-variable/archivo/wght.css';
-import '@fontsource/ibm-plex-sans/400.css';
-import '@fontsource/ibm-plex-sans/500.css';
-import '@fontsource/ibm-plex-sans/600.css';
-import '@fontsource/ibm-plex-mono/500.css';
+import '@fontsource-variable/oswald/wght.css';
+import '@fontsource-variable/libre-franklin/wght.css';
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -66,7 +63,7 @@ const localBusiness = {
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#0d1219" />
+    <meta name="theme-color" content="#2c415e" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -76,11 +73,11 @@ const localBusiness = {
     />
   </head>
   <body
-    class="bg-steel-950 font-sans text-steel-200 antialiased selection:bg-signal-400 selection:text-steel-950"
+    class="bg-cream font-sans text-ink antialiased selection:bg-brick-500 selection:text-cream"
   >
     <a
       href="#main"
-      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:rounded-full focus:bg-signal-400 focus:px-5 focus:py-3 focus:font-semibold focus:text-steel-950"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:rounded-full focus:bg-brick-500 focus:px-5 focus:py-3 focus:font-semibold focus:text-cream"
       >Skip to content</a
     >
 
@@ -115,6 +112,19 @@ const localBusiness = {
               const el = entry.target;
               const delay = Number(el.dataset.reveal) || 0;
               el.style.animation = `rise 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}ms both`;
+              // Safety net: if the animation never runs for any reason, make sure
+              // the element is still visible rather than stuck at opacity 0.
+              el.addEventListener(
+                'animationend',
+                () => {
+                  el.style.opacity = '';
+                  el.style.animation = '';
+                },
+                { once: true }
+              );
+              window.setTimeout(() => {
+                el.style.opacity = '';
+              }, delay + 900);
               io.unobserve(el);
             });
           },

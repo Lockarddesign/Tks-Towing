@@ -4,41 +4,41 @@ import Accordion from './Accordion.astro';
 import { process } from '../site.config';
 ---
 
-<section id="process" class="relative bg-steel-950 py-24 sm:py-28 lg:py-36">
+<section id="process" class="relative bg-paper py-24 sm:py-28 lg:py-36">
   <div class="mx-auto max-w-7xl px-5 sm:px-8">
     <SectionHead
       eyebrow={process.eyebrow}
       heading={process.heading}
       intro={process.intro}
-      tone="dark"
+      tone="light"
     />
 
     <div class="relative mt-16 lg:mt-24">
       <!-- Connecting line: vertical on mobile, horizontal on desktop -->
       <span
         aria-hidden="true"
-        class="absolute top-0 bottom-0 left-6 w-px bg-gradient-to-b from-signal-400/50 via-white/10 to-transparent lg:top-6 lg:right-0 lg:bottom-auto lg:left-0 lg:h-px lg:w-auto lg:bg-gradient-to-r lg:from-signal-400/50 lg:via-white/15 lg:to-transparent"
+        class="absolute top-0 bottom-0 left-6 w-px bg-gradient-to-b from-brick-500/50 via-line to-transparent lg:top-6 lg:right-0 lg:bottom-auto lg:left-0 lg:h-px lg:w-auto lg:bg-gradient-to-r lg:from-brick-500/50 lg:via-line lg:to-transparent"
       ></span>
 
       <ol class="grid gap-0 lg:grid-cols-4 lg:gap-8">
         {
           process.steps.map((step, i) => (
             <li data-reveal={i * 90} class="relative pl-20 lg:pl-0">
-              <span class="absolute top-6 left-0 grid h-12 w-12 place-items-center rounded-full border border-signal-400/40 bg-steel-950 font-display text-lg font-extrabold text-signal-400 lg:static lg:mb-8">
+              <span class="absolute top-6 left-0 grid h-12 w-12 place-items-center rounded-full border-2 border-brick-500/40 bg-paper font-display text-lg font-bold text-brick-500 lg:static lg:mb-8">
                 {i + 1}
               </span>
 
-              <div class="border-t border-white/10 lg:border-t-0">
-                <Accordion tone="dark" class="border-0" open={i === 0}>
+              <div class="border-t border-line lg:border-t-0">
+                <Accordion tone="light" class="border-0" open={i === 0}>
                   <div slot="summary">
-                    <h3 class="font-display text-xl leading-tight font-extrabold tracking-tight text-white sm:text-2xl">
+                    <h3 class="font-display text-xl leading-tight font-bold tracking-tight text-navy-700 uppercase sm:text-2xl">
                       {step.title}
                     </h3>
-                    <p class="mt-2 text-sm leading-relaxed text-steel-400">
+                    <p class="mt-2 text-sm leading-relaxed text-ink/60">
                       {step.summary}
                     </p>
                   </div>
-                  <p class="text-sm leading-relaxed text-steel-300">
+                  <p class="text-sm leading-relaxed text-ink/80">
                     {step.detail}
                   </p>
                 </Accordion>

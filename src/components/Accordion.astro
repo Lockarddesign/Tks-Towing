@@ -26,15 +26,15 @@ const isDark = tone === 'dark';
   class:list={[
     'group',
     isDark
-      ? 'border-white/10 [&[open]]:border-signal-400/40'
-      : 'border-steel-900/10 [&[open]]:border-brand-500/40',
+      ? 'border-cream/12 [&[open]]:border-brick-300/40'
+      : 'border-line [&[open]]:border-brick-500/50',
     className,
   ]}
 >
   <summary
     class:list={[
       'flex cursor-pointer list-none items-start gap-5 py-6 transition-colors [&::-webkit-details-marker]:hidden',
-      isDark ? 'hover:text-white' : 'hover:text-steel-900',
+      isDark ? 'hover:text-cream' : 'hover:text-brick-500',
     ]}
   >
     <div class="min-w-0 flex-1">
@@ -44,8 +44,8 @@ const isDark = tone === 'dark';
       class:list={[
         'mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-full border transition-all duration-300 group-open:rotate-180',
         isDark
-          ? 'border-white/15 text-signal-400 group-open:border-signal-400/50 group-open:bg-signal-400/10'
-          : 'border-steel-900/15 text-brand-500 group-open:border-brand-500/40 group-open:bg-brand-500/8',
+          ? 'border-cream/20 text-brick-300 group-open:border-brick-300/50 group-open:bg-brick-300/10'
+          : 'border-line text-brick-500 group-open:border-brick-500/50 group-open:bg-brick-500/8',
       ]}
       aria-hidden="true"
     >

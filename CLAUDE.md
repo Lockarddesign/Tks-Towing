@@ -14,8 +14,18 @@ parts of Burlington & Gloucester.
 - **Fonts** (Archivo + IBM Plex) are imported in `src/layouts/Base.astro`, not in
   `global.css`. A CSS `@import` of the fontsource files does not get its `.woff2`
   URLs rewritten by PostCSS, so the fonts 404 in the build. Keep the JS imports.
-- Design tokens live in the `@theme` block of `src/styles/global.css`
-  (steel / bone / signal / brand palettes).
+- **Brand: Vintage Americana.** Design tokens live in the `@theme` block of
+  `src/styles/global.css`:
+  - `navy-*` — PRIMARY (#2C415E at `navy-700`): headers, nav, buttons, icons,
+    links, and dark anchor sections (hero, story, gallery, footer).
+  - `brick-*` — ACCENT/CTA (#7C4E4B at `brick-500`): call buttons, hovers,
+    highlights, the emergency band.
+  - `cream` (#FAF1E8) page bg, `paper` (#fff) cards, `line` (#C6C1C3) borders,
+    `ink` (#2B2B2B) text.
+  - Fonts: **Oswald** (`font-display`, condensed americana signage — echoes the
+    logo) + **Libre Franklin** (`font-sans`, Franklin Gothic revival body).
+    `.label-caps` utility = tracked uppercase Oswald for eyebrows/meta.
+- Logo is the real badge at `src/assets/tks-logo.png`, used in Header + Footer.
 
 ## Content
 

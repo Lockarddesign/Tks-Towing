@@ -1,32 +1,36 @@
 ---
+import { Image } from 'astro:assets';
 import Icon from './Icon.astro';
 import { business, nav } from '../site.config';
+import logo from '../assets/tks-logo.png';
 ---
 
 <header
   id="site-header"
-  class="fixed inset-x-0 top-0 z-50 border-b border-white/5 bg-steel-950/80 backdrop-blur-xl transition-colors duration-300"
+  class="fixed inset-x-0 top-0 z-50 border-b border-line/70 bg-cream/85 backdrop-blur-xl transition-all duration-300"
 >
   <div
     class="mx-auto flex h-18 max-w-7xl items-center gap-4 px-5 sm:px-8 lg:h-20"
   >
     <!-- Logo -->
     <a href="#top" class="group flex shrink-0 items-center gap-3">
-      <span
-        class="grid h-10 w-10 place-items-center rounded-lg border border-signal-400/40 bg-signal-400/10 font-display text-sm font-extrabold tracking-tight text-signal-400 lg:h-11 lg:w-11"
-        >TK</span
-      >
+      <Image
+        src={logo}
+        alt="TK's Towing — fast, reliable, professional. Since 1996."
+        widths={[80, 120, 160]}
+        sizes="56px"
+        loading="eager"
+        class="h-12 w-auto lg:h-14"
+      />
       <span class="hidden leading-none sm:block">
         <span
-          class="block font-display text-lg font-extrabold tracking-tight text-white lg:text-xl"
+          class="block font-display text-xl font-bold tracking-tight text-navy-700 lg:text-2xl"
           >TK&rsquo;S TOWING</span
         >
-        <span
-          class="mt-1 block font-mono text-[0.6rem] tracking-[0.2em] text-steel-400 uppercase"
+        <span class="label-caps mt-1 block text-[0.6rem] text-brick-500"
           >Since 1996 · Haddon Twp, NJ</span
         >
       </span>
-      <span class="sr-only">PLACEHOLDER — TK&rsquo;S TOWING LOGO</span>
     </a>
 
     <!-- Desktop nav -->
@@ -35,7 +39,7 @@ import { business, nav } from '../site.config';
         nav.links.map((link) => (
           <a
             href={link.href}
-            class="rounded-full px-4 py-2 text-sm font-medium text-steel-300 transition-colors hover:bg-white/5 hover:text-white"
+            class="rounded-md px-4 py-2 text-sm font-semibold text-navy-700 transition-colors hover:bg-navy-700/6 hover:text-brick-500"
           >
             {link.label}
           </a>
@@ -46,7 +50,7 @@ import { business, nav } from '../site.config';
     <!-- Desktop call CTA -->
     <a
       href={business.phoneHref}
-      class="ml-auto hidden items-center gap-2 rounded-full bg-signal-400 px-5 py-3 font-display text-sm font-bold tracking-tight text-steel-950 shadow-lg shadow-signal-500/20 transition hover:bg-signal-300 hover:shadow-signal-400/30 focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-signal-300 lg:ml-4 lg:inline-flex"
+      class="ml-auto hidden items-center gap-2 rounded-md bg-brick-500 px-5 py-3 font-display text-sm font-bold tracking-tight text-cream uppercase shadow-sm transition hover:bg-brick-600 focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-brick-500 lg:ml-4 lg:inline-flex"
     >
       <Icon name="phone" class="h-4 w-4" />
       {nav.callCta}
@@ -56,7 +60,7 @@ import { business, nav } from '../site.config';
     <div class="ml-auto flex items-center gap-2 lg:hidden">
       <a
         href={business.phoneHref}
-        class="inline-flex items-center gap-2 rounded-full bg-signal-400 px-4 py-2.5 font-display text-sm font-bold tracking-tight text-steel-950"
+        class="inline-flex items-center gap-2 rounded-md bg-brick-500 px-4 py-2.5 font-display text-sm font-bold tracking-tight text-cream uppercase"
       >
         <Icon name="phone" class="h-4 w-4" />
         <span class="hidden sm:inline">Call</span>
@@ -67,7 +71,7 @@ import { business, nav } from '../site.config';
         id="menu-toggle"
         aria-expanded="false"
         aria-controls="mobile-menu"
-        class="grid h-11 w-11 place-items-center rounded-full border border-white/10 text-white transition hover:bg-white/5"
+        class="grid h-11 w-11 place-items-center rounded-md border border-line text-navy-700 transition hover:bg-navy-700/6"
       >
         <Icon name="menu" class="h-6 w-6" />
         <span class="sr-only">Open menu</span>
@@ -79,20 +83,20 @@ import { business, nav } from '../site.config';
   <div
     id="mobile-menu"
     hidden
-    class="border-t border-white/5 bg-steel-950/98 backdrop-blur-xl lg:hidden"
+    class="border-t border-line/70 bg-cream/98 backdrop-blur-xl lg:hidden"
   >
     <nav class="mx-auto max-w-7xl px-5 py-4 sm:px-8" aria-label="Mobile">
-      <ul class="divide-y divide-white/5">
+      <ul class="divide-y divide-line/70">
         {
           nav.links.map((link) => (
             <li>
               <a
                 href={link.href}
                 data-menu-link
-                class="flex items-center justify-between py-4 font-display text-lg font-bold tracking-tight text-white"
+                class="flex items-center justify-between py-4 font-display text-lg font-bold tracking-tight text-navy-700"
               >
                 {link.label}
-                <Icon name="arrow" class="h-5 w-5 text-signal-400" />
+                <Icon name="arrow" class="h-5 w-5 text-brick-500" />
               </a>
             </li>
           ))
@@ -100,12 +104,12 @@ import { business, nav } from '../site.config';
       </ul>
       <a
         href={business.phoneHref}
-        class="mt-4 flex items-center justify-center gap-2 rounded-full bg-signal-400 px-6 py-4 font-display text-base font-extrabold tracking-tight text-steel-950"
+        class="mt-4 flex items-center justify-center gap-2 rounded-md bg-brick-500 px-6 py-4 font-display text-base font-bold tracking-tight text-cream uppercase"
       >
         <Icon name="phone" class="h-5 w-5" />
         {nav.callCta}
       </a>
-      <p class="mt-3 text-center font-mono text-xs tracking-widest text-steel-400 uppercase">
+      <p class="label-caps mt-3 text-center text-xs text-navy-500">
         {business.hoursShort}
       </p>
     </nav>
@@ -139,10 +143,10 @@ import { business, nav } from '../site.config';
     const header = document.getElementById('site-header');
     const onScroll = () => {
       const scrolled = window.scrollY > 24;
-      header.classList.toggle('bg-steel-950/95', scrolled);
-      header.classList.toggle('shadow-2xl', scrolled);
-      header.classList.toggle('shadow-black/40', scrolled);
-      header.classList.toggle('border-white/10', scrolled);
+      header.classList.toggle('bg-cream/95', scrolled);
+      header.classList.toggle('shadow-lg', scrolled);
+      header.classList.toggle('shadow-navy-950/10', scrolled);
+      header.classList.toggle('border-line', scrolled);
     };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
