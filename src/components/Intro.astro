@@ -1,0 +1,156 @@
+---
+import Icon from './Icon.astro';
+import PlaceholderFigure from './PlaceholderFigure.astro';
+import { intro, business } from '../site.config';
+import aboutImg from '../assets/flatbed-silver-car.jpg';
+---
+
+<section id="about" class="relative overflow-hidden bg-paper py-24 sm:py-28 lg:py-32">
+  <!-- faint vintage corner rule -->
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full bg-navy-700/4 blur-3xl"
+  >
+  </div>
+
+  <div class="mx-auto max-w-7xl px-5 sm:px-8">
+    <div class="grid items-center gap-14 lg:grid-cols-12 lg:gap-16">
+      <!-- Image + seal -->
+      <div data-reveal class="relative lg:col-span-5">
+        <div class="relative rounded-xl border border-line bg-cream p-2.5 shadow-sm">
+          <PlaceholderFigure
+            src={aboutImg}
+            label={intro.imageCaption}
+            class="aspect-4/5 rounded-lg"
+            sizes="(min-width: 1024px) 40vw, 100vw"
+          />
+        </div>
+
+        <!-- Vintage seal stamp -->
+        <div
+          class="absolute -right-5 -bottom-8 h-32 w-32 drop-shadow-lg sm:-right-8 sm:h-40 sm:w-40 lg:-right-10"
+        >
+          <svg viewBox="0 0 200 200" class="h-full w-full" role="img" aria-label="Established 1996, family owned">
+            <defs>
+              <path
+                id="intro-seal-curve"
+                d="M100,100 m-74,0 a74,74 0 1,1 148,0 a74,74 0 1,1 -148,0"
+                fill="none"
+              ></path>
+            </defs>
+            <circle cx="100" cy="100" r="97" fill="#2c415e"></circle>
+            <circle
+              cx="100"
+              cy="100"
+              r="97"
+              fill="none"
+              stroke="#7c4e4b"
+              stroke-width="5"></circle>
+            <circle
+              cx="100"
+              cy="100"
+              r="60"
+              fill="none"
+              stroke="#c59794"
+              stroke-width="1.25"
+              stroke-dasharray="2 4"></circle>
+            <text
+              fill="#faf1e8"
+              style="font-family:var(--font-display);font-weight:600;font-size:13px;letter-spacing:2.4px;text-transform:uppercase;"
+            >
+              <textPath href="#intro-seal-curve" startOffset="0"
+                >{intro.seal.ring}</textPath
+              >
+            </text>
+            <!-- center star -->
+            <path
+              d="M100 70 l5.6 11.4 12.6 1.8 -9.1 8.9 2.2 12.5 -11.3 -5.9 -11.3 5.9 2.2 -12.5 -9.1 -8.9 12.6 -1.8 Z"
+              fill="#7c4e4b"></path>
+            <text
+              x="100"
+              y="120"
+              text-anchor="middle"
+              fill="#c59794"
+              style="font-family:var(--font-display);font-weight:600;font-size:11px;letter-spacing:3px;text-transform:uppercase;"
+              >{intro.seal.centerTop}</text
+            >
+            <text
+              x="100"
+              y="140"
+              text-anchor="middle"
+              fill="#faf1e8"
+              style="font-family:var(--font-display);font-weight:700;font-size:26px;letter-spacing:1px;"
+              >{intro.seal.centerBig}</text
+            >
+          </svg>
+        </div>
+      </div>
+
+      <!-- Copy -->
+      <div class="lg:col-span-7 lg:pl-4">
+        <p data-reveal class="label-caps flex items-center gap-3 text-xs text-brick-500">
+          <span class="h-px w-8 bg-brick-500/50"></span>
+          {intro.eyebrow}
+        </p>
+
+        <h2
+          data-reveal="80"
+          class="mt-5 font-display text-[clamp(2rem,4.6vw,3.4rem)] leading-[1.02] font-bold tracking-tight text-navy-700 uppercase text-balance"
+        >
+          {intro.heading}
+        </h2>
+
+        <p
+          data-reveal="130"
+          class="mt-7 font-display text-xl leading-snug font-medium tracking-tight text-brick-600 text-pretty sm:text-2xl"
+        >
+          {intro.lead}
+        </p>
+        <p data-reveal="170" class="mt-4 text-[1.02rem] leading-relaxed text-ink/75 text-pretty">
+          {intro.body}
+        </p>
+
+        <!-- Pillars -->
+        <ul
+          data-reveal="220"
+          class="mt-9 grid gap-x-8 gap-y-6 border-t border-line pt-8 sm:grid-cols-2"
+        >
+          {
+            intro.pillars.map((p) => (
+              <li class="flex items-start gap-4">
+                <span class="grid h-11 w-11 shrink-0 place-items-center rounded-lg border border-navy-700/15 bg-navy-700/6 text-navy-700">
+                  <Icon name={p.icon} class="h-5 w-5" />
+                </span>
+                <div>
+                  <h3 class="font-display text-base font-bold tracking-wide text-navy-700 uppercase">
+                    {p.title}
+                  </h3>
+                  <p class="mt-1 text-sm leading-relaxed text-ink/65">
+                    {p.text}
+                  </p>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+
+        <div data-reveal="280" class="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+          <a
+            href={intro.primaryHref}
+            class="inline-flex items-center justify-center gap-2 rounded-md bg-navy-700 px-7 py-4 font-display font-bold tracking-tight text-cream uppercase transition hover:bg-navy-800"
+          >
+            {intro.primaryCta}
+            <Icon name="arrow" class="h-4 w-4" />
+          </a>
+          <a
+            href={business.phoneHref}
+            class="inline-flex items-center justify-center gap-2 rounded-md border border-brick-500/40 px-7 py-4 font-display font-bold tracking-tight text-brick-500 uppercase transition hover:bg-brick-500 hover:text-cream"
+          >
+            <Icon name="phone" class="h-4 w-4" />
+            {intro.secondaryCta}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

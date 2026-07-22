@@ -120,6 +120,49 @@ export const hero = {
 } as const;
 
 /* ------------------------------------------------------------------ */
+/* Intro / About (sits directly under the hero)                        */
+/* ------------------------------------------------------------------ */
+
+export const intro = {
+  eyebrow: 'Who we are',
+  heading: 'The local flatbed crew South Jersey has trusted since 1996',
+  lead: 'At TK’s Towing, our mission is to provide fast, safe, and reliable towing services to our customers.',
+  body: 'We understand the inconvenience and stress that comes with a vehicle breakdown, and we are committed to making the towing experience as smooth and hassle-free as possible. Family owned and operated for over 25 years, right here in Haddon Township — you are talking to the people who own the trucks.',
+  seal: {
+    ring: "TK’S TOWING · EST. 1996 · HADDON TOWNSHIP NJ · ",
+    centerTop: 'Since',
+    centerBig: '1996',
+    centerBottom: 'Family Owned',
+  },
+  pillars: [
+    {
+      icon: 'shield',
+      title: 'Family owned & operated',
+      text: 'Nearly 30 years, same family, same town.',
+    },
+    {
+      icon: 'clock',
+      title: 'Open 24/7, 365',
+      text: 'Nights, weekends, holidays — someone answers.',
+    },
+    {
+      icon: 'flatbed',
+      title: 'Flatbed done right',
+      text: 'Carried on the deck, never dragged.',
+    },
+    {
+      icon: 'pin',
+      title: 'Local & fast',
+      text: 'Based in the middle of Camden County.',
+    },
+  ],
+  primaryCta: 'Read our story',
+  primaryHref: '#story',
+  secondaryCta: `Call ${business.phone}`,
+  imageCaption: 'PLACEHOLDER — TK’S TRUCK / CREW PHOTO',
+} as const;
+
+/* ------------------------------------------------------------------ */
 /* Trust bar                                                           */
 /* ------------------------------------------------------------------ */
 
