@@ -1,0 +1,215 @@
+---
+import Icon from './Icon.astro';
+import { coverageMap } from '../data/coverage-map';
+import { coverage, business } from '../site.config';
+
+/**
+ * Real county boundaries (US Census TIGER), not a picture of a map.
+ * Each county carries data-county so the region cards below can light it up —
+ * see the script at the bottom of Coverage.astro.
+ */
+const { width, height, base, context, counties } = coverageMap;
+
+// Region metadata comes from site.config so the map and the cards can never
+// drift apart.
+const regionBySlug = Object.fromEntries(
+  coverage.regions.map((r) => [
+    r.name.split(' ')[0].toLowerCase(),
+    { name: r.name.replace(/\s*County$/, ''), status: r.status },
+  ])
+);
+
+// Gloucester's area centroid sits close to the Camden border, so its label
+// needs a nudge west to stay clear of the line.
+const labelNudge: Record<string, number> = { gloucester: -28 };
+---
+
+<figure class="coverage-map">
+  <svg
+    viewBox={`0 0 ${width} ${height}`}
+    role="img"
+    aria-labelledby="coverage-map-title"
+    class="block h-auto w-full"
+  >
+    <title id="coverage-map-title">
+      {coverage.heading} — {coverage.primaryLabel} in full, plus parts of Burlington
+      and Gloucester County
+    </title>
+
+    <!-- Neighbouring counties, for orientation only -->
+    <g class="ctx" aria-hidden="true">
+      {context.map((d) => <path d={d} />)}
+    </g>
+
+    <!-- The counties we actually serve -->
+    {
+      counties.map((c) => (
+        <path
+          d={c.d}
+          class="county"
+          data-county={c.slug}
+          data-status={regionBySlug[c.slug].status === 'Full coverage' ? 'full' : 'partial'}
+        />
+      ))
+    }
+
+    <!-- County names -->
+    {
+      counties.map((c) => (
+        <text
+          class="county-label"
+          data-status={regionBySlug[c.slug].status === 'Full coverage' ? 'full' : 'partial'}
+          x={c.label.x + (labelNudge[c.slug] ?? 0)}
+          y={c.label.y}
+          text-anchor="middle"
+          aria-hidden="true"
+        >
+          {regionBySlug[c.slug].name}
+        </text>
+      ))
+    }
+
+    <!-- Home base -->
+    <g class="base" transform={`translate(${base.x} ${base.y})`} aria-hidden="true">
+      <circle class="base-pulse" r="26" />
+      <circle class="base-ring" r="11" />
+      <circle class="base-dot" r="4.5" />
+    </g>
+  </svg>
+
+  <figcaption class="legend">
+    <span class="legend-item">
+      <i class="swatch swatch-full"></i>
+      Full coverage
+    </span>
+    <span class="legend-item">
+      <i class="swatch swatch-partial"></i>
+      Partial coverage
+    </span>
+    <span class="legend-item">
+      <Icon name="pin" class="h-3.5 w-3.5 text-brick-500" />
+      {business.address.city}
+    </span>
+  </figcaption>
+</figure>
+
+<style>
+  .coverage-map {
+    margin: 0;
+  }
+
+  /* Neighbouring counties — present, but clearly not the subject */
+  .ctx path {
+    fill: var(--color-navy-700);
+    fill-opacity: 0.045;
+    stroke: var(--color-line);
+    stroke-width: 1.6;
+    stroke-linejoin: round;
+  }
+
+  .county {
+    stroke: var(--color-navy-700);
+    stroke-width: 2;
+    stroke-linejoin: round;
+    transition:
+      fill-opacity 0.35s ease,
+      filter 0.35s ease;
+  }
+  .county[data-status='full'] {
+    fill: var(--color-brick-500);
+    fill-opacity: 0.88;
+  }
+  .county[data-status='partial'] {
+    fill: var(--color-navy-700);
+    fill-opacity: 0.24;
+  }
+
+  /* Lit by the matching region card (or by hovering the county itself) */
+  .county.is-lit[data-status='full'] {
+    fill-opacity: 1;
+  }
+  .county.is-lit[data-status='partial'] {
+    fill-opacity: 0.44;
+  }
+  .county.is-lit {
+    filter: drop-shadow(0 6px 14px rgba(44, 65, 94, 0.28));
+  }
+
+  .county-label {
+    font-family: var(--font-display);
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    pointer-events: none;
+    user-select: none;
+  }
+  .county-label[data-status='full'] {
+    fill: var(--color-cream);
+  }
+  .county-label[data-status='partial'] {
+    fill: var(--color-navy-700);
+    fill-opacity: 0.72;
+  }
+
+  /* Home base marker */
+  .base-dot {
+    fill: var(--color-cream);
+  }
+  .base-ring {
+    fill: var(--color-brick-600);
+    stroke: var(--color-cream);
+    stroke-width: 3;
+  }
+  .base-pulse {
+    fill: var(--color-brick-500);
+    opacity: 0.22;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .base-pulse {
+      transform-origin: center;
+      animation: basePulse 3.2s ease-out infinite;
+    }
+    @keyframes basePulse {
+      0% {
+        transform: scale(0.45);
+        opacity: 0.35;
+      }
+      70%,
+      100% {
+        transform: scale(1.15);
+        opacity: 0;
+      }
+    }
+  }
+
+  .legend {
+    margin-top: 1.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    font-family: var(--font-display);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--color-ink) 62%, transparent);
+  }
+  .legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .swatch {
+    width: 0.85rem;
+    height: 0.85rem;
+    border-radius: 0.2rem;
+    border: 1px solid var(--color-navy-700);
+  }
+  .swatch-full {
+    background: var(--color-brick-500);
+  }
+  .swatch-partial {
+    background: color-mix(in srgb, var(--color-navy-700) 24%, transparent);
+  }
+</style>

@@ -1,0 +1,228 @@
+---
+/**
+ * "What this service covers" — the service's own bullets, given room.
+ *
+ * Rebuilt from a three-up card grid. Two problems with that: it was the third
+ * icon-box grid on the page (the coverage and related bands are both grids
+ * too), and a four-item list in a three-column grid always left one orphan on
+ * the second row.
+ *
+ * This is a dark editorial band instead — sticky heading on the left, the
+ * points as full-width numbered rows on the right, separated by hairlines. The
+ * rows read as a spec sheet, they take any number of items without orphans, and
+ * the dark tone breaks up a run of light sections.
+ *
+ * Copy is `services.items[].bullets` verbatim; only the presentation differs.
+ * Icons cycle through `servicePage.includes.icons` — an icon labels a row, it
+ * does not assert anything.
+ */
+import Icon from './Icon.astro';
+import { servicePage, business } from '../site.config';
+
+interface Props {
+  bullets: readonly string[];
+}
+
+const { bullets } = Astro.props;
+const { eyebrow, heading, intro, icons } = servicePage.includes;
+---
+
+<section id="included" class="inc">
+  <div class="inc__inner">
+    <div class="inc__grid">
+      <!-- Sticky head -->
+      <div class="inc__head" data-reveal>
+        <p class="inc__eyebrow label-caps">
+          <span class="inc__eyebrow-rule" aria-hidden="true"></span>
+          {eyebrow}
+        </p>
+        <h2 class="inc__heading font-display">{heading}</h2>
+        <p class="inc__intro">{intro}</p>
+
+        <a href={business.phoneHref} class="inc__cta">
+          <Icon name="phone" class="h-4 w-4" />
+          {servicePage.overview.primaryCta}
+        </a>
+      </div>
+
+      <!-- Numbered rows -->
+      <ol class="inc__rows">
+        {
+          bullets.map((bullet, i) => (
+            <li class="inc__row" data-reveal={i * 70}>
+              <span class="inc__num font-display" aria-hidden="true">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <span class="inc__ico" aria-hidden="true">
+                <Icon name={icons[i % icons.length]} class="h-5 w-5" />
+              </span>
+              <p class="inc__text">{bullet}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .inc {
+    background: var(--color-navy-950);
+    padding-block: 4.5rem;
+  }
+  .inc__inner {
+    margin-inline: auto;
+    max-width: 1300px;
+    padding-inline: 1.25rem;
+  }
+  .inc__grid {
+    display: grid;
+    gap: 3rem;
+  }
+
+  /* ---- Head -------------------------------------------------------- */
+  .inc__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    font-size: 0.7rem;
+    color: var(--color-brick-300);
+  }
+  .inc__eyebrow-rule {
+    width: 2.25rem;
+    height: 1px;
+    background: color-mix(in srgb, var(--color-brick-300) 60%, transparent);
+  }
+  .inc__heading {
+    margin-top: 1.25rem;
+    font-size: clamp(1.9rem, 3.6vw, 2.75rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.015em;
+    text-transform: uppercase;
+    text-wrap: balance;
+    color: var(--color-cream);
+  }
+  .inc__intro {
+    margin-top: 1.25rem;
+    font-size: 1rem;
+    line-height: 1.7;
+    text-wrap: pretty;
+    color: var(--color-navy-100);
+  }
+  .inc__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 1.75rem;
+    padding: 0.9rem 1.5rem;
+    border-radius: 0.4rem;
+    background: var(--color-brick-500);
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--color-cream);
+    transition: background-color 0.25s;
+  }
+  .inc__cta:hover {
+    background: var(--color-brick-600);
+  }
+
+  /* ---- Rows -------------------------------------------------------- */
+  .inc__rows {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid color-mix(in srgb, var(--color-cream) 14%, transparent);
+  }
+  .inc__row {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    align-items: center;
+    gap: 1.1rem;
+    padding-block: 1.6rem;
+    border-bottom: 1px solid
+      color-mix(in srgb, var(--color-cream) 14%, transparent);
+    transition: background-color 0.25s;
+  }
+  .inc__row:hover {
+    background: color-mix(in srgb, var(--color-cream) 4%, transparent);
+  }
+  .inc__num {
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    color: color-mix(in srgb, var(--color-cream) 26%, transparent);
+  }
+  .inc__ico {
+    display: grid;
+    place-items: center;
+    width: 2.6rem;
+    height: 2.6rem;
+    border-radius: 0.6rem;
+    border: 1px solid color-mix(in srgb, var(--color-cream) 14%, transparent);
+    background: color-mix(in srgb, var(--color-cream) 6%, transparent);
+    color: var(--color-brick-300);
+  }
+  .inc__text {
+    margin: 0;
+    font-size: 1.02rem;
+    line-height: 1.5;
+    text-wrap: pretty;
+    color: color-mix(in srgb, var(--color-cream) 88%, transparent);
+  }
+
+  @media (min-width: 640px) {
+    .inc {
+      padding-block: 5.5rem;
+    }
+    .inc__inner {
+      padding-inline: 2rem;
+    }
+    .inc__row {
+      gap: 1.5rem;
+      padding-block: 1.9rem;
+    }
+    .inc__num {
+      font-size: 2rem;
+    }
+    .inc__text {
+      font-size: 1.1rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .inc {
+      padding-block: 7rem;
+    }
+    .inc__grid {
+      grid-template-columns: minmax(0, 22rem) 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+    .inc__head {
+      position: sticky;
+      /* Clears the fixed header. */
+      top: 7rem;
+    }
+    /* First row's rule doubles as the head's baseline, so drop the top border
+       and let the rows start flush with the heading. */
+    .inc__rows {
+      border-top: 0;
+    }
+    .inc__row:first-child {
+      padding-top: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .inc__row,
+    .inc__cta {
+      transition: none;
+    }
+  }
+</style>

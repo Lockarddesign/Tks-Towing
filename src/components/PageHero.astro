@@ -1,0 +1,129 @@
+---
+/**
+ * Shared header band for the inner pages (/coverage, /gallery, /contact).
+ *
+ * The same hero as the About and Services pages: a short split band under the
+ * pinned sticky header, dark copy panel on the left and the quote form on the
+ * right. Deliberately not the homepage's slideshow hero.
+ *
+ * All copy is passed in from the page, which takes it from site.config — this
+ * component holds none of its own. `<slot />` sits between the lead and the
+ * buttons for page-specific extras.
+ */
+import Icon from './Icon.astro';
+import QuoteForm from './QuoteForm.astro';
+
+interface Props {
+  eyebrow: string;
+  heading: string;
+  lead: string;
+  /** Optional second paragraph, set smaller than the lead. */
+  body?: string;
+  primaryCta: string;
+  primaryHref: string;
+  secondaryCta?: string;
+  secondaryHref?: string;
+  /**
+   * Short proof points under the copy. Two jobs: they give the crawler concrete
+   * local terms near the h1, and they bulk the copy column out so it sits level
+   * with the quote form instead of floating short beside it.
+   */
+  points?: readonly string[];
+  /** Namespaces the quote form's field ids — one form per page. */
+  formIdPrefix: string;
+}
+
+const {
+  eyebrow,
+  heading,
+  lead,
+  body,
+  primaryCta,
+  primaryHref,
+  secondaryCta,
+  secondaryHref,
+  points,
+  formIdPrefix,
+} = Astro.props;
+---
+
+<section id="top" class="bg-navy-950">
+  <div class="grid lg:grid-cols-[1fr_44%] xl:grid-cols-[1fr_48%]">
+    <!-- Copy panel -->
+    <div
+      class="px-5 pt-14 pb-10 sm:px-8 lg:py-24 lg:pb-24 lg:pl-[max(2rem,calc((100vw-1300px)/2))] xl:py-28"
+    >
+      <div class="mx-auto max-w-2xl lg:mx-0 lg:pr-12">
+        <p class="label-caps flex items-center gap-3 text-xs text-brick-300">
+          <span class="h-px w-8 bg-brick-300/60"></span>
+          {eyebrow}
+        </p>
+
+        <h1
+          class="mt-5 font-display text-[clamp(2.2rem,4.6vw,3.6rem)] leading-[0.97] font-bold tracking-tight text-balance text-cream uppercase"
+        >
+          {heading}
+        </h1>
+
+        <p class="mt-6 text-lg leading-relaxed text-pretty text-cream/85">
+          {lead}
+        </p>
+        {
+          body && (
+            <p class="mt-4 text-[0.97rem] leading-relaxed text-pretty text-navy-100">
+              {body}
+            </p>
+          )
+        }
+
+        {
+          points && points.length > 0 && (
+            <ul class="mt-7 grid gap-x-7 gap-y-3 sm:grid-cols-2">
+              {points.map((point) => (
+                <li class="flex items-start gap-3 text-[0.92rem] leading-snug text-cream/80">
+                  <span class="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-brick-300/15 text-brick-300">
+                    <Icon name="check" class="h-3 w-3" />
+                  </span>
+                  <span>{point}</span>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+
+        <slot />
+
+        <div class="mt-9 flex flex-wrap gap-3">
+          <a
+            href={primaryHref}
+            class="inline-flex items-center justify-center gap-2.5 bg-brick-500 px-7 py-4 font-display font-bold tracking-wider text-cream uppercase transition hover:bg-brick-600"
+          >
+            <Icon name="phone" class="h-[17px] w-[17px]" />
+            {primaryCta}
+          </a>
+          {
+            secondaryCta && secondaryHref && (
+              <a
+                href={secondaryHref}
+                class="inline-flex items-center justify-center gap-2.5 border border-cream/30 px-7 py-4 font-display font-bold tracking-wider text-cream uppercase transition hover:border-cream hover:bg-cream/8"
+              >
+                {secondaryCta}
+                <Icon name="arrow" class="h-[17px] w-[17px]" />
+              </a>
+            )
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Quote form. No order swap: DOM order (headline, then form) is right on
+         both — a form ahead of any context reads badly on mobile. -->
+    <div
+      class="px-5 pt-2 pb-16 sm:px-8 lg:py-24 lg:pr-[max(2rem,calc((100vw-1300px)/2))] lg:pl-4 xl:py-28"
+    >
+      <div class="mx-auto w-full max-w-lg lg:mx-0 lg:max-w-none">
+        <QuoteForm idPrefix={formIdPrefix} />
+      </div>
+    </div>
+  </div>
+</section>

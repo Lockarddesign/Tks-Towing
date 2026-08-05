@@ -1,0 +1,72 @@
+---
+/**
+ * About page header. Deliberately not the homepage's slideshow hero — this is a
+ * short band that sits under the pinned sticky header and leads into the story.
+ * Copy is `about.hero`, which is `intro` verbatim.
+ *
+ * Split layout: copy on the left, quote form on the right. The form replaced
+ * the owners photo here — the photo now leads AboutCompany directly below, so
+ * it is still on the page, and the hero gets a conversion point above the fold.
+ */
+import Icon from './Icon.astro';
+import QuoteForm from './QuoteForm.astro';
+import { about, business } from '../site.config';
+---
+
+<section id="top" class="bg-navy-950">
+  <div class="grid lg:grid-cols-[1fr_44%] xl:grid-cols-[1fr_48%]">
+    <!-- Copy panel -->
+    <div
+      class="px-5 pt-14 pb-10 sm:px-8 lg:py-24 lg:pb-24 lg:pl-[max(2rem,calc((100vw-1300px)/2))] xl:py-28"
+    >
+      <div class="mx-auto max-w-2xl lg:mx-0 lg:pr-12">
+        <p class="label-caps flex items-center gap-3 text-xs text-brick-300">
+          <span class="h-px w-8 bg-brick-300/60"></span>
+          {about.hero.eyebrow}
+        </p>
+
+        <h1
+          class="mt-5 font-display text-[clamp(2.2rem,4.6vw,3.6rem)] leading-[0.97] font-bold tracking-tight text-balance text-cream uppercase"
+        >
+          {about.hero.heading}
+        </h1>
+
+        <p class="mt-6 text-lg leading-relaxed text-pretty text-cream/85">
+          {about.hero.lead}
+        </p>
+        <p class="mt-4 text-[0.97rem] leading-relaxed text-pretty text-navy-100">
+          {about.hero.body}
+        </p>
+
+        <div class="mt-9 flex flex-wrap gap-3">
+          <a
+            href={business.phoneHref}
+            class="inline-flex items-center justify-center gap-2.5 bg-brick-500 px-7 py-4 font-display font-bold tracking-wider text-cream uppercase transition hover:bg-brick-600"
+          >
+            <Icon name="phone" class="h-[17px] w-[17px]" />
+            {about.primaryCta}
+          </a>
+          <a
+            href={about.secondaryCtaHref}
+            class="inline-flex items-center justify-center gap-2.5 border border-cream/30 px-7 py-4 font-display font-bold tracking-wider text-cream uppercase transition hover:border-cream hover:bg-cream/8"
+          >
+            {about.secondaryCta}
+            <Icon name="arrow" class="h-[17px] w-[17px]" />
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quote form. No order swap: DOM order (headline, then form) is right on
+         both — a form ahead of any context reads badly on mobile. Extra padding
+         leaves room for the card's offset plates and shadow, which sit outside
+         its box. -->
+    <div
+      class="px-5 pt-2 pb-16 sm:px-8 lg:py-24 lg:pr-[max(2rem,calc((100vw-1300px)/2))] lg:pl-4 xl:py-28"
+    >
+      <div class="mx-auto w-full max-w-lg lg:mx-0 lg:max-w-none">
+        <QuoteForm idPrefix="about" />
+      </div>
+    </div>
+  </div>
+</section>

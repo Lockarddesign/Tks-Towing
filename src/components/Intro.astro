@@ -28,8 +28,11 @@ import aboutImg from '../assets/about-firefighter.png';
             sizes="(min-width: 1024px) 40vw, 100vw"
           />
           <!-- Brand caption tying the image to the community-service story -->
+          <!-- From sm up the seal sits at the bottom-right, so the caption ends
+               short of it. On mobile the seal moves to the top-right instead
+               (see below) and the caption gets the full width back. -->
           <div
-            class="absolute right-5 bottom-5 left-5 rounded-lg border border-cream/15 bg-navy-950/70 px-4 py-3 backdrop-blur-sm"
+            class="absolute right-5 bottom-5 left-5 rounded-lg border border-cream/15 bg-navy-950/70 px-4 py-3 backdrop-blur-sm sm:right-[9.5rem]"
           >
             <p class="label-caps text-[0.6rem] text-brick-300">
               {intro.imageKicker}
@@ -40,9 +43,10 @@ import aboutImg from '../assets/about-firefighter.png';
           </div>
         </div>
 
-        <!-- Vintage seal stamp -->
+        <!-- Vintage seal stamp. Top-right on mobile: at the bottom it sat over
+             the caption and covered the end of the firefighter line. -->
         <div
-          class="absolute -right-5 -bottom-8 h-32 w-32 drop-shadow-lg sm:-right-8 sm:h-40 sm:w-40 lg:-right-10"
+          class="absolute -top-7 -right-4 h-28 w-28 drop-shadow-lg sm:top-auto sm:-right-8 sm:-bottom-8 sm:h-40 sm:w-40 lg:-right-10"
         >
           <svg viewBox="0 0 200 200" class="h-full w-full" role="img" aria-label="Established 1996, family owned">
             <defs>
@@ -52,24 +56,24 @@ import aboutImg from '../assets/about-firefighter.png';
                 fill="none"
               ></path>
             </defs>
-            <circle cx="100" cy="100" r="97" fill="#2c415e"></circle>
+            <circle cx="100" cy="100" r="97" fill="var(--color-navy-700)"></circle>
             <circle
               cx="100"
               cy="100"
               r="97"
               fill="none"
-              stroke="#7c4e4b"
+              stroke="var(--color-brick-500)"
               stroke-width="5"></circle>
             <circle
               cx="100"
               cy="100"
               r="60"
               fill="none"
-              stroke="#c59794"
+              stroke="var(--color-brick-300)"
               stroke-width="1.25"
               stroke-dasharray="2 4"></circle>
             <text
-              fill="#faf1e8"
+              fill="var(--color-cream)"
               style="font-family:var(--font-display);font-weight:600;font-size:13px;letter-spacing:2.4px;text-transform:uppercase;"
             >
               <textPath href="#intro-seal-curve" startOffset="0"
@@ -79,12 +83,12 @@ import aboutImg from '../assets/about-firefighter.png';
             <!-- center star -->
             <path
               d="M100 70 l5.6 11.4 12.6 1.8 -9.1 8.9 2.2 12.5 -11.3 -5.9 -11.3 5.9 2.2 -12.5 -9.1 -8.9 12.6 -1.8 Z"
-              fill="#7c4e4b"></path>
+              fill="var(--color-brick-500)"></path>
             <text
               x="100"
               y="120"
               text-anchor="middle"
-              fill="#c59794"
+              fill="var(--color-brick-300)"
               style="font-family:var(--font-display);font-weight:600;font-size:11px;letter-spacing:3px;text-transform:uppercase;"
               >{intro.seal.centerTop}</text
             >
@@ -92,7 +96,7 @@ import aboutImg from '../assets/about-firefighter.png';
               x="100"
               y="140"
               text-anchor="middle"
-              fill="#faf1e8"
+              fill="var(--color-cream)"
               style="font-family:var(--font-display);font-weight:700;font-size:26px;letter-spacing:1px;"
               >{intro.seal.centerBig}</text
             >

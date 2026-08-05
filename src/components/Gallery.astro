@@ -1,52 +1,593 @@
 ---
+/**
+ * The work — 3D coverflow carousel.
+ *
+ * Progressive enhancement: with no JS the slides are a plain scroll-snap row
+ * (still swipeable, still indexable). Once the script runs it flips the deck
+ * into a perspective coverflow — the active slide faces the viewer, its
+ * neighbours rotate away on the Y axis and sink back in Z, and a sheen sweeps
+ * the active face. Drag, arrows, dots, keyboard and autoplay all drive the
+ * same `go(index)`. Under prefers-reduced-motion the 3D and the autoplay are
+ * both skipped and the scroll-snap row is kept.
+ */
 import SectionHead from './SectionHead.astro';
-import PlaceholderFigure from './PlaceholderFigure.astro';
+import Icon from './Icon.astro';
 import { gallery } from '../site.config';
+import { Image } from 'astro:assets';
 
-import flatbedSilver from '../assets/flatbed-silver-car.jpg';
-import chains from '../assets/chains-secured.jpg';
-import operator from '../assets/operator-blue-car.jpg';
-import rural from '../assets/flatbed-rural-road.jpg';
-import silhouette from '../assets/truck-silhouette.jpg';
-import hauled from '../assets/car-hauled-away.jpg';
+interface Props {
+  /** Off on /gallery — that page's hero already carries this same copy. */
+  showHead?: boolean;
+}
 
-// Masonry-ish: each tile declares its own span so the grid stays lively.
-const tiles = [
-  { src: flatbedSilver, label: gallery.captions.a, span: 'sm:col-span-2 sm:row-span-2', ratio: 'aspect-4/3 sm:aspect-auto sm:h-full' },
-  { src: chains, label: gallery.captions.b, span: '', ratio: 'aspect-square' },
-  { src: operator, label: gallery.captions.c, span: '', ratio: 'aspect-square' },
-  { src: rural, label: gallery.captions.d, span: 'sm:col-span-2', ratio: 'aspect-16/9' },
-  { src: silhouette, label: gallery.captions.e, span: '', ratio: 'aspect-square' },
-  { src: hauled, label: gallery.captions.f, span: '', ratio: 'aspect-square' },
+const { showHead = true } = Astro.props;
+
+import mustang from '../assets/tk-mustang-flatbed.jpg';
+import aston from '../assets/tk-aston-flatbed.jpg';
+import trailer from '../assets/tk-trailer-haul.jpg';
+import corvette from '../assets/tk-corvette-flatbed.jpg';
+import nightHospital from '../assets/tk-night-hospital.jpg';
+
+const slides = [
+  { src: mustang, alt: gallery.captions.a },
+  { src: aston, alt: gallery.captions.b },
+  { src: trailer, alt: gallery.captions.c },
+  { src: corvette, alt: gallery.captions.d },
+  { src: nightHospital, alt: gallery.captions.e },
 ];
+
+const total = String(slides.length).padStart(2, '0');
 ---
 
-<section id="gallery" class="bg-navy-900 py-24 sm:py-28 lg:py-36">
-  <div class="mx-auto max-w-[1300px] px-5 sm:px-8">
-    <SectionHead
-      eyebrow={gallery.eyebrow}
-      heading={gallery.heading}
-      intro={gallery.intro}
-      tone="dark"
-    />
+<section
+  id="gallery"
+  class="relative overflow-hidden bg-navy-900 py-24 sm:py-28 lg:py-36"
+>
+  <!-- depth wash behind the deck -->
+  <span
+    aria-hidden="true"
+    class="pointer-events-none absolute top-1/3 left-1/2 h-[34rem] w-[70rem] -translate-x-1/2 rounded-full bg-brick-500/12 blur-3xl"
+  ></span>
 
-    <div
-      class="mt-14 grid auto-rows-auto grid-cols-1 gap-3 sm:mt-18 sm:grid-cols-4"
-    >
-      {
-        tiles.map((tile, i) => (
-          <div data-reveal={i * 60} class={`group ${tile.span}`}>
-            <PlaceholderFigure
-              src={tile.src}
-              label={tile.label}
-              class={`h-full rounded-xl border border-cream/12 ${tile.ratio}`}
-              imgClass="h-full w-full object-cover transition-transform duration-700 ease-out motion-safe:group-hover:scale-105"
-              sizes="(min-width: 640px) 40vw, 100vw"
-              widths={[480, 800, 1200]}
-            />
-          </div>
-        ))
-      }
+  {
+    showHead && (
+      <div class="relative mx-auto max-w-[1300px] px-5 sm:px-8">
+        <SectionHead
+          eyebrow={gallery.eyebrow}
+          heading={gallery.heading}
+          intro={gallery.intro}
+          tone="dark"
+        />
+      </div>
+    )
+  }
+
+  <div
+    class:list={['coverflow relative', showHead && 'mt-14 sm:mt-18']}
+    data-coverflow
+    role="group"
+    aria-roledescription="carousel"
+    aria-label={gallery.heading}
+  >
+    <div class="stage" data-stage>
+      <ul class="deck" data-deck>
+        {
+          slides.map((slide, i) => (
+            <li
+              class="slide"
+              data-slide
+              role="group"
+              aria-roledescription="slide"
+              aria-label={`${i + 1} of ${slides.length}`}
+            >
+              <figure class="card">
+                <Image
+                  src={slide.src}
+                  alt={slide.alt}
+                  widths={[480, 800, 1200, 1600]}
+                  sizes="(min-width: 1024px) 55vw, 88vw"
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                  decoding={i === 0 ? 'sync' : 'async'}
+                  class="card-img"
+                />
+                <span class="card-shade" aria-hidden="true" />
+                <span class="card-sheen" aria-hidden="true" />
+                <figcaption class="card-cap label-caps">{slide.alt}</figcaption>
+              </figure>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <!-- controls -->
+    <div class="mx-auto flex max-w-[1300px] flex-col gap-6 px-5 sm:px-8">
+      <div class="controls">
+        <div class="counter label-caps" aria-hidden="true">
+          <span data-current>01</span>
+          <span class="counter-sep" />
+          <span class="counter-total">{total}</span>
+        </div>
+
+        <div class="dots" data-dots>
+          {
+            slides.map((slide, i) => (
+              <button
+                type="button"
+                class="dot"
+                data-dot
+                aria-label={`Show photo ${i + 1}: ${slide.alt}`}
+                aria-current={i === 0 ? 'true' : 'false'}
+              >
+                <span class="dot-fill" aria-hidden="true" />
+              </button>
+            ))
+          }
+        </div>
+
+        <div class="arrows">
+          <button type="button" class="arrow" data-prev aria-label="Previous photo">
+            <Icon name="arrow" class="h-5 w-5 -scale-x-100" />
+          </button>
+          <button type="button" class="arrow" data-next aria-label="Next photo">
+            <Icon name="arrow" class="h-5 w-5" />
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </section>
+
+<style>
+  /* ---------- fallback: scroll-snap row (no JS / reduced motion) -------- */
+  .stage {
+    position: relative;
+  }
+  .deck {
+    list-style: none;
+    margin: 0;
+    padding: 0 max(1.25rem, calc((100vw - 1300px) / 2 + 2rem));
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .deck::-webkit-scrollbar {
+    display: none;
+  }
+  .slide {
+    flex: 0 0 auto;
+    width: min(88vw, 46rem);
+    scroll-snap-align: center;
+  }
+
+  /* ---------- enhanced: 3D coverflow ---------- */
+  [data-coverflow][data-ready] .stage {
+    perspective: 1500px;
+    perspective-origin: 50% 46%;
+    height: clamp(19rem, 46vw, 32rem);
+    margin-bottom: 2.75rem;
+    touch-action: pan-y;
+    cursor: grab;
+  }
+  [data-coverflow][data-ready][data-dragging] .stage {
+    cursor: grabbing;
+  }
+  [data-coverflow][data-ready] .deck {
+    display: block;
+    height: 100%;
+    padding: 0;
+    overflow: visible;
+    transform-style: preserve-3d;
+  }
+  [data-coverflow][data-ready] .slide {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: clamp(17rem, 52vw, 40rem);
+    height: 100%;
+    transform-style: preserve-3d;
+    transform: translateX(-50%);
+    transition:
+      transform 0.75s var(--ease-out-soft),
+      opacity 0.75s var(--ease-out-soft),
+      filter 0.75s var(--ease-out-soft);
+    will-change: transform, opacity;
+  }
+  [data-coverflow][data-dragging] .slide {
+    transition: none;
+  }
+
+  .card {
+    position: relative;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    border-radius: 0.875rem;
+    border: 1px solid rgba(250, 241, 232, 0.14);
+    background: var(--color-navy-950);
+    box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.85);
+  }
+  [data-coverflow][data-ready] .slide[data-active] .card {
+    box-shadow:
+      0 45px 80px -30px rgba(0, 0, 0, 0.9),
+      0 0 0 1px rgba(197, 151, 148, 0.35);
+  }
+  .card-img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    aspect-ratio: 16 / 10;
+    transform: scale(1.02);
+    filter: brightness(var(--dim, 1));
+    transition:
+      transform 1.2s var(--ease-out-soft),
+      filter 0.75s var(--ease-out-soft);
+  }
+  [data-coverflow][data-ready] .slide[data-active] .card-img {
+    transform: scale(1.06);
+  }
+  .card-shade {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      to top,
+      rgba(17, 26, 38, 0.88),
+      rgba(17, 26, 38, 0.12) 42%,
+      transparent 70%
+    );
+  }
+  /* sheen sweeps across whichever slide is active */
+  .card-sheen {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    background: linear-gradient(
+      104deg,
+      transparent 38%,
+      rgba(250, 241, 232, 0.18) 48%,
+      rgba(250, 241, 232, 0.32) 52%,
+      transparent 62%
+    );
+    transform: translateX(-60%);
+  }
+  [data-coverflow][data-ready] .slide[data-active] .card-sheen {
+    animation: sheen 1.5s var(--ease-out-soft) 0.15s both;
+  }
+  @keyframes sheen {
+    0% {
+      opacity: 0;
+      transform: translateX(-60%);
+    }
+    35% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: translateX(60%);
+    }
+  }
+
+  .card-cap {
+    position: absolute;
+    right: 1.1rem;
+    bottom: 1.1rem;
+    left: 1.1rem;
+    color: var(--color-cream);
+    font-size: 0.66rem;
+    line-height: 1.4;
+    letter-spacing: 0.14em;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+    transform: translateZ(0.01px);
+    transition:
+      opacity 0.5s var(--ease-out-soft),
+      transform 0.6s var(--ease-out-soft);
+  }
+  [data-coverflow][data-ready] .card-cap {
+    opacity: 0;
+    transform: translate3d(0, 10px, 40px);
+  }
+  [data-coverflow][data-ready] .slide[data-active] .card-cap {
+    opacity: 1;
+    transform: translate3d(0, 0, 60px);
+  }
+
+  /* ---------- controls ---------- */
+  .controls {
+    margin-top: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem 2rem;
+  }
+  [data-coverflow][data-ready] .controls {
+    margin-top: 0;
+  }
+  .counter {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.7rem;
+    color: var(--color-brick-300);
+  }
+  .counter-sep {
+    width: 1.75rem;
+    height: 1px;
+    background: rgba(250, 241, 232, 0.25);
+  }
+  .counter-total {
+    color: rgba(250, 241, 232, 0.45);
+  }
+
+  .dots {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    order: 3;
+    width: 100%;
+  }
+  @media (min-width: 640px) {
+    .dots {
+      order: 0;
+      width: auto;
+    }
+  }
+  .dot {
+    position: relative;
+    height: 2px;
+    width: 2.25rem;
+    flex: 1 1 auto;
+    max-width: 3.5rem;
+    border: 0;
+    padding: 0;
+    background: rgba(250, 241, 232, 0.18);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  .dot:hover {
+    background: rgba(250, 241, 232, 0.35);
+  }
+  /* The rule itself is 2px tall — far too small to tap. This keeps the visual
+     hairline and gives the button a ~42px touch target. */
+  .dot::after {
+    content: '';
+    position: absolute;
+    inset: -20px 0;
+  }
+  .dot-fill {
+    position: absolute;
+    inset: 0;
+    transform-origin: left center;
+    transform: scaleX(0);
+    background: var(--color-brick-400);
+    transition: transform 0.5s var(--ease-out-soft);
+  }
+  .dot[aria-current='true'] .dot-fill {
+    transform: scaleX(1);
+  }
+
+  .arrows {
+    display: flex;
+    gap: 0.6rem;
+  }
+  .arrow {
+    display: grid;
+    place-items: center;
+    height: 3rem;
+    width: 3rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(250, 241, 232, 0.2);
+    background: transparent;
+    color: var(--color-cream);
+    cursor: pointer;
+    transition:
+      background-color 0.3s ease,
+      border-color 0.3s ease,
+      transform 0.3s var(--ease-out-soft);
+  }
+  .arrow:hover {
+    background: var(--color-brick-500);
+    border-color: var(--color-brick-500);
+    transform: translateY(-2px);
+  }
+  .arrow:active {
+    transform: translateY(0);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brick-300);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .slide,
+    .card-img,
+    .card-cap,
+    .arrow,
+    .dot-fill {
+      transition: none !important;
+    }
+    .card-sheen {
+      animation: none !important;
+    }
+  }
+</style>
+
+<script>
+  // 3D coverflow. Owns one index; drag, arrows, dots, keys and autoplay all
+  // funnel through go(). Layout is pure transform math — no reflow per frame.
+  (() => {
+    const root = document.querySelector<HTMLElement>('[data-coverflow]');
+    if (!root) return;
+
+    const stage = root.querySelector<HTMLElement>('[data-stage]');
+    const slides = Array.from(root.querySelectorAll<HTMLElement>('[data-slide]'));
+    const dots = Array.from(root.querySelectorAll<HTMLElement>('[data-dot]'));
+    const current = root.querySelector<HTMLElement>('[data-current]');
+    const prevBtn = root.querySelector<HTMLElement>('[data-prev]');
+    const nextBtn = root.querySelector<HTMLElement>('[data-next]');
+    if (!stage || slides.length === 0) return;
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (reduced.matches) return; // keep the scroll-snap fallback
+
+    const count = slides.length;
+    const VISIBLE = 3; // slides shown either side of the active one
+    let index = 0;
+    let drag = 0; // -1..1 while a pointer drag is in flight
+
+    // Shortest signed distance from the active index, wrapping both ways.
+    const offsetOf = (i: number) => {
+      let o = i - index;
+      if (o > count / 2) o -= count;
+      if (o < -count / 2) o += count;
+      return o;
+    };
+
+    const layout = () => {
+      slides.forEach((slide, i) => {
+        const o = offsetOf(i) + drag;
+        const abs = Math.abs(o);
+        const hidden = abs > VISIBLE;
+        const x = o * 42;
+        const z = abs === 0 ? 0 : -170 - (abs - 1) * 120;
+        const ry = -o * 34;
+        const scale = Math.max(0.6, 1 - abs * 0.07);
+        slide.style.transform = `translateX(calc(-50% + ${x}%)) translateZ(${z}px) rotateY(${ry}deg) scale(${scale})`;
+        slide.style.opacity = hidden ? '0' : String(Math.max(0, 1 - abs * 0.28));
+        // Dim via a custom property on the image — a `filter` on the slide
+        // itself would flatten the preserve-3d children (the lifted caption).
+        slide.style.setProperty(
+          '--dim',
+          String(Math.max(0.4, 1 - abs * 0.28).toFixed(2))
+        );
+        slide.style.zIndex = String(100 - Math.round(abs * 10));
+        slide.style.pointerEvents = hidden ? 'none' : '';
+        slide.toggleAttribute('data-active', Math.round(o) === 0);
+        slide.setAttribute('aria-hidden', abs < 0.5 ? 'false' : 'true');
+      });
+
+      dots.forEach((dot, i) =>
+        dot.setAttribute('aria-current', i === index ? 'true' : 'false')
+      );
+      if (current) current.textContent = String(index + 1).padStart(2, '0');
+    };
+
+    const go = (next: number) => {
+      index = ((next % count) + count) % count;
+      layout();
+    };
+
+    // --- autoplay ------------------------------------------------------
+    let timer = 0;
+    const stop = () => {
+      if (timer) window.clearInterval(timer);
+      timer = 0;
+    };
+    const start = () => {
+      stop();
+      timer = window.setInterval(() => go(index + 1), 5200);
+    };
+
+    // --- pointer drag -------------------------------------------------
+    let startX = 0;
+    let lastX = 0;
+    let dragging = false;
+    let width = stage.getBoundingClientRect().width || 1;
+
+    stage.addEventListener('pointerdown', (event) => {
+      if (event.button !== 0) return;
+      dragging = true;
+      startX = event.clientX;
+      lastX = event.clientX;
+      width = stage.getBoundingClientRect().width || 1;
+      root.setAttribute('data-dragging', '');
+      stage.setPointerCapture(event.pointerId);
+      stop();
+    });
+
+    stage.addEventListener('pointermove', (event) => {
+      lastX = event.clientX;
+      if (!dragging) return;
+      // A full stage-width drag advances ~2 slides; clamp so it never flies.
+      drag = Math.max(-1.2, Math.min(1.2, ((startX - event.clientX) / width) * 2));
+      layout();
+    });
+
+    const endDrag = () => {
+      if (!dragging) return;
+      dragging = false;
+      root.removeAttribute('data-dragging');
+      const step = Math.round(drag);
+      drag = 0;
+      go(index + step);
+      start();
+    };
+    stage.addEventListener('pointerup', endDrag);
+    stage.addEventListener('pointercancel', endDrag);
+    stage.addEventListener('pointerleave', endDrag);
+
+    // --- click a neighbour to bring it forward -------------------------
+    slides.forEach((slide, i) => {
+      slide.addEventListener('click', () => {
+        if (Math.abs(startX - lastX) > 6) return; // that was a drag, not a tap
+        if (offsetOf(i) !== 0) go(i);
+      });
+    });
+
+    // --- controls ------------------------------------------------------
+    prevBtn?.addEventListener('click', () => {
+      go(index - 1);
+      stop();
+    });
+    nextBtn?.addEventListener('click', () => {
+      go(index + 1);
+      stop();
+    });
+    dots.forEach((dot, i) =>
+      dot.addEventListener('click', () => {
+        go(i);
+        stop();
+      })
+    );
+
+    root.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowLeft') {
+        go(index - 1);
+        stop();
+      } else if (event.key === 'ArrowRight') {
+        go(index + 1);
+        stop();
+      }
+    });
+
+    root.addEventListener('pointerenter', stop);
+    root.addEventListener('pointerleave', start);
+    root.addEventListener('focusin', stop);
+    root.addEventListener('focusout', start);
+    document.addEventListener('visibilitychange', () =>
+      document.hidden ? stop() : start()
+    );
+
+    // Only run the deck once it is on screen, so it is not spinning offstage.
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => (entry.isIntersecting ? start() : stop()));
+      },
+      { threshold: 0.25 }
+    );
+    observer.observe(root);
+
+    window.addEventListener('resize', () => {
+      width = stage.getBoundingClientRect().width || 1;
+      layout();
+    });
+
+    root.setAttribute('data-ready', '');
+    layout();
+  })();
+</script>

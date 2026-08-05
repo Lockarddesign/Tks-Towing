@@ -3,7 +3,14 @@ import SectionHead from './SectionHead.astro';
 import Icon from './Icon.astro';
 import PlaceholderFigure from './PlaceholderFigure.astro';
 import { business, contact } from '../site.config';
-import mapImg from '../assets/chains-secured.jpg';
+import mapImg from '../assets/tk-suv-flatbed.jpg';
+
+interface Props {
+  /** Off on /contact — that page's hero already carries this same copy. */
+  showHead?: boolean;
+}
+
+const { showHead = true } = Astro.props;
 
 const inputClass =
   'mt-2 w-full rounded-md border border-line bg-cream px-4 py-3.5 text-ink placeholder:text-ink/40 transition focus:border-brick-500/60 focus:bg-paper focus:outline-2 focus:outline-offset-2 focus:outline-brick-500/40';
@@ -12,14 +19,23 @@ const labelClass = 'label-caps block text-[0.65rem] text-navy-600';
 
 <section id="contact" class="bg-paper py-24 sm:py-28 lg:py-36">
   <div class="mx-auto max-w-[1300px] px-5 sm:px-8">
-    <SectionHead
-      eyebrow={contact.eyebrow}
-      heading={contact.heading}
-      intro={contact.intro}
-      tone="light"
-    />
+    {
+      showHead && (
+        <SectionHead
+          eyebrow={contact.eyebrow}
+          heading={contact.heading}
+          intro={contact.intro}
+          tone="light"
+        />
+      )
+    }
 
-    <div class="mt-16 grid gap-6 lg:mt-20 lg:grid-cols-12">
+    <div
+      class:list={[
+        'grid gap-6 lg:grid-cols-12',
+        showHead && 'mt-16 lg:mt-20',
+      ]}
+    >
       <!-- Call panel + details -->
       <div class="flex flex-col gap-6 lg:col-span-5">
         <div data-reveal class="rounded-xl bg-navy-800 p-7 sm:p-9">
@@ -201,9 +217,11 @@ const labelClass = 'label-caps block text-[0.65rem] text-navy-600';
               <Icon name="arrow" class="h-5 w-5" />
             </button>
 
-            <p class="label-caps text-[0.6rem] leading-relaxed text-ink/50">
-              {contact.form.disclaimer}
-            </p>
+            {contact.form.disclaimer && (
+              <p class="label-caps text-[0.6rem] leading-relaxed text-ink/50">
+                {contact.form.disclaimer}
+              </p>
+            )}
           </form>
         </div>
       </div>

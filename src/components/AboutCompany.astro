@@ -1,0 +1,95 @@
+---
+/**
+ * "About the company" — sits directly under the hero and introduces TK's before
+ * the page moves into the expandable story chapters.
+ *
+ * Carries the owners photo (moved off the hero when the quote form took that
+ * column) plus the est-1996 seal and the four pillars. All copy is `intro`
+ * verbatim, the same block the homepage uses.
+ */
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import { about, intro, story } from '../site.config';
+import owners from '../assets/tk-owners.jpg';
+---
+
+<section id="company" class="bg-cream py-24 sm:py-28 lg:py-32">
+  <div class="mx-auto max-w-[1300px] px-5 sm:px-8">
+    <div class="grid items-center gap-14 lg:grid-cols-12 lg:gap-16">
+      <!-- Owners photo + seal -->
+      <div class="relative lg:col-span-5">
+        <figure data-reveal class="relative">
+          <Image
+            src={owners}
+            alt={story.ownerImageAlt}
+            widths={[600, 900, 1200]}
+            sizes="(min-width: 1024px) 40vw, 100vw"
+            class="aspect-[4/5] w-full rounded-xl object-cover shadow-xl shadow-navy-950/15"
+          />
+        </figure>
+
+        <!-- Est. 1996 seal, tucked over the photo's lower corner -->
+        <div
+          data-reveal="140"
+          aria-hidden="true"
+          class="absolute -right-2 -bottom-6 grid h-28 w-28 place-items-center rounded-full border-4 border-brick-500 bg-navy-950 text-center shadow-xl shadow-navy-950/30 sm:-right-5 sm:h-32 sm:w-32"
+        >
+          <div>
+            <div class="label-caps text-[0.55rem] text-brick-300">
+              {intro.seal.centerTop}
+            </div>
+            <div
+              class="font-display text-2xl leading-none font-bold tracking-tight text-cream sm:text-3xl"
+            >
+              {intro.seal.centerBig}
+            </div>
+            <div class="label-caps mt-1 text-[0.5rem] text-cream/60">
+              {intro.seal.centerBottom}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Copy + pillars -->
+      <div class="lg:col-span-7">
+        <div data-reveal>
+          <p class="label-caps flex items-center gap-3 text-xs text-brick-500">
+            <span class="h-px w-8 bg-brick-500/50"></span>
+            {intro.eyebrow}
+          </p>
+          <h2
+            class="mt-5 font-display text-[clamp(2rem,4vw,3rem)] leading-[0.99] font-bold tracking-tight text-balance text-navy-700 uppercase"
+          >
+            {intro.heading}
+          </h2>
+          <p class="mt-6 text-lg leading-relaxed text-pretty text-ink/80">
+            {intro.lead}
+          </p>
+          <p class="mt-4 text-[0.97rem] leading-relaxed text-pretty text-ink/70">
+            {intro.body}
+          </p>
+        </div>
+
+        <ul data-reveal="120" class="mt-10 grid gap-x-8 gap-y-6 sm:grid-cols-2">
+          {
+            about.pillars.map((pillar) => (
+              <li class="flex items-start gap-4">
+                <span class="grid h-11 w-11 shrink-0 place-items-center rounded-lg border border-line bg-paper text-brick-500">
+                  <Icon name={pillar.icon} class="h-5 w-5" />
+                </span>
+                <div>
+                  <h3 class="font-display text-base font-bold tracking-tight text-navy-700 uppercase">
+                    {pillar.title}
+                  </h3>
+                  <p class="mt-1 text-[0.9rem] leading-relaxed text-ink/70">
+                    {pillar.text}
+                  </p>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

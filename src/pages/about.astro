@@ -1,0 +1,59 @@
+---
+/**
+ * /about — the About Us page.
+ *
+ * The deeper content is expandable: the story reads as three chapters, and
+ * "Why TK's" and "How it works" are accordion groups. Everything is native
+ * <details>, so all copy is in the DOM for search engines and works with JS off.
+ *
+ * `pinnedHeader` is required — this page has no tall hero for the sticky header
+ * to reveal itself after.
+ */
+import Base from '../layouts/Base.astro';
+import InnerHero from '../components/InnerHero.astro';
+import AboutMarquee from '../components/AboutMarquee.astro';
+import AboutCompany from '../components/AboutCompany.astro';
+import AboutWhy from '../components/AboutWhy.astro';
+import AboutProcess from '../components/AboutProcess.astro';
+import Gallery from '../components/Gallery.astro';
+import EmergencyCta from '../components/EmergencyCta.astro';
+import { about, business, hero } from '../site.config';
+import heroImg from '../assets/tk-truck-garage.jpg';
+---
+
+<Base
+  pinnedHeader
+  title={about.meta.title}
+  description={about.meta.description}
+>
+  <InnerHero
+    eyebrow={about.hero.eyebrow}
+    heading={about.hero.heading}
+    lead={about.hero.lead}
+    body={about.hero.body}
+    points={about.hero.points}
+    railText={about.hero.railText}
+    crumbs={about.hero.crumbs}
+    meta={about.hero.meta}
+    image={heroImg}
+    imageAlt={hero.slideshow.slides[0].alt}
+    primaryCta={about.primaryCta}
+    primaryHref={business.phoneHref}
+    secondaryCta={about.secondaryCta}
+    secondaryHref={about.secondaryCtaHref}
+    formIdPrefix="about"
+  />
+  <AboutMarquee />
+  <AboutCompany />
+  <AboutWhy />
+  {/* Second pass of the ticker, breaking the dark Why grid from the light
+      process timeline. Runs the other way and is hidden from assistive tech —
+      the list is already announced by the band under the hero. */}
+  <AboutMarquee reverse decorative />
+  <AboutProcess />
+  <Gallery />
+  {/* One closing CTA, not two: EmergencyCta and FinalCta were stacked back to
+      back above the footer. EmergencyCta stays — it carries an eyebrow, body
+      and the call-911-first safety note, where FinalCta was a bare repeat. */}
+  <EmergencyCta />
+</Base>

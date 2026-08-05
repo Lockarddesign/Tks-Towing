@@ -1,9 +1,8 @@
 ---
 import Icon from './Icon.astro';
 import PlaceholderFigure from './PlaceholderFigure.astro';
-import { story } from '../site.config';
-import ownerImg from '../assets/operator-blue-car.jpg';
-import fireImg from '../assets/firefighter.jpg';
+import { business, story } from '../site.config';
+import ownerImg from '../assets/tk-owners.jpg';
 ---
 
 <section
@@ -18,29 +17,37 @@ import fireImg from '../assets/firefighter.jpg';
   </div>
 
   <div class="mx-auto max-w-[1300px] px-5 sm:px-8">
-    <div class="grid gap-14 lg:grid-cols-12 lg:items-center lg:gap-16">
-      <!-- Images -->
+    <div class="grid gap-14 lg:grid-cols-12 lg:items-stretch lg:gap-16">
+      <!-- Portrait: one image, matted, running the full height of the copy -->
       <div data-reveal class="lg:col-span-5">
-        <div class="relative">
+        <div class="portrait relative h-full">
+          <span
+            aria-hidden="true"
+            class="pointer-events-none absolute -inset-3 rounded-2xl border border-brick-400/25 sm:-inset-4"
+          ></span>
+
           <PlaceholderFigure
             src={ownerImg}
-            label={story.ownerImageCaption}
+            label=""
             alt={story.ownerImageAlt}
-            class="aspect-4/5 rounded-xl border border-cream/12"
+            class="portrait-figure aspect-4/5 h-full rounded-xl border border-cream/12 lg:aspect-auto lg:min-h-[34rem]"
+            imgClass="h-full w-full object-cover object-top"
             sizes="(min-width: 1024px) 38vw, 100vw"
           />
-          <PlaceholderFigure
-            src={fireImg}
-            label={story.secondaryImageCaption}
-            class="absolute -right-4 -bottom-10 aspect-square w-40 rounded-xl border-4 border-navy-800 shadow-2xl shadow-navy-950/50 sm:-right-8 sm:w-52 lg:-right-12"
-            sizes="220px"
-            widths={[220, 440]}
-          />
+
+          <p class="portrait-badge">
+            <span class="portrait-badge-year font-display">
+              {business.founded}
+            </span>
+            <span class="portrait-badge-text label-caps">
+              Est. · {business.address.city}, {business.address.state}
+            </span>
+          </p>
         </div>
       </div>
 
       <!-- Copy -->
-      <div class="lg:col-span-7 lg:pl-6">
+      <div class="flex flex-col justify-center lg:col-span-7 lg:pl-6">
         <p data-reveal class="label-caps flex items-center gap-3 text-xs text-brick-300">
           <Icon name="flame" class="h-4 w-4" />
           {story.eyebrow}
@@ -98,3 +105,45 @@ import fireImg from '../assets/firefighter.jpg';
     </div>
   </div>
 </section>
+
+<style>
+  /* The matted frame sits behind a single portrait; the figure stretches to
+     whatever height the copy column ends up at on desktop. */
+  .portrait-figure {
+    box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.85);
+  }
+
+  /* Year plate, half-hanging off the bottom-left corner of the portrait. */
+  .portrait-badge {
+    position: absolute;
+    bottom: 1.25rem;
+    left: -0.75rem;
+    margin: 0;
+    display: flex;
+    align-items: baseline;
+    gap: 0.7rem;
+    padding: 0.65rem 1.1rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(197, 151, 148, 0.35);
+    background: rgba(17, 26, 38, 0.88);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 18px 36px -18px rgba(0, 0, 0, 0.9);
+  }
+  .portrait-badge-year {
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--color-cream);
+  }
+  .portrait-badge-text {
+    font-size: 0.6rem;
+    color: var(--color-brick-300);
+  }
+
+  @media (min-width: 640px) {
+    .portrait-badge {
+      left: -1.25rem;
+      bottom: 1.75rem;
+    }
+  }
+</style>

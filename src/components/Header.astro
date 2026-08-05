@@ -3,48 +3,97 @@ import { Image } from 'astro:assets';
 import Icon from './Icon.astro';
 import { business, nav } from '../site.config';
 import logo from '../assets/tks-logo.png';
+
+interface Props {
+  /**
+   * Show the bar immediately instead of waiting for the hero to scroll past.
+   * Pages without the tall homepage hero (e.g. /about) must set this, or the
+   * scroll-reveal threshold leaves them with no navigation at the top.
+   */
+  pinned?: boolean;
+}
+
+const { pinned = false } = Astro.props;
 ---
 
 <!--
   Condensed sticky header. Matches the hero shell's dark topnav styling, but is
   hidden while the hero is on screen and slides down once you scroll past it —
   so the top of the page shows the framed hero nav, and the rest of the long
-  page keeps a persistent bar.
+  page keeps a persistent bar. On `pinned` pages it is simply always there.
 -->
 <header
   id="site-header"
-  class="fixed inset-x-0 top-0 z-50 -translate-y-full border-b border-cream/12 bg-navy-900/95 backdrop-blur-xl transition-transform duration-500 ease-out"
-  data-hidden="true"
+  class:list={[
+    'fixed inset-x-0 top-0 z-50 border-b border-cream/12 bg-navy-900/95 backdrop-blur-xl transition-transform duration-500 ease-out',
+    pinned ? 'translate-y-0 shadow-2xl shadow-navy-950/40' : '-translate-y-full',
+  ]}
+  data-pinned={pinned ? 'true' : null}
+  data-hidden={pinned ? null : 'true'}
 >
   <div
     class="mx-auto flex h-16 max-w-[1300px] items-center gap-4 px-5 sm:px-8 lg:h-18"
   >
     <!-- Logo -->
-    <a href="#top" class="group flex shrink-0 items-center gap-3">
+    <a
+      href="/"
+      class="group flex shrink-0 items-center"
+      aria-label="TK's Towing Service — home"
+    >
       <Image
         src={logo}
-        alt="TK's Towing badge logo"
-        widths={[72, 108]}
-        sizes="40px"
-        class="h-10 w-auto"
+        alt="TK's Towing Service"
+        widths={[96, 144, 192, 288]}
+        sizes="94px"
+        class="h-11 w-auto lg:h-14"
       />
-      <span
-        class="hidden font-display text-lg font-bold tracking-wide text-cream uppercase sm:block"
-        >TK&rsquo;S <span class="text-brick-300">Towing</span></span
-      >
     </a>
 
     <!-- Desktop nav -->
     <nav class="ml-auto hidden items-center gap-7 lg:flex" aria-label="Main">
       {
-        nav.links.map((link) => (
-          <a
-            href={link.href}
-            class="relative pb-1 font-display text-[0.78rem] font-medium tracking-[0.12em] text-cream/65 uppercase transition-colors after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-brick-300 after:transition-all after:duration-300 hover:text-cream hover:after:w-full"
-          >
-            {link.label}
-          </a>
-        ))
+        nav.links.map((link) =>
+          'children' in link ? (
+            /* Opens on hover and on focus-within, so it works by keyboard
+               without JS. The panel's top padding doubles as the bridge from
+               the trigger — a real gap would close it as the pointer crosses. */
+            <div class="hdrop relative">
+              <a
+                href={link.href}
+                class="relative inline-flex items-center gap-1.5 pb-1 font-display text-[0.78rem] font-medium tracking-[0.12em] text-cream/65 uppercase transition-colors after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-brick-300 after:transition-all after:duration-300 hover:text-cream hover:after:w-full"
+              >
+                {link.label}
+                <Icon name="chevron" class="hdrop-caret h-3 w-3" />
+              </a>
+
+              <div class="hdrop-panel absolute top-full left-1/2 z-50 w-72 pt-4">
+                <ul class="overflow-hidden rounded-xl border border-cream/12 bg-navy-900/98 p-2 shadow-2xl shadow-navy-950/50 backdrop-blur-xl">
+                  {link.children.map((child) => (
+                    <li>
+                      <a
+                        href={child.href}
+                        class="flex items-center gap-3 rounded-lg px-3 py-2.5 font-display text-[0.72rem] font-medium tracking-[0.1em] text-cream/70 uppercase transition hover:bg-cream/8 hover:text-cream focus-visible:bg-cream/8 focus-visible:text-cream"
+                      >
+                        <Icon
+                          name={child.icon}
+                          class="h-4 w-4 shrink-0 text-brick-300"
+                        />
+                        {child.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ) : (
+            <a
+              href={link.href}
+              class="relative pb-1 font-display text-[0.78rem] font-medium tracking-[0.12em] text-cream/65 uppercase transition-colors after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-brick-300 after:transition-all after:duration-300 hover:text-cream hover:after:w-full"
+            >
+              {link.label}
+            </a>
+          )
+        )
       }
     </nav>
 
@@ -61,7 +110,7 @@ import logo from '../assets/tks-logo.png';
     <div class="ml-auto flex items-center gap-2 lg:hidden">
       <a
         href={business.phoneHref}
-        class="inline-flex items-center gap-2 bg-brick-500 px-4 py-2.5 font-display text-sm font-bold tracking-tight text-cream uppercase"
+        class="inline-flex items-center gap-2 bg-brick-500 px-4 py-3.5 font-display text-sm font-bold tracking-tight text-cream uppercase"
       >
         <Icon name="phone" class="h-4 w-4" />
         <span class="hidden sm:inline">Call</span>
@@ -99,6 +148,27 @@ import logo from '../assets/tks-logo.png';
                 {link.label}
                 <Icon name="arrow" class="h-5 w-5 text-brick-300" />
               </a>
+              {/* Sub-items render inline rather than behind another toggle —
+                  one tap to any service instead of two. */}
+              {'children' in link && (
+                <ul class="mb-3 space-y-1 border-l border-cream/12 pl-4">
+                  {link.children.map((child) => (
+                    <li>
+                      <a
+                        href={child.href}
+                        data-menu-link
+                        class="flex items-center gap-3 py-2.5 font-display text-[0.8rem] font-medium tracking-[0.1em] text-cream/65 uppercase"
+                      >
+                        <Icon
+                          name={child.icon}
+                          class="h-4 w-4 shrink-0 text-brick-300"
+                        />
+                        {child.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </li>
           ))
         }
@@ -113,6 +183,49 @@ import logo from '../assets/tks-logo.png';
     </nav>
   </div>
 </header>
+
+<style>
+  /* Scoped CSS rather than Tailwind's group-hover/group-focus-within variants.
+     Tailwind v4 wraps those in :where(), which zeroes their specificity, so the
+     base `invisible` utility beat them on source order and the panel never
+     opened. These rules carry real specificity and win outright.
+
+     Opens on hover AND focus-within, so it is reachable by keyboard with no JS.
+     The panel's top padding bridges the gap to the trigger — a real gap would
+     close the menu as the pointer crossed it. */
+  .hdrop-panel {
+    transform: translateX(-50%) translateY(4px);
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease,
+      visibility 0.2s ease;
+  }
+  .hdrop:hover .hdrop-panel,
+  .hdrop:focus-within .hdrop-panel {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* :global — the caret is an <svg> rendered inside Icon.astro, so it never
+     carries this component's scope attribute. */
+  .hdrop :global(.hdrop-caret) {
+    transition: transform 0.3s ease;
+  }
+  .hdrop:hover :global(.hdrop-caret),
+  .hdrop:focus-within :global(.hdrop-caret) {
+    transform: rotate(180deg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hdrop-panel,
+    .hdrop :global(.hdrop-caret) {
+      transition: none;
+    }
+  }
+</style>
 
 <script is:inline>
   (() => {
@@ -133,6 +246,9 @@ import logo from '../assets/tks-logo.png';
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && !menu.hidden) setOpen(false);
     });
+
+    // Pinned pages have no tall hero to scroll past — the bar stays put.
+    if (header.dataset.pinned === 'true') return;
 
     // Reveal the sticky bar only after the hero is mostly scrolled past.
     const revealAt = () => Math.max(320, window.innerHeight * 0.82);

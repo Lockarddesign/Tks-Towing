@@ -1,0 +1,208 @@
+---
+/**
+ * "How it works" — a connected four-step timeline.
+ *
+ * Was an accordion list. Rebuilt as a timeline for two reasons: the four steps
+ * are a sequence, and a rail that runs through them shows that in a way a stack
+ * of collapsed rows cannot; and AboutWhy directly above is now a card grid, so
+ * repeating that shape here would flatten the page.
+ *
+ * Nothing is hidden behind a click — each step's detail sits under its summary.
+ *
+ * Copy is process verbatim.
+ */
+import SectionHead from './SectionHead.astro';
+import Icon from './Icon.astro';
+import { about, business } from '../site.config';
+---
+
+<section id="process" class="bg-cream py-24 sm:py-28 lg:py-36">
+  <div class="mx-auto max-w-[1300px] px-5 sm:px-8">
+    <SectionHead
+      eyebrow={about.process.eyebrow}
+      heading={about.process.heading}
+      intro={about.process.intro}
+      tone="light"
+      align="center"
+      class="mx-auto"
+    />
+
+    <ol class="steps mt-16 lg:mt-20">
+      {
+        about.process.steps.map((step, i) => (
+          <li class="step" data-reveal={i * 80}>
+            {/* The rail. Vertical on mobile, horizontal from lg. Hidden on the
+                last step so the line stops rather than running into nothing. */}
+            {i < about.process.steps.length - 1 && (
+              <span class="step__rail" aria-hidden="true" />
+            )}
+
+            <div class="step__marker">
+              <span class="step__num">{String(i + 1).padStart(2, '0')}</span>
+              <span class="step__icon">
+                <Icon name={step.icon} class="h-5 w-5" />
+              </span>
+            </div>
+
+            <div class="step__body">
+              <h3 class="step__title font-display">{step.title}</h3>
+              <p class="step__summary">{step.summary}</p>
+              <p class="step__detail">{step.detail}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+
+    <div class="mt-16 text-center">
+      <a
+        href={business.phoneHref}
+        class="inline-flex items-center justify-center gap-2.5 rounded-lg bg-brick-500 px-8 py-4 font-display font-bold tracking-wider text-cream uppercase transition hover:bg-brick-600"
+      >
+        <Icon name="phone" class="h-[17px] w-[17px]" />
+        {about.primaryCta}
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .steps {
+    display: grid;
+    gap: 2.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: step;
+  }
+
+  .step {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.25rem;
+  }
+
+  /* Mobile: rail drops from under the marker to the next step. */
+  .step__rail {
+    position: absolute;
+    left: 1.75rem;
+    top: 3.5rem;
+    bottom: -2.5rem;
+    width: 2px;
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--color-brick-500) 45%, transparent),
+      color-mix(in srgb, var(--color-brick-500) 8%, transparent)
+    );
+  }
+
+  .step__marker {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-line);
+    background: var(--color-paper);
+    box-shadow: 0 8px 20px -12px rgb(8 11 15 / 0.4);
+    transition:
+      border-color 0.35s ease,
+      box-shadow 0.35s ease;
+  }
+
+  /* The number is the resting state; the icon fades in over it on hover. */
+  .step__num {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--color-brick-500);
+    transition: opacity 0.3s ease;
+  }
+  .step__icon {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: var(--color-brick-500);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .step:hover .step__marker,
+  .step:focus-within .step__marker {
+    border-color: color-mix(in srgb, var(--color-brick-500) 55%, transparent);
+    box-shadow: 0 12px 26px -12px rgb(8 11 15 / 0.55);
+  }
+  .step:hover .step__num,
+  .step:focus-within .step__num {
+    opacity: 0;
+  }
+  .step:hover .step__icon,
+  .step:focus-within .step__icon {
+    opacity: 1;
+  }
+
+  .step__title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    color: var(--color-navy-700);
+  }
+  .step__summary {
+    margin-top: 0.35rem;
+    font-family: var(--font-display);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-brick-500);
+  }
+  .step__detail {
+    margin-top: 0.85rem;
+    font-size: 0.94rem;
+    line-height: 1.68;
+    color: color-mix(in srgb, var(--color-ink) 78%, transparent);
+  }
+
+  /* Desktop: four across, marker above the copy, rail running between them. */
+  @media (min-width: 1024px) {
+    .steps {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+    }
+    .step {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    .step__rail {
+      left: calc(1.75rem + 1rem);
+      right: -2rem;
+      top: 1.75rem;
+      bottom: auto;
+      width: auto;
+      height: 2px;
+      background: linear-gradient(
+        to right,
+        color-mix(in srgb, var(--color-brick-500) 45%, transparent),
+        color-mix(in srgb, var(--color-brick-500) 8%, transparent)
+      );
+    }
+    .step__detail {
+      margin-top: 0.7rem;
+      font-size: 0.9rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .step__marker,
+    .step__num,
+    .step__icon {
+      transition: none;
+    }
+  }
+</style>

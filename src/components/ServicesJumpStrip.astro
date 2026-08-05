@@ -1,0 +1,123 @@
+---
+/**
+ * The four services as a jump rail, sitting in the InnerHero's bottom strip on
+ * /services.
+ *
+ * Not decoration: the footer and the homepage service cards both link to
+ * /services#slug, so the anchors need a visible index on the page itself.
+ *
+ * Scrolls horizontally on narrow screens rather than wrapping to three rows —
+ * the strip is a rail, and a rail that grows taller than the masthead it hangs
+ * off stops reading as one.
+ */
+import Icon from './Icon.astro';
+import { servicesPage } from '../site.config';
+---
+
+<nav class="jump" aria-label="Jump to a service">
+  <ul class="jump__row">
+    {
+      servicesPage.items.map((service, i) => (
+        <li class="jump__item">
+          <a href={`#${service.slug}`} class="jump__link">
+            <span class="jump__num" aria-hidden="true">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <Icon name={service.icon} class="jump__ico h-4 w-4" />
+            <span class="jump__label">{service.title}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style>
+  /* Full bleed, matching InnerHero — the left inset clears the 76px rail so the
+     first entry lines up with the copy above it. */
+  .jump {
+    padding-inline: 1.25rem;
+  }
+  .jump__row {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .jump__row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .jump__item {
+    flex: none;
+  }
+  /* Hairline between entries, not around them — the strip reads as one rule. */
+  .jump__item + .jump__item .jump__link {
+    border-left: 1px solid rgb(from var(--color-cream) r g b / 0.14);
+  }
+
+  .jump__link {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 1.15rem 1.5rem;
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    text-decoration: none;
+    color: color-mix(in srgb, var(--color-cream) 72%, transparent);
+    transition:
+      color 0.2s,
+      background-color 0.2s;
+  }
+  .jump__link:hover,
+  .jump__link:focus-visible {
+    background: color-mix(in srgb, var(--color-cream) 7%, transparent);
+    color: var(--color-cream);
+  }
+  .jump__link:focus-visible {
+    outline: 2px solid var(--color-brick-300);
+    outline-offset: -2px;
+  }
+
+  .jump__num {
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: color-mix(in srgb, var(--color-cream) 34%, transparent);
+    transition: color 0.2s;
+  }
+  .jump__link:hover .jump__num {
+    color: var(--color-brick-300);
+  }
+  .jump__ico {
+    color: var(--color-brick-300);
+    flex: none;
+  }
+
+  @media (min-width: 1024px) {
+    .jump {
+      padding-left: calc(76px + 2.5rem);
+      padding-right: 2.5rem;
+    }
+    .jump__link {
+      padding-inline: 1.75rem;
+      font-size: 0.75rem;
+    }
+    /* First entry sits flush with the headline above it. */
+    .jump__item:first-child .jump__link {
+      padding-left: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .jump__link,
+    .jump__num {
+      transition: none;
+    }
+  }
+</style>

@@ -1,0 +1,591 @@
+---
+/**
+ * Inner-page masthead — an alternative to PageHero's copy-panel-beside-a-form.
+ *
+ * This one echoes the HOMEPAGE hero's framed shell: hairline frame with corner
+ * ticks, a vertical utility rail down the left edge, and a meta strip along the
+ * bottom. That is the shape a visitor already met on the homepage, so inner
+ * pages read as the same site rather than as a different template — and it does
+ * it at masthead height, not full viewport.
+ *
+ * Layout notes:
+ *  - FULL BLEED, matching the homepage hero rather than the 1300px container
+ *    the body sections use. The rail is a real 76px column flush to the left
+ *    viewport edge, exactly as `.shell` does on the homepage, so the two
+ *    mastheads are the same width and the rails line up between pages;
+ *  - the photo is the stage rather than a column, so the headline can run much
+ *    larger than PageHero allowed;
+ *  - copy left, form right on desktop, stacking headline-then-form on mobile;
+ *    DOM order matches visual order in both, so reading order and focus order
+ *    never disagree.
+ *
+ * Every string is a prop — the component holds no copy of its own.
+ */
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import QuoteForm from './QuoteForm.astro';
+
+interface Props {
+  eyebrow: string;
+  heading: string;
+  lead: string;
+  /** Optional second paragraph, set smaller than the lead. */
+  body?: string;
+  /**
+   * Short proof points under the copy. Two jobs: they put concrete local terms
+   * (towns, counties, hours) in the DOM next to the h1, and they bulk the copy
+   * column out so it sits level with the form instead of floating short.
+   */
+  points?: readonly string[];
+  /** Vertical text down the left rail. */
+  railText: string;
+  /** Top-left trail, e.g. [{label:'Home',href:'/'},{label:'Services'}]. */
+  crumbs: readonly { label: string; href?: string }[];
+  /** Short line at the top-right of the frame, e.g. "Open 24/7, 365". */
+  meta?: string;
+  image: ImageMetadata;
+  imageAlt: string;
+  primaryCta: string;
+  primaryHref: string;
+  secondaryCta?: string;
+  secondaryHref?: string;
+  /** Namespaces the quote form's field ids — one form per page. */
+  formIdPrefix: string;
+}
+
+const {
+  eyebrow,
+  heading,
+  lead,
+  body,
+  points,
+  railText,
+  crumbs,
+  meta,
+  image,
+  imageAlt,
+  primaryCta,
+  primaryHref,
+  secondaryCta,
+  secondaryHref,
+  formIdPrefix,
+} = Astro.props;
+---
+
+<section id="top" class="ih">
+  <!-- Stage: photo + scrims. The photo is context behind the copy, but it is a
+       real job photo, so it keeps its alt rather than aria-hidden. -->
+  <div class="ih__stage">
+    <Image
+      src={image}
+      alt={imageAlt}
+      widths={[900, 1400, 1900]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+      class="ih__img"
+    />
+    <div class="ih__scrim" aria-hidden="true"></div>
+
+    <div class="ih__frame">
+      <!-- Corner ticks — the framed-shell detail from the homepage hero. -->
+      <span class="ih__tick ih__tick--tl" aria-hidden="true"></span>
+      <span class="ih__tick ih__tick--tr" aria-hidden="true"></span>
+      <span class="ih__tick ih__tick--bl" aria-hidden="true"></span>
+      <span class="ih__tick ih__tick--br" aria-hidden="true"></span>
+
+      <!-- Left utility rail — a real column, the same 76px the homepage hero
+           shell uses, flush to the viewport edge. -->
+      <aside class="ih__rail" aria-hidden="true">
+        <span class="ih__rail-line"></span>
+        <span class="ih__rail-text">{railText}</span>
+        <span class="ih__rail-line"></span>
+      </aside>
+
+      <div class="ih__main">
+        <!-- Meta row spans the whole masthead, above the split. -->
+        <div class="ih__meta">
+          <nav class="ih__crumbs" aria-label="Breadcrumb">
+            {
+              crumbs.map((crumb, i) => (
+                <>
+                  {i > 0 && (
+                    <span class="ih__crumb-sep" aria-hidden="true">
+                      /
+                    </span>
+                  )}
+                  {crumb.href ? (
+                    <a href={crumb.href} class="ih__crumb">
+                      {crumb.label}
+                    </a>
+                  ) : (
+                    <span class="ih__crumb is-current" aria-current="page">
+                      {crumb.label}
+                    </span>
+                  )}
+                </>
+              ))
+            }
+          </nav>
+          {meta && <span class="ih__meta-note">{meta}</span>}
+        </div>
+
+        <div class="ih__split">
+          <div class="ih__body">
+            <!-- Headline block -->
+            <p class="ih__eyebrow">
+              <span class="ih__eyebrow-rule" aria-hidden="true"></span>
+              {eyebrow}
+            </p>
+
+            <h1 class="ih__title">{heading}</h1>
+
+            <p class="ih__lead">{lead}</p>
+            {body && <p class="ih__body-copy">{body}</p>}
+
+            {
+              points && points.length > 0 && (
+                <ul class="ih__points">
+                  {points.map((point) => (
+                    <li class="ih__point">
+                      <span class="ih__point-ico" aria-hidden="true">
+                        <Icon name="check" class="h-3 w-3" />
+                      </span>
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
+              )
+            }
+
+            <div class="ih__cta">
+              <a href={primaryHref} class="ih__btn ih__btn--solid">
+                <Icon name="phone" class="h-[17px] w-[17px]" />
+                {primaryCta}
+              </a>
+              {
+                secondaryCta && secondaryHref && (
+                  <a href={secondaryHref} class="ih__btn ih__btn--ghost">
+                    {secondaryCta}
+                    <Icon name="arrow" class="h-[17px] w-[17px]" />
+                  </a>
+                )
+              }
+            </div>
+          </div>
+
+          {/* Form follows the headline in the document and sits to its right on
+              desktop — a form ahead of any context reads badly on mobile, and
+              the h1 should lead the document regardless. */}
+          <div class="ih__form">
+            <QuoteForm idPrefix={formIdPrefix} />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom strip — page-specific extras (e.g. the /services jump list). -->
+    <div class="ih__strip">
+      <slot />
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Palette. Same token names the homepage hero uses, so retuning
+     src/styles/global.css retunes this too. The rgb triplets exist because the
+     scrims and hairlines need alpha and you cannot take a channel out of a hex
+     token — keep each in step with the token beside it. */
+  .ih {
+    --ih-frame: var(--color-navy-950);
+    --ih-frame-rgb: 8 11 15;
+    --ih-ink: var(--color-cream);
+    --ih-ink-rgb: 242 246 249;
+    --ih-accent: var(--color-brick-300); /* cyan — reads on the dark stage */
+    --ih-cta: var(--color-brick-500);
+    --ih-cta-hi: var(--color-brick-600);
+    --ih-line: rgb(var(--ih-ink-rgb) / 0.16);
+    --ih-dim: rgb(var(--ih-ink-rgb) / 0.72);
+    --ih-faint: rgb(var(--ih-ink-rgb) / 0.42);
+
+    display: block;
+    background: var(--ih-frame);
+  }
+  .ih *,
+  .ih *::before,
+  .ih *::after {
+    box-sizing: border-box;
+  }
+
+  /* ── Stage ────────────────────────────────────────────────────────── */
+  .ih__stage {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+  .ih__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: -2;
+  }
+  /* Two stacked washes: a left-to-right ramp so the copy column always has a
+     dark bed regardless of what the photo does there, plus a flat floor so the
+     bottom strip stays legible. The form sits over the lighter right side, so
+     the ramp holds more density across the middle than it needs to on its own. */
+  .ih__scrim {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(
+        to right,
+        rgb(var(--ih-frame-rgb) / 0.96) 0%,
+        rgb(var(--ih-frame-rgb) / 0.9) 45%,
+        rgb(var(--ih-frame-rgb) / 0.72) 75%,
+        rgb(var(--ih-frame-rgb) / 0.6) 100%
+      ),
+      linear-gradient(
+        to top,
+        rgb(var(--ih-frame-rgb) / 0.9) 0%,
+        rgb(var(--ih-frame-rgb) / 0) 38%
+      );
+  }
+
+  /* ── Frame ────────────────────────────────────────────────────────── */
+  /* Full bleed, like the homepage hero's `.shell` — no max-width container.
+     The rail becomes a real grid column at desktop (see the media query). */
+  .ih__frame {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  .ih__main {
+    /* Top padding clears the fixed header, which overlays this section rather
+       than pushing it down. */
+    padding: 6.25rem 1.25rem 3.5rem;
+  }
+
+  .ih__tick {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border: 0 solid var(--ih-accent);
+    opacity: 0.85;
+    display: none;
+  }
+  /* Top ticks sit below the fixed header, not under it. */
+  .ih__tick--tl {
+    top: 4.75rem;
+    left: 1.25rem;
+    border-top-width: 1px;
+    border-left-width: 1px;
+  }
+  .ih__tick--tr {
+    top: 4.75rem;
+    right: 1.25rem;
+    border-top-width: 1px;
+    border-right-width: 1px;
+  }
+  .ih__tick--bl {
+    bottom: 1.5rem;
+    left: 1.25rem;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+  }
+  .ih__tick--br {
+    bottom: 1.5rem;
+    right: 1.25rem;
+    border-bottom-width: 1px;
+    border-right-width: 1px;
+  }
+
+  /* ── Rail ─────────────────────────────────────────────────────────── */
+  .ih__rail {
+    display: none;
+  }
+  .ih__rail-line {
+    flex: 1;
+    width: 1px;
+    background: var(--ih-line);
+  }
+  .ih__rail-text {
+    writing-mode: vertical-rl;
+    rotate: 180deg;
+    font-family: var(--font-display);
+    font-size: 0.58rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--ih-faint);
+  }
+
+  /* ── Split ────────────────────────────────────────────────────────── */
+  .ih__split {
+    display: grid;
+    gap: 2.5rem;
+  }
+  .ih__body {
+    max-width: 46rem;
+  }
+
+  .ih__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 1.75rem;
+    border-bottom: 1px solid var(--ih-line);
+  }
+  .ih__crumbs {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    font-family: var(--font-display);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+  .ih__crumb {
+    color: var(--ih-faint);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  a.ih__crumb:hover {
+    color: var(--ih-ink);
+  }
+  .ih__crumb.is-current {
+    color: var(--ih-accent);
+  }
+  .ih__crumb-sep {
+    color: rgb(var(--ih-ink-rgb) / 0.28);
+  }
+  .ih__meta-note {
+    font-family: var(--font-display);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ih-faint);
+  }
+
+  .ih__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin-top: 2.5rem;
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ih-accent);
+  }
+  .ih__eyebrow-rule {
+    width: 2.25rem;
+    height: 1px;
+    background: color-mix(in srgb, var(--ih-accent) 60%, transparent);
+  }
+
+  .ih__title {
+    margin-top: 1.25rem;
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 5.2vw, 4rem);
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: -0.015em;
+    text-transform: uppercase;
+    text-wrap: balance;
+    color: var(--ih-ink);
+  }
+
+  .ih__lead {
+    margin-top: 1.5rem;
+    max-width: 38rem;
+    font-size: 1.05rem;
+    line-height: 1.65;
+    text-wrap: pretty;
+    color: var(--ih-dim);
+  }
+
+  .ih__body-copy {
+    margin-top: 1rem;
+    max-width: 38rem;
+    font-size: 0.97rem;
+    line-height: 1.7;
+    text-wrap: pretty;
+    color: var(--color-navy-100);
+  }
+
+  /* ── Proof points ─────────────────────────────────────────────────── */
+  .ih__points {
+    display: grid;
+    gap: 0.7rem 1.75rem;
+    margin: 1.75rem 0 0;
+    padding: 0;
+    max-width: 38rem;
+    list-style: none;
+  }
+  .ih__point {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    color: rgb(var(--ih-ink-rgb) / 0.82);
+  }
+  .ih__point-ico {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 1.15rem;
+    height: 1.15rem;
+    margin-top: 0.1rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--ih-accent) 16%, transparent);
+    color: var(--ih-accent);
+  }
+
+  @media (min-width: 640px) {
+    .ih__points {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  /* ── Buttons ──────────────────────────────────────────────────────── */
+  .ih__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+  .ih__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    padding: 1rem 1.75rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition:
+      background-color 0.25s,
+      border-color 0.25s,
+      color 0.25s;
+  }
+  .ih__btn--solid {
+    background: var(--ih-cta);
+    color: var(--ih-ink);
+  }
+  .ih__btn--solid:hover {
+    background: var(--ih-cta-hi);
+  }
+  .ih__btn--ghost {
+    border: 1px solid rgb(var(--ih-ink-rgb) / 0.32);
+    color: var(--ih-ink);
+  }
+  .ih__btn--ghost:hover {
+    border-color: var(--ih-ink);
+    background: rgb(var(--ih-ink-rgb) / 0.09);
+  }
+  .ih__btn:focus-visible {
+    outline: 2px solid var(--ih-accent);
+    outline-offset: 3px;
+  }
+
+  /* ── Form column ──────────────────────────────────────────────────── */
+  .ih__form {
+    width: 100%;
+    max-width: 32rem;
+  }
+
+  /* ── Bottom strip ─────────────────────────────────────────────────── */
+  /* :empty keeps pages that pass no slot content from drawing a stray band. */
+  .ih__strip {
+    position: relative;
+    border-top: 1px solid var(--ih-line);
+    background: rgb(var(--ih-frame-rgb) / 0.72);
+    backdrop-filter: blur(6px);
+  }
+  .ih__strip:empty {
+    display: none;
+  }
+
+  /* ── Desktop ──────────────────────────────────────────────────────── */
+  @media (min-width: 1024px) {
+    /* 76px rail + main — the homepage hero shell's exact column split. */
+    .ih__frame {
+      grid-template-columns: 76px 1fr;
+    }
+    .ih__main {
+      padding: 8.5rem 2.5rem 4.5rem;
+    }
+
+    .ih__tick {
+      display: block;
+    }
+    .ih__tick--tl,
+    .ih__tick--tr {
+      top: 6.75rem;
+    }
+    .ih__tick--bl,
+    .ih__tick--br {
+      bottom: 2rem;
+    }
+    .ih__tick--tl,
+    .ih__tick--bl {
+      left: calc(76px + 1rem);
+    }
+    .ih__tick--tr,
+    .ih__tick--br {
+      right: 1.5rem;
+    }
+
+    /* Rail is a real column, mirroring the homepage hero: its own darker bed
+       and a hairline right border separating it from the stage. */
+    .ih__rail {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.25rem;
+      padding-block: 2rem;
+      background: rgb(var(--ih-frame-rgb) / 0.55);
+      border-right: 1px solid var(--ih-line);
+      backdrop-filter: blur(2px);
+    }
+
+    /* Copy left, form right — DOM order and visual order agree, so no `order`
+       shuffle and no mismatch between reading order and focus order. */
+    .ih__split {
+      grid-template-columns: 1fr 40%;
+      gap: 3.25rem;
+      align-items: start;
+    }
+    .ih__form {
+      max-width: none;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .ih__split {
+      grid-template-columns: 1fr 38%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ih__btn {
+      transition: none;
+    }
+  }
+</style>

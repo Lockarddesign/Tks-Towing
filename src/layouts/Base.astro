@@ -6,14 +6,24 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import MobileCallBar from '../components/MobileCallBar.astro';
+import QuickActions from '../components/QuickActions.astro';
 import { business, meta } from '../site.config';
 
 interface Props {
   title?: string;
   description?: string;
+  /** Pages without the homepage hero need the sticky header shown from the top. */
+  pinnedHeader?: boolean;
 }
 
-const { title = meta.title, description = meta.description } = Astro.props;
+const {
+  title = meta.title,
+  description = meta.description,
+  pinnedHeader = false,
+} = Astro.props;
+
+// Keep in step with --color-navy-900 in src/styles/global.css.
+const themeColor = '#0d1219';
 
 const localBusiness = {
   '@context': 'https://schema.org',
@@ -63,13 +73,19 @@ const localBusiness = {
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#2c415e" />
+    <meta name="theme-color" content={themeColor} />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta name="twitter:card" content="summary_large_image" />
-    <set:html
-      value={`<script type="application/ld+json">${JSON.stringify(localBusiness)}</script>`}
+    {/* set:html is a directive on a real element, never a tag of its own — as
+        `<set:html value=... />` it emitted a literal <set:html> element, which
+        swallowed <body> (losing its classes) and shipped the schema as escaped
+        text instead of structured data. */}
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(localBusiness)}
     />
   </head>
   <body
@@ -81,7 +97,7 @@ const localBusiness = {
       >Skip to content</a
     >
 
-    <Header />
+    <Header pinned={pinnedHeader} />
 
     <main id="main">
       <slot />
@@ -89,6 +105,7 @@ const localBusiness = {
 
     <Footer />
     <MobileCallBar />
+    <QuickActions />
 
     <script is:inline>
       // Reveal-on-scroll. Elements are visible by default; we only hide them

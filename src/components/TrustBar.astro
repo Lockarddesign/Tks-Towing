@@ -26,16 +26,18 @@ import { trustBar } from '../site.config';
       data-reveal="280"
       class="mt-10 flex flex-col items-start gap-4 border-t border-line pt-7 sm:flex-row sm:items-center sm:justify-between"
     >
-      <p class="flex items-center gap-2.5 text-sm text-ink/65">
-        <span class="flex gap-0.5 text-brick-500" aria-hidden="true">
-          {
-            Array.from({ length: 5 }).map(() => (
+      {/* Stars AND note, or neither. With the note blank the five stars would
+          still render and read as a five-star rating we have not verified. */}
+      {trustBar.reviewNote && (
+        <p class="flex items-center gap-2.5 text-sm text-ink/65">
+          <span class="flex gap-0.5 text-brick-500" aria-hidden="true">
+            {Array.from({ length: 5 }).map(() => (
               <Icon name="star" class="h-4 w-4" />
-            ))
-          }
-        </span>
-        {trustBar.reviewNote}
-      </p>
+            ))}
+          </span>
+          {trustBar.reviewNote}
+        </p>
+      )}
       <ul class="flex flex-wrap items-center gap-2">
         {
           trustBar.reviewLinks.map((link) => (

@@ -1,38 +1,24 @@
 ---
-import { Image } from 'astro:assets';
+/** Emergency band — fixed photo background (see FixedPhotoBg) + one call CTA. */
 import Icon from './Icon.astro';
+import FixedPhotoBg from './FixedPhotoBg.astro';
 import { business, emergency } from '../site.config';
-import bandImg from '../assets/truck-silhouette.jpg';
+import bandImg from '../assets/tk-highway-tow.jpg';
 ---
 
-<section
-  class="relative isolate overflow-hidden bg-brick-600 py-24 sm:py-28 lg:py-32"
->
-  <div class="absolute inset-0 -z-10">
-    <Image
-      src={bandImg}
-      alt=""
-      widths={[900, 1600, 2200]}
-      sizes="100vw"
-      class="h-full w-full object-cover object-center opacity-25"
-    />
-    <div class="absolute inset-0 bg-brick-700/75"></div>
-    <div
-      class="absolute inset-0 bg-gradient-to-b from-brick-800 via-brick-700/70 to-brick-800"
-    >
-    </div>
-  </div>
+<section class="band relative isolate overflow-hidden py-28 sm:py-32 lg:py-40">
+  <FixedPhotoBg src={bandImg} position="center 55%" />
 
-  <div class="mx-auto max-w-4xl px-5 text-center sm:px-8">
+  <div class="relative mx-auto max-w-3xl px-5 text-center sm:px-8">
     <p
       data-reveal
-      class="label-caps inline-flex items-center gap-2.5 rounded-full border border-cream/25 bg-cream/8 px-4 py-2 text-[0.7rem] text-cream"
+      class="label-caps inline-flex items-center gap-2.5 rounded-full border border-cream/25 bg-navy-950/50 px-4 py-2 text-[0.7rem] text-cream backdrop-blur-sm"
     >
       <span class="relative flex h-1.5 w-1.5">
         <span
-          class="absolute inline-flex h-full w-full animate-ping rounded-full bg-cream opacity-75"
+          class="absolute inline-flex h-full w-full animate-ping rounded-full bg-brick-300 opacity-75"
         ></span>
-        <span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-cream"
+        <span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-brick-300"
         ></span>
       </span>
       {emergency.eyebrow}
@@ -40,29 +26,65 @@ import bandImg from '../assets/truck-silhouette.jpg';
 
     <h2
       data-reveal="80"
-      class="mt-7 font-display text-[clamp(2.5rem,7.5vw,5rem)] leading-[0.95] font-bold tracking-tight text-cream uppercase text-balance"
+      class="mt-7 font-display text-[clamp(2.5rem,7.5vw,5rem)] leading-[0.95] font-bold tracking-tight text-cream uppercase text-balance drop-shadow-[0_4px_24px_rgba(0,0,0,0.6)]"
     >
       {emergency.heading}
     </h2>
 
+    <span
+      data-reveal="110"
+      aria-hidden="true"
+      class="mx-auto mt-8 block h-px w-24 bg-gradient-to-r from-transparent via-brick-300 to-transparent"
+    ></span>
+
     <p
       data-reveal="140"
-      class="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-cream/85 text-pretty"
+      class="mx-auto mt-8 max-w-xl text-lg leading-relaxed text-cream/90 text-pretty"
     >
       {emergency.body}
     </p>
 
-    <a
+    <div
       data-reveal="200"
-      href={business.phoneHref}
-      class="mt-10 inline-flex items-center justify-center gap-3 rounded-md bg-cream px-8 py-6 font-display text-[clamp(1.35rem,4vw,2rem)] leading-none font-bold tracking-tight text-navy-800 uppercase shadow-2xl shadow-navy-950/40 transition hover:bg-paper focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cream sm:px-12"
+      class="mt-11 flex flex-col items-center gap-5 sm:flex-row sm:justify-center"
     >
-      <Icon name="phone" class="h-7 w-7 shrink-0" />
-      {emergency.cta}
-    </a>
+      <a
+        href={business.phoneHref}
+        class="call inline-flex w-full items-center justify-center gap-3 rounded-md bg-brick-500 px-8 py-6 font-display text-[clamp(1.35rem,4vw,2rem)] leading-none font-bold tracking-tight text-cream uppercase transition hover:bg-brick-400 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cream sm:w-auto sm:px-12"
+      >
+        <Icon name="phone" class="h-7 w-7 shrink-0" />
+        {emergency.cta}
+      </a>
 
-    <p data-reveal="260" class="label-caps mt-7 text-[0.7rem] text-cream/70">
+      <p
+        class="label-caps rounded-md border border-cream/20 bg-navy-950/45 px-5 py-4 text-[0.65rem] leading-relaxed text-cream/85 backdrop-blur-sm"
+      >
+        {business.hoursShort}<br />
+        {business.yearsInBusiness}
+      </p>
+    </div>
+
+    <p data-reveal="260" class="label-caps mt-8 text-[0.7rem] text-brick-200">
       {emergency.note}
     </p>
   </div>
 </section>
+
+<style>
+  .band {
+    background: var(--color-navy-950);
+  }
+
+  .call {
+    box-shadow: 0 22px 48px -18px rgba(0, 0, 0, 0.85);
+  }
+  .call:hover {
+    transform: translateY(-2px);
+  }
+
+  @media (hover: none), (prefers-reduced-motion: reduce) {
+    .call:hover {
+      transform: none;
+    }
+  }
+</style>

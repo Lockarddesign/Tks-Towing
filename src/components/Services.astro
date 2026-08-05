@@ -1,52 +1,112 @@
 ---
-import SectionHead from './SectionHead.astro';
+import { Image } from 'astro:assets';
 import Accordion from './Accordion.astro';
 import Icon from './Icon.astro';
 import { services, business } from '../site.config';
+
+// Representative service imagery — real TK's jobs.
+import imgFlatbed from '../assets/tk-audi-flatbed.jpg';
+import imgRoadside from '../assets/tk-highway-tow.jpg';
+import imgDistance from '../assets/tk-truck-loaded-road.jpg';
+import imgEquipment from '../assets/tk-forklift-haul.jpg';
+
+const serviceImages = [imgFlatbed, imgRoadside, imgDistance, imgEquipment];
 ---
 
-<section id="services" class="relative bg-cream py-24 sm:py-28 lg:py-36">
-  <div class="mx-auto max-w-[1300px] px-5 sm:px-8">
-    <SectionHead
-      eyebrow={services.eyebrow}
-      heading={services.heading}
-      intro={services.intro}
-      tone="light"
-    />
+<section
+  id="services"
+  class="relative overflow-hidden bg-cream py-24 sm:py-28 lg:py-36"
+>
+  <!-- faint vintage washes -->
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute -top-32 -right-40 h-96 w-96 rounded-full bg-brick-500/6 blur-3xl"
+  >
+  </div>
 
-    <div class="mt-16 grid gap-5 lg:mt-20 lg:grid-cols-2">
+  <div class="mx-auto max-w-[1300px] px-5 sm:px-8">
+    <!-- Header -->
+    <div class="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+      <div data-reveal class="max-w-2xl">
+        <p class="label-caps flex items-center gap-3 text-xs text-brick-500">
+          <span class="h-px w-8 bg-brick-500/50"></span>
+          {services.eyebrow}
+        </p>
+        <h2
+          class="mt-5 font-display text-[clamp(2.25rem,5vw,3.75rem)] leading-[0.98] font-bold tracking-tight text-navy-700 uppercase text-balance"
+        >
+          {services.heading}
+        </h2>
+        <p class="mt-6 text-lg leading-relaxed text-ink/75 text-pretty">
+          {services.intro}
+        </p>
+      </div>
+
+      <div
+        data-reveal="120"
+        class="flex shrink-0 items-center gap-4 border-t border-line pt-6 lg:border-t-0 lg:pt-0"
+      >
+        <span class="text-brick-500" aria-hidden="true">★★★★★</span>
+        <span class="label-caps text-[0.62rem] text-navy-600"
+          >Fast · Reliable<br />Professional</span
+        >
+      </div>
+    </div>
+
+    <!-- Service cards -->
+    <div class="mt-14 grid gap-6 sm:mt-18 lg:grid-cols-2">
       {
         services.items.map((service, i) => (
           <article
-            data-reveal={i * 80}
-            class="group/card relative overflow-hidden rounded-xl border border-line bg-paper px-6 shadow-sm transition-all duration-300 hover:border-brick-500/40 hover:shadow-md sm:px-8"
+            data-reveal={i * 90}
+            class="group flex flex-col overflow-hidden rounded-2xl border border-line bg-paper shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-brick-500/30 hover:shadow-xl hover:shadow-navy-950/8"
           >
-            <span
-              aria-hidden="true"
-              class="absolute inset-y-0 left-0 w-1 bg-brick-500 opacity-0 transition-opacity duration-300 group-hover/card:opacity-100"
-            />
-            <Accordion tone="light" class="border-0">
-              <div slot="summary">
-                <div class="flex items-start gap-5">
-                  <span class="grid h-12 w-12 shrink-0 place-items-center rounded-lg border border-navy-700/15 bg-navy-700/6 text-navy-700 transition-colors duration-300 group-open:border-brick-500/40 group-open:bg-brick-500/8 group-open:text-brick-500">
-                    <Icon name={service.icon} class="h-6 w-6" />
-                  </span>
-                  <div class="min-w-0">
-                    <h3 class="font-display text-2xl leading-tight font-bold tracking-tight text-navy-700 uppercase sm:text-[1.7rem]">
-                      {service.title}
-                    </h3>
-                    <p class="mt-2 text-[0.95rem] leading-relaxed text-ink/60">
-                      {service.summary}
-                    </p>
-                  </div>
-                </div>
-              </div>
+            {/* Image header */}
+            <div class="relative aspect-[16/10] overflow-hidden">
+              <Image
+                src={serviceImages[i]}
+                alt={service.imageAlt}
+                widths={[480, 800, 1200]}
+                sizes="(min-width: 1024px) 640px, 100vw"
+                loading="lazy"
+                class="h-full w-full object-cover transition-transform duration-700 ease-out motion-safe:group-hover:scale-105"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-navy-950/90 via-navy-950/35 to-navy-950/10" />
 
-              <div class="pl-0 sm:pl-17">
+              <span class="absolute top-4 left-5 font-display text-4xl font-bold tabular-nums text-cream/95 drop-shadow-md sm:text-5xl">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <div class="absolute right-5 bottom-4 left-5 flex items-center gap-3.5">
+                <span class="grid h-12 w-12 shrink-0 place-items-center rounded-xl border border-cream/25 bg-navy-950/50 text-cream backdrop-blur-sm">
+                  <Icon name={service.icon} class="h-6 w-6" />
+                </span>
+                <h3 class="font-display text-2xl leading-none font-bold tracking-tight text-cream uppercase drop-shadow-md sm:text-[1.7rem]">
+                  {service.title}
+                </h3>
+              </div>
+            </div>
+
+            {/* Body */}
+            <div class="flex flex-1 flex-col px-6 pt-5 pb-2 sm:px-8 sm:pt-6">
+              <p class="text-[0.98rem] leading-relaxed text-ink/75">
+                {service.summary}
+              </p>
+
+              <Accordion
+                tone="light"
+                class="mt-4 border-0 border-t border-line/70"
+              >
+                <span
+                  slot="summary"
+                  class="label-caps text-[0.68rem] text-brick-500"
+                >
+                  What&rsquo;s included
+                </span>
+
                 <p class="text-[0.95rem] leading-relaxed text-ink/80">
                   {service.detail}
                 </p>
-                <ul class="mt-6 grid gap-2.5 sm:grid-cols-2">
+                <ul class="mt-5 grid gap-x-6 gap-y-3 sm:grid-cols-2">
                   {service.bullets.map((bullet) => (
                     <li class="flex items-start gap-2.5 text-sm text-ink/80">
                       <Icon
@@ -59,31 +119,32 @@ import { services, business } from '../site.config';
                 </ul>
                 <a
                   href={`/services/${service.slug}/`}
-                  class="label-caps mt-7 inline-flex items-center gap-2 text-[0.7rem] text-brick-500 transition hover:text-brick-600"
+                  class="label-caps mt-3 inline-flex items-center gap-2 py-3 text-[0.7rem] text-brick-500 transition hover:gap-3 hover:text-brick-600"
                 >
                   {service.title} details
                   <Icon name="arrow" class="h-4 w-4" />
                 </a>
-              </div>
-            </Accordion>
+              </Accordion>
+            </div>
           </article>
         ))
       }
     </div>
 
+    <!-- Footnote / CTA bar -->
     <div
       data-reveal
-      class="mt-12 flex flex-col gap-6 rounded-xl border border-line bg-paper p-7 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:p-9"
+      class="mt-8 flex flex-col gap-6 rounded-2xl bg-navy-800 p-8 shadow-lg shadow-navy-950/15 sm:flex-row sm:items-center sm:justify-between sm:p-10"
     >
-      <p class="max-w-2xl text-sm leading-relaxed text-ink/70">
+      <p class="max-w-2xl text-sm leading-relaxed text-navy-100">
         {services.footnote}
       </p>
       <a
         href={business.phoneHref}
-        class="inline-flex shrink-0 items-center justify-center gap-2 rounded-md bg-navy-700 px-6 py-3.5 font-display font-bold tracking-tight text-cream uppercase transition hover:bg-navy-800"
+        class="inline-flex shrink-0 items-center justify-center gap-2.5 rounded-md bg-brick-500 px-7 py-4 font-display font-bold tracking-tight text-cream uppercase transition hover:bg-brick-600"
       >
         <Icon name="phone" class="h-4 w-4" />
-        Ask us
+        Ask us — {business.phone}
       </a>
     </div>
   </div>

@@ -1,0 +1,43 @@
+---
+/**
+ * /gallery — every photo, filterable by category, three across on desktop.
+ *
+ * The homepage keeps the coverflow carousel; this page is the full set. A
+ * carousel shows one job at a time, which is the wrong shape for a page whose
+ * whole job is "show me everything you have done".
+ *
+ * `pinnedHeader` is required — this page has no tall hero for the sticky header
+ * to reveal itself after.
+ */
+import Base from '../layouts/Base.astro';
+import InnerHero from '../components/InnerHero.astro';
+import GalleryGrid from '../components/GalleryGrid.astro';
+import EmergencyCta from '../components/EmergencyCta.astro';
+import { business, gallery, galleryPage } from '../site.config';
+import heroImg from '../assets/tk-mustang-flatbed.jpg';
+---
+
+<Base
+  pinnedHeader
+  title={galleryPage.meta.title}
+  description={galleryPage.meta.description}
+>
+  <InnerHero
+    eyebrow={galleryPage.hero.eyebrow}
+    heading={galleryPage.hero.heading}
+    lead={galleryPage.hero.lead}
+    points={galleryPage.hero.points}
+    railText={galleryPage.hero.railText}
+    crumbs={galleryPage.hero.crumbs}
+    meta={galleryPage.hero.meta}
+    image={heroImg}
+    imageAlt={gallery.captions.a}
+    primaryCta={galleryPage.primaryCta}
+    primaryHref={business.phoneHref}
+    secondaryCta={galleryPage.secondaryCta}
+    secondaryHref={galleryPage.secondaryCtaHref}
+    formIdPrefix="gallery"
+  />
+  <GalleryGrid />
+  <EmergencyCta />
+</Base>

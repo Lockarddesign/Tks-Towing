@@ -55,6 +55,22 @@ const paths: Record<string, string[]> = {
     'M12 3s5 4.2 5 8.5a5 5 0 0 1-10 0C7 9 9 7.5 9 7.5s0 2 1.5 2S12 6 12 3Z',
   ],
   check: ['m5 12.5 4.5 4.5L19 7'],
+  // Medal — ribbon over a star-stamped disc (years in business)
+  medal: [
+    'm8 3 2.6 5.6',
+    'm16 3-2.6 5.6',
+    'M12 21a6 6 0 1 0 0-12 6 6 0 0 0 0 12Z',
+    'm12 12.3 1 2.1 2.3.3-1.7 1.6.4 2.3-2-1.1-2 1.1.4-2.3-1.7-1.6 2.3-.3 1-2.1Z',
+  ],
+  // House — family owned and local
+  home: ['M4 10.5 12 4l8 6.5', 'M6 9.6V20h12V9.6', 'M10 20v-5h4v5'],
+  // Bolt — fast dispatch
+  bolt: ['M13 3 5.5 13.5H11L10.5 21 18 10.5h-5.5L13 3Z'],
+  // Price tag — quoted before the truck rolls
+  tag: [
+    'M3.8 12.6 12 4.4a2 2 0 0 1 1.4-.6h5.4A1.4 1.4 0 0 1 20.2 5.2v5.4a2 2 0 0 1-.6 1.4l-8.2 8.2a1.6 1.6 0 0 1-2.3 0l-5.3-5.3a1.6 1.6 0 0 1 0-2.3Z',
+    'M16.2 7.8a.8.8 0 1 0 1.6 0 .8.8 0 0 0-1.6 0Z',
+  ],
   facebook: ['M14.5 21v-8h2.7l.4-3h-3.1V8.2c0-.9.3-1.5 1.5-1.5H18V4.1A19 19 0 0 0 15.6 4C13.2 4 11.5 5.4 11.5 8v2H9v3h2.5v8'],
   yelp: [
     'M11 4.2 11 11l-4.6-2A1 1 0 0 1 6 7.4l4-3.6a.6.6 0 0 1 1 .4Z',
@@ -67,8 +83,14 @@ const paths: Record<string, string[]> = {
 const d = paths[name] ?? [];
 ---
 
+{/* width/height are presentation attributes, so any CSS size still wins. They
+    exist so that a class which fails to match (e.g. a caller's scoped style,
+    which cannot reach this svg) degrades to a 24px icon instead of the 300x150
+    default replaced-element box. */}
 <svg
   class={className}
+  width="24"
+  height="24"
   viewBox="0 0 24 24"
   fill="none"
   stroke="currentColor"

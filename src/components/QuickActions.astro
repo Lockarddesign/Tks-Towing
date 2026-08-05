@@ -1,0 +1,67 @@
+---
+/**
+ * Floating segmented action bar, pinned bottom-right on desktop.
+ *
+ * Desktop only: mobile already has MobileCallBar across the full width, which
+ * is better for thumb reach, and two fixed bars would overlap.
+ *
+ * It reveals once the hero is scrolled past, matching Header.astro's threshold
+ * so the two arrive together rather than the corner bar covering hero content.
+ */
+import Icon from './Icon.astro';
+import { quickActions } from '../site.config';
+---
+
+<div
+  id="quick-actions"
+  class="pointer-events-none fixed right-6 bottom-6 z-50 hidden translate-y-6 opacity-0 transition-all duration-500 ease-out lg:block"
+  data-hidden="true"
+>
+  <nav
+    aria-label={quickActions.ariaLabel}
+    class="pointer-events-auto flex overflow-hidden rounded-2xl bg-brick-500 shadow-2xl shadow-navy-950/45 ring-1 ring-cream/15"
+  >
+    {
+      quickActions.items.map((item, i) => (
+        <a
+          href={item.href}
+          class:list={[
+            /* Width is set by the longest label ("Request a Quote") so every
+               segment keeps its text on one line and the icons stay aligned. */
+            'group/qa relative flex w-[8.5rem] flex-col items-center gap-2 px-3 py-4 text-center transition-colors duration-200 hover:bg-brick-600 focus-visible:bg-brick-600 focus-visible:outline-none',
+            i > 0 && 'border-l border-cream/20',
+          ]}
+        >
+          <Icon
+            name={item.icon}
+            class="h-7 w-7 text-cream transition-transform duration-200 group-hover/qa:-translate-y-0.5"
+          />
+          <span class="font-display text-[0.75rem] leading-tight font-bold tracking-wide whitespace-nowrap text-cream uppercase">
+            {item.label}
+          </span>
+        </a>
+      ))
+    }
+  </nav>
+</div>
+
+<script is:inline>
+  (() => {
+    const bar = document.getElementById('quick-actions');
+    if (!bar) return;
+
+    // Same threshold as the sticky header, so both appear at the same moment.
+    const revealAt = () => Math.max(320, window.innerHeight * 0.82);
+
+    const onScroll = () => {
+      const show = window.scrollY > revealAt();
+      bar.classList.toggle('opacity-0', !show);
+      bar.classList.toggle('translate-y-6', !show);
+      bar.classList.toggle('pointer-events-none', !show);
+      bar.dataset.hidden = show ? 'false' : 'true';
+    };
+
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  })();
+</script>
