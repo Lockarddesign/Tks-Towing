@@ -5,7 +5,9 @@ import { intro, business } from '../site.config';
 import aboutImg from '../assets/about-firefighter.png';
 ---
 
-<section id="about" class="relative overflow-hidden bg-paper py-24 sm:py-28 lg:py-32">
+<!-- overflow-clip, not overflow-hidden: hidden creates a scroll container and
+     silently kills the sticky photo column; clip crops the glow without it. -->
+<section id="about" class="relative overflow-clip bg-paper py-24 sm:py-28 lg:py-32">
   <!-- faint vintage corner rule -->
   <div
     aria-hidden="true"
@@ -13,18 +15,24 @@ import aboutImg from '../assets/about-firefighter.png';
   >
   </div>
 
-  <div class="mx-auto max-w-[1300px] px-5 sm:px-8">
-    <div class="grid items-stretch gap-14 lg:grid-cols-12 lg:gap-16">
-      <!-- Image + seal -->
-      <div data-reveal class="relative lg:col-span-5">
+  <div class="mx-auto max-w-[81.25rem] px-5 sm:px-8">
+    <div class="grid gap-14 lg:grid-cols-12 lg:items-start lg:gap-16">
+      <!-- Image + seal. The photo is landscape, so on desktop it keeps a
+           near-natural 4:3 frame instead of stretching to the copy's height
+           (which cropped half the frame away). The whole column pins sticky
+           while the longer copy scrolls past. -->
+      <div
+        data-reveal
+        class="relative lg:sticky lg:top-28 lg:col-span-5 lg:self-start"
+      >
         <div
-          class="relative rounded-xl border border-line bg-cream p-2.5 shadow-sm lg:flex lg:h-full"
+          class="relative rounded-xl border border-line bg-cream p-2.5 shadow-sm"
         >
           <PlaceholderFigure
             src={aboutImg}
             label=""
             alt={intro.imageAlt}
-            class="aspect-4/5 rounded-lg lg:aspect-auto lg:h-full lg:flex-1"
+            class="aspect-4/5 rounded-lg lg:aspect-[4/3]"
             sizes="(min-width: 1024px) 40vw, 100vw"
           />
           <!-- Brand caption tying the image to the community-service story -->

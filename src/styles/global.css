@@ -106,3 +106,13 @@
   text-transform: uppercase;
   letter-spacing: 0.18em;
 }
+
+/* Desktop density: composition signed off at the 85% simulation; root scaling
+   reproduces that look at 100% zoom. Mobile stays full size. Works because
+   type, spacing, and containers are all rem-based (1300px containers were
+   converted to 81.25rem). */
+@media (min-width: 1024px) {
+  html {
+    font-size: 85%;
+  }
+}

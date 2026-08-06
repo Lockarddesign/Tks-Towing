@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import Icon from './Icon.astro';
-import { business, nav } from '../site.config';
+import { business, nav, quoteDrawer } from '../site.config';
 import logo from '../assets/tks-logo.png';
 
 interface Props {
@@ -32,7 +32,7 @@ const { pinned = false } = Astro.props;
   data-hidden={pinned ? null : 'true'}
 >
   <div
-    class="mx-auto flex h-16 max-w-[1300px] items-center gap-4 px-5 sm:px-8 lg:h-18"
+    class="mx-auto flex h-16 max-w-[81.25rem] items-center gap-4 px-5 sm:px-8 lg:h-18"
   >
     <!-- Logo -->
     <a
@@ -97,6 +97,16 @@ const { pinned = false } = Astro.props;
       }
     </nav>
 
+    <!-- Desktop quote CTA — opens the slide-in drawer. xl+ only: at lg the
+         nav links plus two buttons overcrowd the bar. -->
+    <button
+      type="button"
+      data-quote-open
+      class="hidden items-center gap-2 border border-brick-300/40 px-5 py-2.5 font-display text-[0.78rem] font-semibold tracking-[0.1em] text-cream uppercase transition hover:border-brick-300 hover:bg-brick-300/10 xl:ml-6 xl:inline-flex"
+    >
+      {quoteDrawer.trigger}
+    </button>
+
     <!-- Desktop call CTA -->
     <a
       href={business.phoneHref}
@@ -135,7 +145,7 @@ const { pinned = false } = Astro.props;
     hidden
     class="border-t border-cream/12 bg-navy-900/98 backdrop-blur-xl lg:hidden"
   >
-    <nav class="mx-auto max-w-[1300px] px-5 py-4 sm:px-8" aria-label="Mobile">
+    <nav class="mx-auto max-w-[81.25rem] px-5 py-4 sm:px-8" aria-label="Mobile">
       <ul class="divide-y divide-cream/10">
         {
           nav.links.map((link) => (

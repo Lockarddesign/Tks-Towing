@@ -1,0 +1,238 @@
+---
+/**
+ * Slide-in quote drawer, mounted once in Base.astro so it exists on every
+ * page. Any element carrying [data-quote-open] opens it — the listener is
+ * delegated to document, so future buttons need no extra wiring.
+ *
+ * Hard rules baked in here:
+ *  - Fits one viewport height and never scrolls: five inputs total (name,
+ *    phone, zip, email, one service dropdown), compact spacing, content
+ *    vertically centered.
+ *  - Copy comes from site.config `quoteDrawer` (which reuses contact.form
+ *    wording verbatim where a string already existed).
+ *
+ * NOTE: like QuoteForm/Contact, delivery is NOT wired up — the form is the
+ * same `method="post"`-with-no-action placeholder those forms use (see the
+ * pre-launch checklist in site.config.ts, item 11). Will's call before launch.
+ */
+import Icon from './Icon.astro';
+import { quoteDrawer } from '../site.config';
+
+const inputClass =
+  'mt-1.5 w-full rounded-lg border border-line bg-cream px-3.5 py-2.5 text-[0.95rem] text-ink placeholder:text-ink/40 transition focus:border-brick-500/60 focus:bg-paper focus:outline-2 focus:outline-offset-2 focus:outline-brick-500/40';
+const labelClass = 'label-caps block text-[0.62rem] text-navy-600';
+---
+
+<div id="quote-drawer-root" class="qd-root fixed inset-0 z-90" aria-hidden="true">
+  <!-- Backdrop scrim — click closes -->
+  <div class="qd-scrim absolute inset-0 bg-navy-950/60" data-quote-close></div>
+
+  <aside
+    id="quote-drawer"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="quote-drawer-title"
+    tabindex="-1"
+    class="qd-panel absolute top-0 right-0 flex h-dvh w-full max-w-md flex-col justify-center overflow-hidden bg-paper px-6 py-4 shadow-2xl shadow-navy-950/60 outline-none sm:px-8"
+  >
+    <button
+      type="button"
+      data-quote-close
+      aria-label={quoteDrawer.closeLabel}
+      class="absolute top-4 right-4 grid h-10 w-10 place-items-center rounded-lg border border-line text-ink/60 transition hover:bg-cream hover:text-ink"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        class="h-4 w-4"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        aria-hidden="true"
+      >
+        <path d="M6 6l12 12M18 6L6 18"></path>
+      </svg>
+    </button>
+
+    <!-- Header: one compact line + one short reassurance line -->
+    <div class="h-0.5 w-9 bg-brick-300"></div>
+    <h2
+      id="quote-drawer-title"
+      class="mt-3 font-display text-2xl leading-tight font-bold tracking-tight text-navy-700 uppercase"
+    >
+      {quoteDrawer.heading}
+    </h2>
+    <p class="mt-1 text-[0.82rem] leading-snug text-ink/60">{quoteDrawer.note}</p>
+
+    <form class="mt-5 space-y-3.5" method="post">
+      <div class="grid grid-cols-2 gap-3.5">
+        <div>
+          <label class={labelClass} for="qd-name">{quoteDrawer.fields.name}</label>
+          <input
+            class={inputClass}
+            id="qd-name"
+            name="name"
+            type="text"
+            autocomplete="name"
+            required
+          />
+        </div>
+        <div>
+          <label class={labelClass} for="qd-phone">{quoteDrawer.fields.phone}</label>
+          <input
+            class={inputClass}
+            id="qd-phone"
+            name="phone"
+            type="tel"
+            autocomplete="tel"
+          />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-[7rem_1fr] gap-3.5">
+        <div>
+          <label class={labelClass} for="qd-zip">{quoteDrawer.fields.zip}</label>
+          <input
+            class={inputClass}
+            id="qd-zip"
+            name="zip"
+            type="text"
+            inputmode="numeric"
+            autocomplete="postal-code"
+            required
+          />
+        </div>
+        <div>
+          <label class={labelClass} for="qd-email">{quoteDrawer.fields.email}</label>
+          <input
+            class={inputClass}
+            id="qd-email"
+            name="email"
+            type="email"
+            autocomplete="email"
+            required
+          />
+        </div>
+      </div>
+
+      <div>
+        <label class={labelClass} for="qd-service">{quoteDrawer.fields.service}</label>
+        <select class={inputClass} id="qd-service" name="service" required>
+          <option value="" disabled selected>
+            {quoteDrawer.fields.servicePlaceholder}
+          </option>
+          {quoteDrawer.services.map((s) => <option value={s}>{s}</option>)}
+        </select>
+      </div>
+
+      <button
+        type="submit"
+        class="flex w-full items-center justify-center gap-2.5 rounded-lg bg-brick-500 px-6 py-3.5 font-display font-bold tracking-wider text-cream uppercase shadow-lg shadow-brick-500/25 transition hover:bg-brick-600 hover:shadow-brick-500/35"
+      >
+        {quoteDrawer.submit}
+        <Icon name="arrow" class="h-[17px] w-[17px]" />
+      </button>
+    </form>
+  </aside>
+</div>
+
+<style>
+  /* Closed state hides via visibility (delayed on close so the slide-out
+     plays), never display — display:none would kill the transition. */
+  .qd-root {
+    visibility: hidden;
+    transition: visibility 0s 0.35s;
+  }
+  .qd-root.is-open {
+    visibility: visible;
+    transition-delay: 0s;
+  }
+  .qd-scrim {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .is-open .qd-scrim {
+    opacity: 1;
+  }
+  .qd-panel {
+    transform: translateX(100%);
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .is-open .qd-panel {
+    transform: translateX(0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .qd-root,
+    .qd-scrim,
+    .qd-panel {
+      transition: none;
+    }
+  }
+</style>
+
+<script is:inline>
+  (() => {
+    const root = document.getElementById('quote-drawer-root');
+    const panel = document.getElementById('quote-drawer');
+    if (!root || !panel) return;
+
+    /** @type {HTMLElement | null} */
+    let lastTrigger = null;
+
+    const focusables = () =>
+      Array.from(
+        panel.querySelectorAll(
+          'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled])'
+        )
+      );
+
+    const isOpen = () => root.classList.contains('is-open');
+
+    const setOpen = (open) => {
+      root.classList.toggle('is-open', open);
+      root.setAttribute('aria-hidden', String(!open));
+      // Freeze the page behind the modal drawer.
+      document.documentElement.style.overflow = open ? 'hidden' : '';
+      if (open) {
+        const first = panel.querySelector('input, select');
+        (first || panel).focus();
+      } else if (lastTrigger) {
+        lastTrigger.focus();
+      }
+    };
+
+    // Delegated: any current or future [data-quote-open] opens the drawer;
+    // [data-quote-close] (scrim, X button) closes it.
+    document.addEventListener('click', (e) => {
+      const opener = e.target.closest('[data-quote-open]');
+      if (opener) {
+        e.preventDefault();
+        lastTrigger = opener;
+        setOpen(true);
+        return;
+      }
+      if (e.target.closest('[data-quote-close]')) setOpen(false);
+    });
+
+    // Escape closes; Tab is trapped inside the dialog while open.
+    document.addEventListener('keydown', (e) => {
+      if (!isOpen()) return;
+      if (e.key === 'Escape') {
+        setOpen(false);
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      const els = focusables();
+      if (!els.length) return;
+      const first = els[0];
+      const last = els[els.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && (document.activeElement === last || !panel.contains(document.activeElement))) {
+        e.preventDefault();
+        first.focus();
+      }
+    });
+  })();
+</script>

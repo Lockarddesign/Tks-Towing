@@ -336,6 +336,7 @@ const {
   }
 
   .ih__meta {
+    position: relative;
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
@@ -575,11 +576,33 @@ const {
     .ih__form {
       max-width: none;
     }
+
+    /* The quote card's top edge sits flush with the meta row's bottom edge, so
+       a full-width rule here would cut straight across the card's top corners.
+       Swap the border for a hairline that stops at the copy column's right
+       edge — the width mirrors `.ih__split`'s columns: 100% minus the form
+       column minus the gap. Mobile keeps the full-width border; the form
+       stacks well below it there. */
+    .ih__meta {
+      border-bottom: 0;
+    }
+    .ih__meta::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 1px;
+      width: calc(60% - 3.25rem);
+      background: var(--ih-line);
+    }
   }
 
   @media (min-width: 1280px) {
     .ih__split {
       grid-template-columns: 1fr 38%;
+    }
+    .ih__meta::after {
+      width: calc(62% - 3.25rem);
     }
   }
 

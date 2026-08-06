@@ -21,7 +21,9 @@ const regions = coverage.regions.map((region) => ({
 }));
 ---
 
-<section id="coverage" class="relative overflow-hidden bg-paper py-24 sm:py-28 lg:py-36">
+<!-- overflow-clip, not overflow-hidden: hidden creates a scroll container and
+     silently kills the sticky map column; clip crops the wash without it. -->
+<section id="coverage" class="relative overflow-clip bg-paper py-24 sm:py-28 lg:py-36">
   <!-- faint vintage wash, matching the Services section -->
   <div
     aria-hidden="true"
@@ -29,7 +31,7 @@ const regions = coverage.regions.map((region) => ({
   >
   </div>
 
-  <div class="mx-auto max-w-[1300px] px-5 sm:px-8">
+  <div class="mx-auto max-w-[81.25rem] px-5 sm:px-8">
     {
       showHead && (
         <SectionHead

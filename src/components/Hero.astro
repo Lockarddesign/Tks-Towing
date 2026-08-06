@@ -98,8 +98,10 @@ const socialCode: Record<string, string> = { Facebook: 'FB', Yelp: 'YELP' };
         </a>
       </header>
 
-      <!-- Burger-triggered mobile menu -->
-      <nav id="hero-menu" class="hero-menu" aria-label="Mobile" hidden>
+      <!-- Burger-triggered menu (all viewports). The scrim sits behind the
+           panel and closes it on click. -->
+      <div class="hero-menu-scrim" id="hero-menu-scrim" hidden></div>
+      <nav id="hero-menu" class="hero-menu" aria-label="Menu" hidden>
         <ul>
           {
             nav.links.map((link) => (
@@ -381,6 +383,8 @@ const socialCode: Record<string, string> = { Facebook: 'FB', Yelp: 'YELP' };
     display: flex;
     flex-direction: column;
     min-width: 0;
+    /* Containing block for the burger menu overlay + its scrim. */
+    position: relative;
   }
 
   /* Top navigation */
@@ -557,11 +561,31 @@ const socialCode: Record<string, string> = { Facebook: 'FB', Yelp: 'YELP' };
     flex-shrink: 0;
   }
 
-  /* Burger menu (mobile) */
+  /* Burger menu — an overlay on every viewport, absolutely positioned so
+     opening it never pushes the stage down. `top` must match .topnav's
+     height at each breakpoint (.main is a flex container, so the static
+     position of an abspos child is the container's top, not below its
+     siblings). Was `display: none !important` above 900px, which is why
+     the desktop burger did nothing. */
   .hero-menu {
+    position: absolute;
+    top: 96px; /* .topnav height */
+    left: 0;
+    right: 0;
+    z-index: 70;
+    max-height: calc(100dvh - 140px);
+    overflow-y: auto;
     border-bottom: 1px solid var(--line);
     background: var(--shell-2);
     padding: 8px clamp(20px, 3vw, 44px) 20px;
+    box-shadow: 0 30px 60px -20px rgb(var(--frame-rgb) / 0.8);
+  }
+  /* Click-to-close backdrop behind the open menu. */
+  .hero-menu-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 65;
+    background: rgb(var(--frame-rgb) / 0.55);
   }
   .hero-menu li + li {
     border-top: 1px solid var(--line);
@@ -897,7 +921,9 @@ const socialCode: Record<string, string> = { Facebook: 'FB', Yelp: 'YELP' };
     /* The vh term keeps the headline from outgrowing a short laptop window —
        on a wide-but-short screen 5.4vw alone wraps to four tall lines and
        pushes the proof strip below the fold. */
-    font-size: clamp(40px, min(5.4vw, 9.2vh), 78px);
+    /* px-clamped, so the desktop density root-scale doesn't reach it — the
+       66px cap is the 85%-density equivalent of the old 78px. */
+    font-size: clamp(40px, min(5.4vw, 9.2vh), 66px);
     font-weight: 700;
     line-height: 0.95;
     letter-spacing: -0.01em;
@@ -1117,6 +1143,9 @@ const socialCode: Record<string, string> = { Facebook: 'FB', Yelp: 'YELP' };
     .burger {
       height: 78px;
     }
+    .hero-menu {
+      top: 78px;
+    }
     .brand-badge {
       height: 58px;
     }
@@ -1191,6 +1220,9 @@ const socialCode: Record<string, string> = { Facebook: 'FB', Yelp: 'YELP' };
     .topnav {
       height: 72px;
       gap: 16px;
+    }
+    .hero-menu {
+      top: 72px;
     }
     .navlinks {
       display: none;
@@ -1288,9 +1320,15 @@ const socialCode: Record<string, string> = { Facebook: 'FB', Yelp: 'YELP' };
       margin-top: 2px;
     }
   }
+  /* Desktop: the panel attaches to the burger's rail edge — compact and
+     left-anchored for straight-down travel, not a full-width curtain. */
   @media (min-width: 901px) {
     .hero-menu {
-      display: none !important;
+      right: auto;
+      width: min(400px, 100%);
+      max-height: calc(100vh - 96px);
+      padding: 8px 28px 24px;
+      border-right: 1px solid var(--line);
     }
   }
   /* Narrow phones. The tick / caption / strip rules above already apply here;
@@ -1526,21 +1564,43 @@ const socialCode: Record<string, string> = { Facebook: 'FB', Yelp: 'YELP' };
       schedule(DUR);
     }
 
-    // Burger → mobile menu
+    // Burger → overlay menu (all viewports)
     var burger = document.getElementById('hero-burger');
     var menu = document.getElementById('hero-menu') as HTMLElement | null;
+    var menuScrim = document.getElementById('hero-menu-scrim');
     if (burger && menu) {
       var setOpen = function (open: boolean) {
         menu!.hidden = !open;
+        if (menuScrim) menuScrim.hidden = !open;
         burger!.setAttribute('aria-expanded', String(open));
+        if (open) {
+          var first = menu!.querySelector<HTMLElement>('a');
+          if (first) first.focus();
+        }
+      };
+      var closeMenu = function () {
+        setOpen(false);
+        (burger as HTMLElement).focus();
       };
       burger.addEventListener('click', function () {
         setOpen(menu!.hidden);
       });
-      menu.querySelectorAll('[data-hero-menu-link]').forEach(function (a) {
+      // Any link tap closes it (call CTA included).
+      menu.querySelectorAll('a').forEach(function (a) {
         a.addEventListener('click', function () {
           setOpen(false);
         });
+      });
+      if (menuScrim) menuScrim.addEventListener('click', closeMenu);
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !menu!.hidden) closeMenu();
+      });
+      // Click anywhere outside the panel (scrim covers most of it, but the
+      // topnav sits above the scrim's z-index) also closes.
+      document.addEventListener('click', function (e) {
+        if (menu!.hidden) return;
+        var t = e.target as Node;
+        if (!menu!.contains(t) && !burger!.contains(t)) setOpen(false);
       });
     }
   })();

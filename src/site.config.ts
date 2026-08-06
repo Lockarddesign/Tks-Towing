@@ -59,7 +59,7 @@ export const business = {
     zip: '08108',
     full: '208 W Cuthbert Blvd, Haddon Township, NJ 08108',
   },
-  hours: 'Open 24 hours a day, 7 days a week — all year',
+  hours: 'Open 24 hours a day, 7 days a week, all year',
   hoursShort: 'Open 24/7, 365',
   staffLine: 'Our 24/7 staff is here when you need us.',
   socials: [
@@ -76,7 +76,7 @@ export const business = {
 /* ------------------------------------------------------------------ */
 
 export const meta = {
-  title: "TK's Towing | 24/7 Flatbed Towing & Roadside Assistance — South Jersey",
+  title: "TK's Towing | 24/7 Flatbed Towing & Roadside Assistance in South Jersey",
   description:
     "Family owned flatbed towing and roadside assistance in Haddon Township, NJ since 1996. Serving all of Camden County plus parts of Burlington and Gloucester. Open 24/7. Call (856) 854-9889.",
 } as const;
@@ -88,8 +88,8 @@ export const meta = {
 
 export const hero = {
   eyebrow: 'Haddon Township, NJ · Since 1996',
-  heading: 'Fast, reliable towing across South Jersey — 24/7',
-  sub: 'Flatbed towing and roadside assistance from a family owned crew that has been answering the phone in Camden County for nearly 30 years. Day, night, holidays — someone picks up.',
+  heading: 'Fast, reliable towing across South Jersey, 24/7',
+  sub: 'Flatbed towing and roadside assistance from a family owned crew that has been answering the phone in Camden County for nearly 30 years. Call at any hour and someone picks up.',
   primaryCta: `Call ${business.phone}`,
   secondaryCta: 'Our services',
   secondaryCtaHref: '#services',
@@ -104,7 +104,7 @@ export const hero = {
 
   // Left utility rail (vintage framed shell)
   rail: {
-    vertical: 'Haddon Township, NJ — Family Owned Since 1996',
+    vertical: 'Haddon Township, NJ · Family Owned Since 1996',
   },
 
   // Ken Burns slideshow — captions per frame. Images are wired in Hero.astro.
@@ -130,7 +130,7 @@ export const hero = {
       },
       {
         label: 'Recovery & Hauling',
-        alt: "A night job — large medical equipment strapped to the TK's flatbed under the truck's work lights",
+        alt: "Large medical equipment strapped to the TK's flatbed at night under the truck's work lights",
       },
     ],
   },
@@ -154,8 +154,8 @@ export const hero = {
 export const intro = {
   eyebrow: 'Who we are',
   heading: 'The local flatbed crew South Jersey has trusted since 1996',
-  lead: 'At TK’s Towing, our mission is to provide fast, safe, and reliable towing services to our customers.',
-  body: 'We understand the inconvenience and stress that comes with a vehicle breakdown, and we are committed to making the towing experience as smooth and hassle-free as possible. Family owned and operated for over 25 years, right here in Haddon Township — you are talking to the people who own the trucks.',
+  lead: 'Our job is simple: get to you fast and move your vehicle safely.',
+  body: 'A breakdown is stressful enough on its own, so we keep the tow itself easy. Family owned and operated for over 25 years, right here in Haddon Township. When you call, you are talking to the people who own the trucks.',
   seal: {
     ring: "TK’S TOWING · EST. 1996 · HADDON TOWNSHIP NJ · ",
     centerTop: 'Since',
@@ -171,12 +171,12 @@ export const intro = {
     {
       icon: 'clock',
       title: 'Open 24/7, 365',
-      text: 'Nights, weekends, holidays — someone answers.',
+      text: 'Someone answers, even on holidays.',
     },
     {
       icon: 'flatbed',
-      title: 'Flatbed done right',
-      text: 'Carried on the deck, never dragged.',
+      title: 'Flatbed towing',
+      text: 'Your car rides on the deck, never dragged.',
     },
     {
       icon: 'pin',
@@ -188,7 +188,7 @@ export const intro = {
   primaryHref: '#story',
   secondaryCta: `Call ${business.phone}`,
   imageAlt:
-    'A volunteer firefighter in full turnout gear kneeling after a call — the community-service roots behind TK’s Towing',
+    'A volunteer firefighter in full turnout gear kneeling after a call, the community service roots behind TK’s Towing',
   imageKicker: 'On & off the job',
   imageCaption: 'HTFD volunteer firefighter since 2009',
 } as const;
@@ -220,18 +220,18 @@ export const trustBar = {
 
 export const services = {
   eyebrow: 'What we do',
-  heading: 'Towing and roadside help, done right',
+  heading: 'Flatbed towing and roadside help',
   intro:
-    'We offer a comprehensive range of flatbed towing for auto and light trucks. Tap any service for the details.',
+    'Flatbed towing for autos and light trucks, plus roadside help when you do not need a tow. Tap any service for the details.',
   items: [
     {
       slug: 'flatbed-towing',
       imageAlt: "A black Audi sports car secured on the TK's Towing flatbed",
       icon: 'flatbed',
       title: 'Flatbed Towing',
-      summary: 'Autos and light trucks, carried — never dragged.',
+      summary: 'Autos and light trucks, carried on the deck instead of dragged.',
       detail:
-        'Flatbed towing for autos and light trucks. Your vehicle rides fully on the deck, so the drivetrain and bodywork stay off the road — the safest way to move a car that has been in an accident, has all-wheel drive, sits low, or simply will not roll. Our team of experienced professionals is equipped with the latest tools and equipment to get you back on the road quickly and safely.',
+        'Flatbed towing for autos and light trucks. Your vehicle rides fully on the deck, so the drivetrain and bodywork stay off the road. That is the safest way to move a car that has been in an accident, has all-wheel drive, sits low, or just will not roll. The driver who shows up has done this for years and brings the right equipment to load your car safely.',
       bullets: [
         'Cars, SUVs and light trucks',
         'Accident and breakdown recovery',
@@ -246,7 +246,7 @@ export const services = {
       title: 'Roadside Assistance',
       summary: 'Jump-starts, tire changes, lockouts and fuel delivery.',
       detail:
-        'Not every problem needs a tow. If a jump, a spare, a fuel can or a door unlock will get you moving again, that is what we will do — and you are back on your way in minutes instead of waiting on a tow yard.',
+        'Not every problem needs a tow. If a jump, a spare, a fuel can or a door unlock will get you moving again, that is what we will do, and you are back on your way in minutes instead of waiting on a tow yard.',
       bullets: [
         'Jump-starts',
         'Tire changes',
@@ -259,9 +259,9 @@ export const services = {
       imageAlt: "The TK's Towing flatbed loaded and on the road at dusk",
       icon: 'distance',
       title: 'Long-Distance Towing',
-      summary: 'Local to long distance — we will take it the whole way.',
+      summary: 'Local or long distance, we take it the whole way.',
       detail:
-        'Local to long distance towing is offered as well. Whether it is three miles to your mechanic in Haddon Township or a run well outside the county, we quote the trip up front and haul it on the flatbed the entire way.',
+        'We run local and long distance tows. Three miles to your mechanic in Haddon Township or a trip well past the county line, either way we quote it up front and your vehicle rides the flatbed the entire way.',
       bullets: [
         'Across Camden County and beyond',
         'Out-of-area and interstate runs',
@@ -275,15 +275,15 @@ export const services = {
       title: 'Light Equipment Transport & Hauling',
       summary: 'Small machines and equipment moved on the deck.',
       detail:
-        'Light equipment transportation and hauling can be arranged as well. If it fits safely on a flatbed and is within our weight range, give us a call with the dimensions and we will tell you straight whether we can move it.',
+        'We also haul light equipment. If it fits safely on a flatbed and is within our weight range, call with the dimensions and we will tell you straight whether we can move it.',
       bullets: [
         'Light equipment and small machinery',
         'Loading and tie-down handled by our operator',
-        'Weight and size limits — ask when you call',
+        'Weight and size limits: ask when you call',
       ],
     },
   ],
-  footnote: `We are a flatbed operation for autos and light trucks. We do not advertise heavy-duty or semi towing — if you are not sure whether your vehicle fits, call and ask.`,
+  footnote: `We are a flatbed operation for autos and light trucks. We do not advertise heavy-duty or semi towing. If you are not sure whether your vehicle fits, call and ask.`,
 } as const;
 
 /* ------------------------------------------------------------------ */
@@ -328,7 +328,7 @@ export const nav = {
    the footer link to as /services#slug. */
 export const servicesPage = {
   meta: {
-    title: "Towing Services | Flatbed, Roadside & Long-Distance — TK's Towing",
+    title: "Towing Services | Flatbed, Roadside & Long-Distance | TK's Towing",
     description:
       'Flatbed towing, roadside assistance, long-distance towing and light equipment hauling from a family owned crew in Haddon Township, NJ. Open 24/7. Call (856) 854-9889.',
   },
@@ -431,7 +431,7 @@ export const servicePage = {
     eyebrow: 'In detail',
     heading: 'What this service covers',
     intro:
-      'Every point below is part of the job — no add-ons quoted after the truck arrives.',
+      'Every point below is part of the job, so nothing gets tacked onto the quote after the truck arrives.',
     icons: ['check', 'flatbed', 'shield', 'clock', 'pin', 'tag'],
   },
 
@@ -479,9 +479,9 @@ export const coverage = {
   eyebrow: 'Coverage area',
   heading: 'Where we tow',
   intro:
-    "TK's proudly provides towing services to all of Camden County, and parts of Burlington and Gloucester County. Local to long distance towing is offered as well.",
+    "We tow across all of Camden County and into parts of Burlington and Gloucester County, local and long distance both.",
   primaryLabel: 'Camden County',
-  primaryNote: 'Full coverage — every town, every hour',
+  primaryNote: 'Full coverage, every town, every hour',
   regions: [
     {
       name: 'Camden County',
@@ -521,7 +521,7 @@ export const coverage = {
     {
       name: 'Gloucester County',
       status: 'Partial coverage',
-      note: 'Same story on the Gloucester side — much of the county is well within our range.',
+      note: 'Same story on the Gloucester side. Much of the county is well within our range.',
       towns: [],
       townsNote: '',
     },
@@ -540,7 +540,7 @@ export const coverage = {
    verbatim; the map and region cards below it are the same component. */
 export const coveragePage = {
   meta: {
-    title: "Service Areas | Camden County & South Jersey Towing — TK's Towing",
+    title: "Service Areas | Camden County & South Jersey Towing | TK's Towing",
     description:
       'Where TK’s Towing tows: all of Camden County plus parts of Burlington and Gloucester. Local to long distance, open 24/7. Call (856) 854-9889.',
   },
@@ -556,9 +556,9 @@ export const coveragePage = {
     lead: coverage.intro,
     body: coverage.outsideBody,
     points: [
-      `${coverage.regions[0].name} — ${coverage.regions[0].status}`,
-      `${coverage.regions[1].name} — ${coverage.regions[1].status}`,
-      `${coverage.regions[2].name} — ${coverage.regions[2].status}`,
+      `${coverage.regions[0].name} · ${coverage.regions[0].status}`,
+      `${coverage.regions[1].name} · ${coverage.regions[1].status}`,
+      `${coverage.regions[2].name} · ${coverage.regions[2].status}`,
       `${business.hoursShort} · ${business.address.city}, ${business.address.state}`,
     ],
     railText: hero.rail.vertical,
@@ -607,11 +607,11 @@ export const coveragePage = {
 
 export const story = {
   eyebrow: 'The TK’s story',
-  heading: 'A local who protects and serves — on the job and off it',
+  heading: 'A local who protects and serves, on the job and off it',
   paragraphs: [
-    "TK's Towing started in 1996 in Haddon Township, New Jersey. Same family, same town, same phone number ever since — going on thirty years of answering calls from neighbors who are having a bad day.",
+    "TK's Towing started in 1996 in Haddon Township, New Jersey. Same family, same town, same phone number ever since. That is going on thirty years of answering calls from neighbors having a bad day.",
     'In 2009 the owner joined the Haddon Township Fire Department, and he has served the community as a volunteer firefighter ever since. It is the same instinct that built the towing company: when the call comes in, you go.',
-    'That is who shows up when you call. Not a dispatch center three states away — a local operator who lives here, works here, and answers to his neighbors.',
+    'That is who shows up when you call: a local operator who lives here, works here, and answers to his neighbors, not a dispatch center three states away.',
   ],
   pullQuote:
     'When the call comes in, you go. That has not changed since 1996.',
@@ -637,10 +637,10 @@ export const whyUs = {
   eyebrow: 'Why TK’s',
   heading: 'Six reasons people keep our number saved',
   intro:
-    'At TKS Towing, our mission is to provide fast, safe, and reliable towing services to our customers. We understand the inconvenience and stress that comes with a vehicle breakdown, and we are committed to making the towing experience as smooth and hassle-free as possible.',
+    'A breakdown is stressful enough on its own. Our job is to get to you fast, handle your vehicle carefully, and keep everything else simple.',
   items: [
     {
-      title: '24/7 — and we mean it',
+      title: '24/7, and we mean it',
       icon: 'clock',
       body: 'Open 24 hours a day, 7 days a week, all year. Our 24/7 staff is here when you need us. Two in the morning on a holiday is still a normal call for us.',
     },
@@ -680,21 +680,21 @@ export const process = {
   eyebrow: 'How it works',
   heading: 'Four steps, one phone call',
   intro:
-    'From the moment you call to the moment your vehicle is back on the ground — here is exactly what happens.',
+    'Here is exactly what happens, from the moment you call to the moment your vehicle is back on the ground.',
   steps: [
     {
       title: 'Call us',
       icon: 'phone',
       summary: 'One number, any hour.',
       detail:
-        'Call (856) 854-9889. Tell us where you are, what you are driving, and what happened. If you are somewhere unsafe — a shoulder, a travel lane, a dark road — say so first and stay in a safe spot while we get moving.',
+        'Call (856) 854-9889. Tell us where you are, what you are driving, and what happened. If you are somewhere unsafe, like a shoulder, a travel lane or a dark road, say so first and stay in a safe spot while we get moving.',
     },
     {
       title: 'We dispatch fast',
       icon: 'clock',
       summary: 'A truck starts rolling from Haddon Township.',
       detail:
-        'We confirm the price and send the nearest available flatbed. You get told what to expect rather than left guessing.',
+        'We confirm the price and send the nearest available flatbed. We tell you what to expect instead of leaving you guessing.',
     },
     {
       title: 'Safe flatbed pickup',
@@ -708,7 +708,7 @@ export const process = {
       icon: 'pin',
       summary: 'Your shop, your driveway, or across the state.',
       detail:
-        'We drop at your mechanic, your home, a dealership, or wherever the vehicle is headed — local or long distance. Unloaded as carefully as it went on.',
+        'We drop at your mechanic, your home, a dealership, or wherever the vehicle is headed, local or long distance. It comes off the deck as carefully as it went on.',
     },
   ],
 } as const;
@@ -721,7 +721,7 @@ export const gallery = {
   eyebrow: 'On the road',
   heading: 'The work',
   intro:
-    'Recent work off the TK’s flatbeds — classics, daily drivers and equipment hauls across South Jersey.',
+    'Recent work off the TK’s flatbeds: classics, daily drivers and equipment hauls across South Jersey.',
   // Used as alt text on the gallery tiles.
   captions: {
     a: 'A classic Ford Mustang loaded on the flatbed',
@@ -740,9 +740,9 @@ export const gallery = {
 /* The homepage gallery given its own page. Hero copy is `gallery` verbatim. */
 export const galleryPage = {
   meta: {
-    title: "Gallery | Recent Flatbed Towing Jobs — TK's Towing, Haddon Township NJ",
+    title: "Gallery | Recent Flatbed Towing Jobs | TK's Towing, Haddon Township NJ",
     description:
-      'Recent work off the TK’s Towing flatbeds — classics, daily drivers and equipment hauls across South Jersey.',
+      'Recent work off the TK’s Towing flatbeds: classics, daily drivers and equipment hauls across South Jersey.',
   },
 
   /* "The work" is a fine section head and a poor h1 — it names neither the
@@ -820,7 +820,7 @@ export const galleryPage = {
     {
       src: 'nightEquipment',
       category: 'equipment',
-      alt: "A night job — large medical equipment strapped to the TK's flatbed under the truck's work lights",
+      alt: "Large medical equipment strapped to the TK's flatbed at night under the truck's work lights",
     },
     { src: 'nightHospital', category: 'equipment', alt: gallery.captions.e },
     {
@@ -872,15 +872,15 @@ export const faq = {
   items: [
     {
       q: 'Are you really available 24/7?',
-      a: 'Yes. We are open 24 hours a day, 7 days a week, all year. Our 24/7 staff is here when you need us — nights, weekends and holidays included.',
+      a: 'Yes. We are open 24 hours a day, 7 days a week, all year. Nights, weekends and holidays are all normal working hours for us.',
     },
     {
       q: 'What areas do you cover?',
-      a: "TK's proudly provides towing services to all of Camden County, and parts of Burlington and Gloucester County. Local to long distance towing is offered as well, so if your pickup or drop-off falls outside that area, call and we will quote it.",
+      a: "All of Camden County, plus parts of Burlington and Gloucester County. We also run long distance tows, so if your pickup or drop-off falls outside that area, call and we will quote the trip.",
     },
     {
       q: 'What kinds of vehicles do you tow?',
-      a: `We offer flatbed towing for autos and light trucks — cars, SUVs, vans and light pickups. If you are unsure whether your vehicle fits, call with the year, make and model and we will tell you straight. We do not advertise heavy-duty or commercial semi towing.`,
+      a: `Autos and light trucks: cars, SUVs, vans and light pickups, all on the flatbed. If you are unsure whether your vehicle fits, call with the year, make and model and we will tell you straight. We do not advertise heavy-duty or commercial semi towing.`,
     },
     {
       q: 'Do you do roadside assistance, or only towing?',
@@ -888,7 +888,7 @@ export const faq = {
     },
     {
       q: 'Do you do long-distance tows?',
-      a: 'Yes. Local to long distance towing is offered. Long runs are quoted up front so you know the number before the truck leaves.',
+      a: 'Yes. We run local and long distance tows, and we quote long runs up front so you know the number before the truck leaves.',
     },
     {
       q: 'How fast can you get to me?',
@@ -896,15 +896,15 @@ export const faq = {
     },
     {
       q: 'How much does a tow cost?',
-      a: `Price depends on distance, vehicle and what the recovery involves — a driveway pickup is not the same job as pulling a car off a shoulder. Call with your location and destination and you will get a price before we dispatch.`,
+      a: `Price depends on distance, vehicle and what the recovery involves. A driveway pickup is not the same job as pulling a car off a shoulder. Call with your location and destination and you will get a price before we dispatch.`,
     },
     {
       q: 'Will my car get damaged on the tow?',
-      a: 'That is exactly why we run flatbeds. Your vehicle rides fully on the deck rather than being dragged on its own wheels, secured with straps and chains for the whole trip — the safest way to move a damaged, low or all-wheel-drive vehicle.',
+      a: 'That is exactly why we run flatbeds. Your vehicle rides fully on the deck, secured with straps and chains for the whole trip, instead of being dragged on its own wheels. It is the safest way to move a damaged, low or all-wheel-drive vehicle.',
     },
     {
       q: 'Who actually shows up?',
-      a: "A local operator from a family owned company that has worked out of Haddon Township since 1996 — not a national dispatch app subcontracting your call to a stranger. The owner has also served on the Haddon Township Fire Department as a volunteer firefighter since 2009.",
+      a: "A local operator from a family owned company that has worked out of Haddon Township since 1996, not a national dispatch app subcontracting your call to a stranger. The owner has also served on the Haddon Township Fire Department as a volunteer firefighter since 2009.",
     },
   ],
 } as const;
@@ -915,7 +915,7 @@ export const faq = {
 
 export const contact = {
   eyebrow: "We're here for you!",
-  heading: 'Call now — or send a quote request',
+  heading: 'Call now, or send a quote request',
   intro: 'Our 24/7 staff is here when you need us.',
   callHeading: 'Fastest way to reach us',
   callNote: 'Tap to call. Someone answers, any hour.',
@@ -928,7 +928,7 @@ export const contact = {
       phone: 'Phone (optional)',
       message: 'How can we help?',
       messagePlaceholder:
-        'Vehicle, pickup location, destination — whatever you can tell us.',
+        'Vehicle, pickup location, destination. Whatever you can tell us.',
       files: 'Attach files (optional)',
       filesNote: 'Photos of the vehicle or the equipment help us quote faster.',
     },
@@ -950,16 +950,16 @@ export const contact = {
    component the homepage uses. */
 export const contactPage = {
   meta: {
-    title: "Contact TK's Towing | 24/7 Flatbed Towing — Haddon Township, NJ",
+    title: "Contact TK's Towing | 24/7 Flatbed Towing in Haddon Township, NJ",
     description:
-      'Call TK’s Towing at (856) 854-9889 — open 24 hours a day, 7 days a week, all year. 208 W Cuthbert Blvd, Haddon Township, NJ. Or send a quote request.',
+      'Call TK’s Towing at (856) 854-9889, open 24 hours a day, 7 days a week, all year. 208 W Cuthbert Blvd, Haddon Township, NJ. Or send a quote request.',
   },
 
   /* Heading names the town, which is the whole point of a contact page for
      local search. Every point is a `business` field verbatim. */
   hero: {
     eyebrow: contact.eyebrow,
-    heading: 'Contact TK’s Towing — Haddon Township, NJ',
+    heading: 'Contact TK’s Towing in Haddon Township, NJ',
     lead: contact.intro,
     body: business.hours,
     points: [
@@ -1003,6 +1003,37 @@ export const quickActions = {
   ],
 } as const;
 
+/* ------------------------------------------------------------------ */
+/* Quote drawer (slide-in sidebar, mounted once in Base.astro)         */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Opened by any element carrying [data-quote-open] (QuickActions' quote
+ * button, the sticky header's quote button). Wording reuses `contact.form`
+ * verbatim wherever a string already exists; only the fields the drawer adds
+ * (ZIP, the service picker) and its trigger label are new. The service
+ * options are the `services.items` titles, so a new service shows up here
+ * automatically.
+ */
+export const quoteDrawer = {
+  trigger: 'Request a Quote', // same wording as quickActions.items[1].label
+  heading: contact.form.heading,
+  /* Second sentence of contact.form.note, verbatim — the drawer header is
+     capped at one short reassurance line. */
+  note: 'If you need a truck now, call instead.',
+  closeLabel: 'Close quote form',
+  fields: {
+    name: contact.form.fields.name,
+    phone: contact.form.fields.phone,
+    email: contact.form.fields.email,
+    zip: 'ZIP code',
+    service: 'Service needed',
+    servicePlaceholder: 'Select a service',
+  },
+  services: services.items.map((s) => s.title),
+  submit: contact.form.submit,
+} as const;
+
 export const finalCta = {
   heading: '24/7 towing you can count on.',
   sub: 'Call now.',
@@ -1026,7 +1057,7 @@ export const about = {
   meta: {
     title: "About TK's Towing | Family Owned in Haddon Township Since 1996",
     description:
-      "The family behind TK's Towing — flatbed towing and roadside assistance in Haddon Township, NJ since 1996, run by a Haddon Township Fire Department volunteer.",
+      "The family behind TK's Towing: flatbed towing and roadside assistance in Haddon Township, NJ since 1996, run by a Haddon Township Fire Department volunteer.",
   },
 
   /* Points recombine facts already asserted elsewhere in this file — the four
@@ -1039,7 +1070,7 @@ export const about = {
     lead: intro.lead,
     body: intro.body,
     points: [
-      `${business.address.city}, ${business.address.state} — ${business.yearsInBusiness}`,
+      `${business.address.city}, ${business.address.state} · ${business.yearsInBusiness}`,
       intro.pillars[0].title,
       intro.pillars[1].title,
       intro.pillars[3].title,
@@ -1113,7 +1144,7 @@ export const footer = {
   tagline: 'Flatbed towing & roadside assistance for South Jersey.',
   meta: 'Since 1996 · Haddon Township, NJ',
   /* Vertical text on the framed footer's left utility rail. */
-  railText: 'Haddon Township, NJ — Family Owned',
+  railText: 'Haddon Township, NJ · Family Owned',
   columns: [
     {
       heading: 'Services',

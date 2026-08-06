@@ -7,9 +7,13 @@
  *
  * It reveals once the hero is scrolled past, matching Header.astro's threshold
  * so the two arrive together rather than the corner bar covering hero content.
+ *
+ * The "Request a Quote" segment carries [data-quote-open], so it opens the
+ * slide-in QuoteDrawer instead of navigating; its /contact href stays as the
+ * no-JS fallback.
  */
 import Icon from './Icon.astro';
-import { quickActions } from '../site.config';
+import { quickActions, quoteDrawer } from '../site.config';
 ---
 
 <div
@@ -25,6 +29,7 @@ import { quickActions } from '../site.config';
       quickActions.items.map((item, i) => (
         <a
           href={item.href}
+          data-quote-open={item.label === quoteDrawer.trigger ? '' : undefined}
           class:list={[
             /* Width is set by the longest label ("Request a Quote") so every
                segment keeps its text on one line and the icons stay aligned. */

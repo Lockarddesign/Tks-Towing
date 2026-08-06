@@ -7,7 +7,7 @@ import ownerImg from '../assets/tk-owners.jpg';
 
 <section
   id="story"
-  class="relative isolate overflow-hidden bg-navy-800 py-24 sm:py-28 lg:py-36"
+  class="relative isolate overflow-clip bg-navy-800 py-24 sm:py-28 lg:py-36"
 >
   <!-- Warm ambient glow behind the story, hinting at the fire-service angle -->
   <div
@@ -16,11 +16,13 @@ import ownerImg from '../assets/tk-owners.jpg';
   >
   </div>
 
-  <div class="mx-auto max-w-[1300px] px-5 sm:px-8">
-    <div class="grid gap-14 lg:grid-cols-12 lg:items-stretch lg:gap-16">
-      <!-- Portrait: one image, matted, running the full height of the copy -->
-      <div data-reveal class="lg:col-span-5">
-        <div class="portrait relative h-full">
+  <div class="mx-auto max-w-[81.25rem] px-5 sm:px-8">
+    <div class="grid gap-14 lg:grid-cols-12 lg:items-start lg:gap-16">
+      <!-- Portrait: one image, matted, at its natural 3:4 ratio so the whole
+           photo shows. It pins sticky while the longer copy column scrolls
+           past and catches up. -->
+      <div data-reveal class="lg:sticky lg:top-28 lg:col-span-5 lg:self-start">
+        <div class="portrait relative">
           <span
             aria-hidden="true"
             class="pointer-events-none absolute -inset-3 rounded-2xl border border-brick-400/25 sm:-inset-4"
@@ -30,8 +32,8 @@ import ownerImg from '../assets/tk-owners.jpg';
             src={ownerImg}
             label=""
             alt={story.ownerImageAlt}
-            class="portrait-figure aspect-4/5 h-full rounded-xl border border-cream/12 lg:aspect-auto lg:min-h-[34rem]"
-            imgClass="h-full w-full object-cover object-top"
+            class="portrait-figure aspect-4/5 rounded-xl border border-cream/12 lg:aspect-[3/4]"
+            imgClass="h-full w-full object-cover object-[center_top]"
             sizes="(min-width: 1024px) 38vw, 100vw"
           />
 
@@ -107,8 +109,9 @@ import ownerImg from '../assets/tk-owners.jpg';
 </section>
 
 <style>
-  /* The matted frame sits behind a single portrait; the figure stretches to
-     whatever height the copy column ends up at on desktop. */
+  /* The matted frame sits behind a single portrait; on desktop the figure
+     keeps the photo's natural 3:4 ratio and the column pins sticky while the
+     copy scrolls past. */
   .portrait-figure {
     box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.85);
   }
