@@ -529,7 +529,6 @@ export const coverage = {
   outsideHeading: 'Outside the area?',
   outsideBody:
     'Long-distance runs are part of what we do. If the pickup or the drop-off is outside South Jersey, call and we will quote the trip.',
-  mapPlaceholder: 'PLACEHOLDER — COVERAGE MAP (Camden County highlighted)',
 } as const;
 
 /* ------------------------------------------------------------------ */
@@ -721,7 +720,7 @@ export const gallery = {
   eyebrow: 'On the road',
   heading: 'The work',
   intro:
-    'Recent work off the TK’s flatbeds: classics, daily drivers and equipment hauls across South Jersey.',
+    'Recent work on the TK’s flatbeds: classics, daily drivers and equipment hauls across South Jersey.',
   // Used as alt text on the gallery tiles.
   captions: {
     a: 'A classic Ford Mustang loaded on the flatbed',
@@ -742,7 +741,7 @@ export const galleryPage = {
   meta: {
     title: "Gallery | Recent Flatbed Towing Jobs | TK's Towing, Haddon Township NJ",
     description:
-      'Recent work off the TK’s Towing flatbeds: classics, daily drivers and equipment hauls across South Jersey.',
+      'Recent work on the TK’s Towing flatbeds: classics, daily drivers and equipment hauls across South Jersey.',
   },
 
   /* "The work" is a fine section head and a poor h1 — it names neither the
@@ -938,7 +937,6 @@ export const contact = {
   detailsHeading: 'Where to find us',
   hoursHeading: 'Hours',
   socialHeading: 'Follow along',
-  mapPlaceholder: 'PLACEHOLDER — GOOGLE MAP EMBED (208 W Cuthbert Blvd)',
 } as const;
 
 /* ------------------------------------------------------------------ */

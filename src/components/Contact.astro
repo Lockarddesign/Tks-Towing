@@ -1,9 +1,7 @@
 ---
 import SectionHead from './SectionHead.astro';
 import Icon from './Icon.astro';
-import PlaceholderFigure from './PlaceholderFigure.astro';
 import { business, contact } from '../site.config';
-import mapImg from '../assets/tk-suv-flatbed.jpg';
 
 interface Props {
   /** Off on /contact — that page's hero already carries this same copy. */
@@ -114,12 +112,13 @@ const labelClass = 'label-caps block text-[0.65rem] text-navy-600';
           data-reveal="140"
           class="overflow-hidden rounded-xl border border-line"
         >
-          <PlaceholderFigure
-            src={mapImg}
-            label={contact.mapPlaceholder}
-            class="aspect-16/9"
-            sizes="(min-width: 1024px) 38vw, 100vw"
-          />
+          <iframe
+            src={`https://www.google.com/maps?q=${encodeURIComponent(`TK's Towing Service, ${business.address.full}`)}&output=embed`}
+            title={`Map to TK's Towing, ${business.address.full}`}
+            class="aspect-16/9 h-auto w-full border-0"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            allowfullscreen></iframe>
         </div>
       </div>
 
