@@ -59,9 +59,9 @@ export const business = {
     zip: '08108',
     full: '208 W Cuthbert Blvd, Haddon Township, NJ 08108',
   },
-  hours: 'Open 24 hours a day, 7 days a week, all year',
-  hoursShort: 'Open 24/7, 365',
-  staffLine: 'Our 24/7 staff is here when you need us.',
+  hours: 'Open Monday through Friday, 7am to 7pm',
+  hoursShort: 'Mon–Fri · 7am–7pm',
+  staffLine: 'Our crew is here Monday through Friday, 7am to 7pm.',
   socials: [
     { label: 'Facebook', href: 'https://facebook.com/tkstowingservice' },
     {
@@ -76,9 +76,9 @@ export const business = {
 /* ------------------------------------------------------------------ */
 
 export const meta = {
-  title: "TK's Towing | 24/7 Flatbed Towing & Roadside Assistance in South Jersey",
+  title: "TK's Towing | Flatbed Towing & Roadside Assistance in South Jersey",
   description:
-    "Family owned flatbed towing and roadside assistance in Haddon Township, NJ since 1996. Serving all of Camden County plus parts of Burlington and Gloucester. Open 24/7. Call (856) 854-9889.",
+    "Family owned flatbed towing and roadside assistance in Haddon Township, NJ since 1996. Serving all of Camden County plus parts of Burlington and Gloucester. Open Monday through Friday, 7am to 7pm. Call (856) 854-9889.",
 } as const;
 
 
@@ -88,15 +88,15 @@ export const meta = {
 
 export const hero = {
   eyebrow: 'Haddon Township, NJ · Since 1996',
-  heading: 'Fast, reliable towing across South Jersey, 24/7',
-  sub: 'Flatbed towing and roadside assistance from a family owned crew that has been answering the phone in Camden County for nearly 30 years. Call at any hour and someone picks up.',
+  heading: 'Fast, reliable towing across South Jersey',
+  sub: 'Flatbed towing and roadside assistance from a family owned crew that has been answering the phone in Camden County for nearly 30 years. Call and a real person picks up.',
   primaryCta: `Call ${business.phone}`,
   secondaryCta: 'Our services',
   secondaryCtaHref: '#services',
   trustLine: [
     'Since 1996',
     'Family owned',
-    'Open 24/7',
+    'Mon–Fri · 7am–7pm',
     'Camden, Burlington & Gloucester',
   ],
   imageAlt: "TK's Towing flatbed truck",
@@ -138,7 +138,7 @@ export const hero = {
   // Proof strip beneath the slideshow — real facts only.
   proof: [
     { label: 'Established', value: 'Since 1996', note: 'Family owned & operated' },
-    { label: 'Availability', value: 'Open 24/7', note: '365 days a year' },
+    { label: 'Hours', value: 'Mon–Fri', note: '7am to 7pm' },
     {
       label: 'Service Area',
       value: 'Camden County',
@@ -170,8 +170,8 @@ export const intro = {
     },
     {
       icon: 'clock',
-      title: 'Open 24/7, 365',
-      text: 'Someone answers, even on holidays.',
+      title: 'Open Mon–Fri, 7am–7pm',
+      text: 'Call during the day and a real person answers.',
     },
     {
       icon: 'flatbed',
@@ -190,7 +190,7 @@ export const intro = {
   imageAlt:
     'A volunteer firefighter in full turnout gear kneeling after a call, the community service roots behind TK’s Towing',
   imageKicker: 'On & off the job',
-  imageCaption: 'HTFD volunteer firefighter since 2009',
+  imageCaption: 'Westmont Fire Company volunteer firefighter since 2009',
 } as const;
 
 /* ------------------------------------------------------------------ */
@@ -199,7 +199,7 @@ export const intro = {
 
 export const trustBar = {
   items: [
-    { stat: '24/7', label: 'Real people, any hour' },
+    { stat: '7–7', label: 'Open Monday through Friday' },
     { stat: '1996', label: 'Serving South Jersey since' },
     { stat: 'Family', label: 'Owned & operated' },
     { stat: 'Flatbed', label: 'Careful, damage-free hauling' },
@@ -330,7 +330,7 @@ export const servicesPage = {
   meta: {
     title: "Towing Services | Flatbed, Roadside & Long-Distance | TK's Towing",
     description:
-      'Flatbed towing, roadside assistance, long-distance towing and light equipment hauling from a family owned crew in Haddon Township, NJ. Open 24/7. Call (856) 854-9889.',
+      'Flatbed towing, roadside assistance, long-distance towing and light equipment hauling from a family owned crew in Haddon Township, NJ. Open Monday through Friday, 7am to 7pm. Call (856) 854-9889.',
   },
 
   hero: {
@@ -481,7 +481,7 @@ export const coverage = {
   intro:
     "We tow across all of Camden County and into parts of Burlington and Gloucester County, local and long distance both.",
   primaryLabel: 'Camden County',
-  primaryNote: 'Full coverage, every town, every hour',
+  primaryNote: 'Full coverage, every town',
   regions: [
     {
       name: 'Camden County',
@@ -541,7 +541,7 @@ export const coveragePage = {
   meta: {
     title: "Service Areas | Camden County & South Jersey Towing | TK's Towing",
     description:
-      'Where TK’s Towing tows: all of Camden County plus parts of Burlington and Gloucester. Local to long distance, open 24/7. Call (856) 854-9889.',
+      'Where TK’s Towing tows: all of Camden County plus parts of Burlington and Gloucester. Local to long distance, open Monday through Friday, 7am to 7pm. Call (856) 854-9889.',
   },
 
   /* The section heading ("Where we tow") works inside the page but is thin as
@@ -609,19 +609,19 @@ export const story = {
   heading: 'A local who protects and serves, on the job and off it',
   paragraphs: [
     "TK's Towing started in 1996 in Haddon Township, New Jersey. Same family, same town, same phone number ever since. That is going on thirty years of answering calls from neighbors having a bad day.",
-    'In 2009 the owner joined the Haddon Township Fire Department, and he has served the community as a volunteer firefighter ever since. It is the same instinct that built the towing company: when the call comes in, you go.',
+    'In 2009 the owner joined the Westmont Fire Company, and he has served the community as a volunteer firefighter ever since. It is the same instinct that built the towing company: when the call comes in, you go.',
     'That is who shows up when you call: a local operator who lives here, works here, and answers to his neighbors, not a dispatch center three states away.',
   ],
   pullQuote:
     'When the call comes in, you go. That has not changed since 1996.',
-  pullQuoteAttribution: `Owner, TK's Towing · Haddon Township Fire Department volunteer since 2009`,
+  pullQuoteAttribution: `Owner, TK's Towing · Westmont Fire Company volunteer since 2009`,
   facts: [
     { label: 'Founded', value: '1996' },
     { label: 'Home base', value: 'Haddon Township, NJ' },
     { label: 'Ownership', value: 'Family owned & operated' },
-    { label: 'Community', value: 'HTFD volunteer firefighter since 2009' },
+    { label: 'Community', value: 'Westmont Fire Company volunteer since 2009' },
   ],
-  ownerImageAlt: "The owners of TK's Towing",
+  ownerImageAlt: "TK's Towing branded Kenworth flatbed in the garage, Westmont, NJ",
   ownerImageCaption: '',
   secondaryImageAlt:
     'A volunteer firefighter in turnout gear with an air pack, kneeling after a call',
@@ -639,9 +639,9 @@ export const whyUs = {
     'A breakdown is stressful enough on its own. Our job is to get to you fast, handle your vehicle carefully, and keep everything else simple.',
   items: [
     {
-      title: '24/7, and we mean it',
+      title: 'Real hours, real people',
       icon: 'clock',
-      body: 'Open 24 hours a day, 7 days a week, all year. Our 24/7 staff is here when you need us. Two in the morning on a holiday is still a normal call for us.',
+      body: 'Open Monday through Friday, 7am to 7pm. Call during business hours and you reach a real person who knows the trucks and the area, not a dispatch app three states away.',
     },
     {
       title: 'Since 1996',
@@ -684,7 +684,7 @@ export const process = {
     {
       title: 'Call us',
       icon: 'phone',
-      summary: 'One number, any hour.',
+      summary: 'One number, one local crew.',
       detail:
         'Call (856) 854-9889. Tell us where you are, what you are driving, and what happened. If you are somewhere unsafe, like a shoulder, a travel lane or a dark road, say so first and stay in a safe spot while we get moving.',
     },
@@ -856,7 +856,7 @@ export const galleryPage = {
 export const emergency = {
   eyebrow: 'Need a truck right now?',
   heading: "Stranded? We'll come to you.",
-  body: 'Open 24 hours a day, 7 days a week, all year. One call gets a flatbed moving your way.',
+  body: 'Open Monday through Friday, 7am to 7pm. One call gets a flatbed moving your way.',
   cta: `Call ${business.phone}`,
   note: 'If you are in a travel lane or an unsafe spot, call 911 first.',
 } as const;
@@ -870,8 +870,8 @@ export const faq = {
   heading: 'Answers before you call',
   items: [
     {
-      q: 'Are you really available 24/7?',
-      a: 'Yes. We are open 24 hours a day, 7 days a week, all year. Nights, weekends and holidays are all normal working hours for us.',
+      q: 'What are your hours?',
+      a: 'We are open Monday through Friday, 7am to 7pm. Call during business hours and you get a real person and a truck moving your way.',
     },
     {
       q: 'What areas do you cover?',
@@ -903,7 +903,7 @@ export const faq = {
     },
     {
       q: 'Who actually shows up?',
-      a: "A local operator from a family owned company that has worked out of Haddon Township since 1996, not a national dispatch app subcontracting your call to a stranger. The owner has also served on the Haddon Township Fire Department as a volunteer firefighter since 2009.",
+      a: "A local operator from a family owned company that has worked out of Haddon Township since 1996, not a national dispatch app subcontracting your call to a stranger. The owner has also served with the Westmont Fire Company as a volunteer firefighter since 2009.",
     },
   ],
 } as const;
@@ -915,9 +915,9 @@ export const faq = {
 export const contact = {
   eyebrow: "We're here for you!",
   heading: 'Call now, or send a quote request',
-  intro: 'Our 24/7 staff is here when you need us.',
+  intro: 'Our crew is here Monday through Friday, 7am to 7pm.',
   callHeading: 'Fastest way to reach us',
-  callNote: 'Tap to call. Someone answers, any hour.',
+  callNote: 'Tap to call. A real person answers.',
   form: {
     heading: 'Request a quote',
     note: 'For non-urgent quotes and equipment transport questions. If you need a truck now, call instead.',
@@ -948,9 +948,9 @@ export const contact = {
    component the homepage uses. */
 export const contactPage = {
   meta: {
-    title: "Contact TK's Towing | 24/7 Flatbed Towing in Haddon Township, NJ",
+    title: "Contact TK's Towing | Flatbed Towing in Haddon Township, NJ",
     description:
-      'Call TK’s Towing at (856) 854-9889, open 24 hours a day, 7 days a week, all year. 208 W Cuthbert Blvd, Haddon Township, NJ. Or send a quote request.',
+      'Call TK’s Towing at (856) 854-9889, open Monday through Friday, 7am to 7pm. 208 W Cuthbert Blvd, Haddon Township, NJ. Or send a quote request.',
   },
 
   /* Heading names the town, which is the whole point of a contact page for
@@ -1033,7 +1033,7 @@ export const quoteDrawer = {
 } as const;
 
 export const finalCta = {
-  heading: '24/7 towing you can count on.',
+  heading: 'Towing you can count on.',
   sub: 'Call now.',
   cta: `Call ${business.phone}`,
 } as const;
@@ -1055,7 +1055,7 @@ export const about = {
   meta: {
     title: "About TK's Towing | Family Owned in Haddon Township Since 1996",
     description:
-      "The family behind TK's Towing: flatbed towing and roadside assistance in Haddon Township, NJ since 1996, run by a Haddon Township Fire Department volunteer.",
+      "The family behind TK's Towing: flatbed towing and roadside assistance in Haddon Township, NJ since 1996, run by a Westmont Fire Company volunteer.",
   },
 
   /* Points recombine facts already asserted elsewhere in this file — the four
