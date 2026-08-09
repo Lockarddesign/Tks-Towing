@@ -134,9 +134,16 @@ const labelClass = 'label-caps block text-[0.65rem] text-navy-600';
 
           <form
             class="mt-8 space-y-6"
-            method="post"
+            name="contact"
+            method="POST"
+            data-netlify="true"
+            data-netlify-honeypot="bot-field"
             enctype="multipart/form-data"
           >
+            <input type="hidden" name="form-name" value="contact" />
+            <p class="hidden">
+              <label>Leave this field empty: <input name="bot-field" /></label>
+            </p>
             <div class="grid gap-6 sm:grid-cols-2">
               <div>
                 <label class={labelClass} for="contact-name">

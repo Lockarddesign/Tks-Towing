@@ -7,8 +7,9 @@
  * Copy is contact.form verbatim. This is a shorter version of the full form in
  * Contact.astro (no file upload), not new wording.
  *
- * NOTE: like the Contact form, delivery is NOT wired up — see
- * contact.form.disclaimer. That is Will's call before launch.
+ * Delivery: wired to Netlify Forms (name="quote"). Submissions land under the
+ * site's Forms tab. Registration is guaranteed by public/__forms.html because
+ * CLI (--dir) deploys skip Netlify's live form detection.
  */
 import Icon from './Icon.astro';
 import { contact } from '../site.config';
@@ -36,7 +37,17 @@ const labelClass = 'label-caps block text-[0.62rem] text-navy-600';
       {contact.form.note}
     </p>
 
-    <form class="mt-6 space-y-4" method="post">
+    <form
+      class="mt-6 space-y-4"
+      name="quote"
+      method="POST"
+      data-netlify="true"
+      data-netlify-honeypot="bot-field"
+    >
+      <input type="hidden" name="form-name" value="quote" />
+      <p class="hidden">
+        <label>Leave this field empty: <input name="bot-field" /></label>
+      </p>
       <div class="grid gap-4 sm:grid-cols-2">
         <div>
           <label class={labelClass} for={`${idPrefix}-name`}>

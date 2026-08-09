@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Netlify form registration</title>
+  </head>
+  <body>
+    <!--
+      Static registration copies of every form on the site. Netlify only runs
+      form detection on the HTML it parses at deploy time; CLI (--dir) deploys
+      of prebuilt assets skip detection of the real forms, so these hidden
+      copies guarantee registration. Every field name on the live forms must
+      appear here, including the honeypot. See ~/.claude/rules/site-build.md.
+    -->
+    <form name="quote" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+      <input type="text" name="name" />
+      <input type="tel" name="phone" />
+      <input type="email" name="email" />
+      <textarea name="message"></textarea>
+      <input name="bot-field" />
+    </form>
+
+    <form name="quote-drawer" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+      <input type="text" name="name" />
+      <input type="tel" name="phone" />
+      <input type="text" name="zip" />
+      <input type="email" name="email" />
+      <input type="text" name="service" />
+      <input name="bot-field" />
+    </form>
+
+    <form
+      name="contact"
+      data-netlify="true"
+      data-netlify-honeypot="bot-field"
+      enctype="multipart/form-data"
+      hidden
+    >
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="tel" name="phone" />
+      <textarea name="message"></textarea>
+      <input type="file" name="files" />
+      <input name="bot-field" />
+    </form>
+  </body>
+</html>

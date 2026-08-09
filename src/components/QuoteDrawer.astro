@@ -11,9 +11,9 @@
  *  - Copy comes from site.config `quoteDrawer` (which reuses contact.form
  *    wording verbatim where a string already existed).
  *
- * NOTE: like QuoteForm/Contact, delivery is NOT wired up — the form is the
- * same `method="post"`-with-no-action placeholder those forms use (see the
- * pre-launch checklist in site.config.ts, item 11). Will's call before launch.
+ * Delivery: wired to Netlify Forms (name="quote-drawer"). Registration is
+ * guaranteed by public/__forms.html because CLI (--dir) deploys skip Netlify's
+ * live form detection.
  */
 import Icon from './Icon.astro';
 import { quoteDrawer } from '../site.config';
@@ -64,7 +64,17 @@ const labelClass = 'label-caps block text-[0.62rem] text-navy-600';
     </h2>
     <p class="mt-1 text-[0.82rem] leading-snug text-ink/60">{quoteDrawer.note}</p>
 
-    <form class="mt-5 space-y-3.5" method="post">
+    <form
+      class="mt-5 space-y-3.5"
+      name="quote-drawer"
+      method="POST"
+      data-netlify="true"
+      data-netlify-honeypot="bot-field"
+    >
+      <input type="hidden" name="form-name" value="quote-drawer" />
+      <p class="hidden">
+        <label>Leave this field empty: <input name="bot-field" /></label>
+      </p>
       <div class="grid grid-cols-2 gap-3.5">
         <div>
           <label class={labelClass} for="qd-name">{quoteDrawer.fields.name}</label>
