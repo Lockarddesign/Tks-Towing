@@ -1,0 +1,186 @@
+---
+/**
+ * "Why TK's" — a premium card grid rather than the accordion rows it used to
+ * be. Two reasons for dropping the accordion here: the page already runs two
+ * other expandable groups (story chapters, process steps) and a third made it
+ * feel like a settings screen, and these six items are short enough that
+ * hiding them behind a click cost more than it saved.
+ *
+ * Copy is whyUs verbatim.
+ */
+import SectionHead from './SectionHead.astro';
+import Icon from './Icon.astro';
+import { about } from '../site.config';
+---
+
+<section id="why" class="why relative isolate overflow-hidden bg-navy-950 py-16 sm:py-20 lg:py-24">
+  <!-- Soft brand glow behind the grid, keeps the black from reading flat. -->
+  <div class="why__glow" aria-hidden="true"></div>
+
+  <div class="relative mx-auto max-w-[81.25rem] px-5 sm:px-8">
+    <SectionHead
+      eyebrow={about.why.eyebrow}
+      heading={about.why.heading}
+      intro={about.why.intro}
+      tone="dark"
+      align="center"
+      class="mx-auto"
+    />
+
+    <ul class="mt-16 grid gap-5 sm:grid-cols-2 lg:mt-20 lg:grid-cols-3">
+      {
+        about.why.items.map((item, i) => (
+          <li class="why__card" data-reveal={i * 60}>
+            <span class="why__rule" aria-hidden="true" />
+            <span class="why__index" aria-hidden="true">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+
+            <span class="why__icon">
+              <Icon name={item.icon} class="h-6 w-6" />
+            </span>
+
+            <h3 class="why__title font-display">{item.title}</h3>
+            <p class="why__body">{item.body}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .why__glow {
+    position: absolute;
+    inset-inline: 0;
+    top: -12rem;
+    z-index: -1;
+    height: 34rem;
+    background: radial-gradient(
+      55% 60% at 50% 40%,
+      color-mix(in srgb, var(--color-brick-300) 13%, transparent) 0%,
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+
+  .why__card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 2rem 1.75rem 1.9rem;
+    border-radius: 0.9rem;
+    border: 1px solid color-mix(in srgb, var(--color-cream) 11%, transparent);
+    /* Faint top-down sheen so the card catches light like a surface. */
+    background:
+      linear-gradient(
+        160deg,
+        color-mix(in srgb, var(--color-cream) 7%, transparent) 0%,
+        color-mix(in srgb, var(--color-cream) 2%, transparent) 42%,
+        transparent 100%
+      ),
+      var(--color-navy-900);
+    transition:
+      border-color 0.35s ease,
+      transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.35s ease;
+  }
+
+  /* Accent rule across the top, drawn in from the left on hover. */
+  .why__rule {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: left center;
+    background: linear-gradient(
+      to right,
+      var(--color-brick-300),
+      var(--color-brick-500)
+    );
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .why__card:hover,
+  .why__card:focus-within {
+    border-color: color-mix(in srgb, var(--color-brick-300) 42%, transparent);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px -20px rgb(8 11 15 / 0.85);
+  }
+  .why__card:hover .why__rule,
+  .why__card:focus-within .why__rule {
+    transform: scaleX(1);
+  }
+
+  /* Oversized ghost numeral, sits behind the content in the top corner. */
+  .why__index {
+    position: absolute;
+    top: 0.6rem;
+    right: 1.1rem;
+    font-family: var(--font-display);
+    font-size: 4.25rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: color-mix(in srgb, var(--color-cream) 7%, transparent);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .why__icon {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 1.4rem;
+    border-radius: 0.7rem;
+    border: 1px solid color-mix(in srgb, var(--color-brick-300) 30%, transparent);
+    background: color-mix(in srgb, var(--color-brick-300) 11%, transparent);
+    color: var(--color-brick-300);
+    transition:
+      background-color 0.35s ease,
+      border-color 0.35s ease;
+  }
+  .why__card:hover .why__icon,
+  .why__card:focus-within .why__icon {
+    border-color: color-mix(in srgb, var(--color-brick-300) 55%, transparent);
+    background: color-mix(in srgb, var(--color-brick-300) 18%, transparent);
+  }
+
+  .why__title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    color: var(--color-cream);
+  }
+
+  .why__body {
+    margin-top: 0.7rem;
+    font-size: 0.94rem;
+    line-height: 1.65;
+    color: var(--color-navy-100);
+  }
+
+  @media (min-width: 640px) {
+    .why__card {
+      padding: 2.25rem 2rem 2.1rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .why__card,
+    .why__rule,
+    .why__icon {
+      transition: none;
+    }
+    .why__card:hover,
+    .why__card:focus-within {
+      transform: none;
+    }
+  }
+</style>

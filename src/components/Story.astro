@@ -1,57 +1,63 @@
 ---
 import Icon from './Icon.astro';
 import PlaceholderFigure from './PlaceholderFigure.astro';
-import { story } from '../site.config';
-import ownerImg from '../assets/operator-blue-car.jpg';
-import fireImg from '../assets/firefighter.jpg';
+import { business, story } from '../site.config';
+import ownerImg from '../assets/tk-truck-garage.jpg';
 ---
 
 <section
   id="story"
-  class="relative isolate overflow-hidden bg-steel-900 py-24 sm:py-28 lg:py-36"
+  class="relative isolate overflow-clip bg-navy-800 py-16 sm:py-20 lg:py-24"
 >
   <!-- Warm ambient glow behind the story, hinting at the fire-service angle -->
   <div
     aria-hidden="true"
-    class="pointer-events-none absolute -top-40 -right-40 -z-10 h-[36rem] w-[36rem] rounded-full bg-signal-500/8 blur-3xl"
+    class="pointer-events-none absolute -top-40 -right-40 -z-10 h-[36rem] w-[36rem] rounded-full bg-brick-500/12 blur-3xl"
   >
   </div>
 
-  <div class="mx-auto max-w-7xl px-5 sm:px-8">
-    <div class="grid gap-14 lg:grid-cols-12 lg:items-center lg:gap-16">
-      <!-- Images -->
-      <div data-reveal class="lg:col-span-5">
-        <div class="relative">
+  <div class="mx-auto max-w-[81.25rem] px-5 sm:px-8">
+    <div class="grid gap-14 lg:grid-cols-12 lg:items-start lg:gap-16">
+      <!-- Portrait: one image, matted, at its natural 3:4 ratio so the whole
+           photo shows. It pins sticky while the longer copy column scrolls
+           past and catches up. -->
+      <div data-reveal class="lg:sticky lg:top-28 lg:col-span-5 lg:self-start">
+        <div class="portrait relative">
+          <span
+            aria-hidden="true"
+            class="pointer-events-none absolute -inset-3 rounded-2xl border border-brick-400/25 sm:-inset-4"
+          ></span>
+
           <PlaceholderFigure
             src={ownerImg}
-            label={story.ownerImageCaption}
+            label=""
             alt={story.ownerImageAlt}
-            class="aspect-4/5 rounded-2xl border border-white/10"
+            class="portrait-figure aspect-4/5 rounded-xl border border-cream/12 lg:aspect-[3/4]"
+            imgClass="h-full w-full object-cover object-[center_top]"
             sizes="(min-width: 1024px) 38vw, 100vw"
           />
-          <PlaceholderFigure
-            src={fireImg}
-            label={story.secondaryImageCaption}
-            class="absolute -right-4 -bottom-10 aspect-square w-40 rounded-2xl border-4 border-steel-900 shadow-2xl shadow-black/50 sm:-right-8 sm:w-52 lg:-right-12"
-            sizes="220px"
-            widths={[220, 440]}
-          />
+
+          <p class="portrait-badge">
+            <span class="portrait-badge-year font-display">
+              {business.founded}
+            </span>
+            <span class="portrait-badge-text label-caps">
+              Est. · {business.address.city}, {business.address.state}
+            </span>
+          </p>
         </div>
       </div>
 
       <!-- Copy -->
-      <div class="lg:col-span-7 lg:pl-6">
-        <p
-          data-reveal
-          class="flex items-center gap-3 font-mono text-xs tracking-[0.22em] text-signal-400 uppercase"
-        >
+      <div class="flex flex-col justify-center lg:col-span-7 lg:pl-6">
+        <p data-reveal class="label-caps flex items-center gap-3 text-xs text-brick-300">
           <Icon name="flame" class="h-4 w-4" />
           {story.eyebrow}
         </p>
 
         <h2
           data-reveal="80"
-          class="mt-5 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[0.98] font-extrabold tracking-[-0.025em] text-white text-balance"
+          class="mt-5 font-display text-[clamp(2.25rem,5.5vw,4rem)] leading-[0.98] font-bold tracking-tight text-cream uppercase text-balance"
         >
           {story.heading}
         </h2>
@@ -59,7 +65,7 @@ import fireImg from '../assets/firefighter.jpg';
         <div data-reveal="140" class="mt-8 space-y-5">
           {
             story.paragraphs.map((p) => (
-              <p class="text-lg leading-relaxed text-steel-300 text-pretty">
+              <p class="text-lg leading-relaxed text-navy-100 text-pretty">
                 {p}
               </p>
             ))
@@ -68,31 +74,29 @@ import fireImg from '../assets/firefighter.jpg';
 
         <blockquote
           data-reveal="200"
-          class="mt-10 border-l-2 border-signal-400 pl-6 sm:pl-8"
+          class="mt-10 border-l-4 border-brick-400 pl-6 sm:pl-8"
         >
           <p
-            class="font-display text-[clamp(1.5rem,3vw,2.25rem)] leading-[1.15] font-bold tracking-[-0.02em] text-white text-balance"
+            class="font-display text-[clamp(1.6rem,3.2vw,2.5rem)] leading-[1.1] font-medium tracking-tight text-cream text-balance"
           >
             &ldquo;{story.pullQuote}&rdquo;
           </p>
-          <footer
-            class="mt-5 font-mono text-[0.7rem] leading-relaxed tracking-[0.14em] text-steel-400 uppercase"
-          >
+          <footer class="label-caps mt-5 text-[0.7rem] leading-relaxed text-brick-300">
             {story.pullQuoteAttribution}
           </footer>
         </blockquote>
 
         <dl
           data-reveal="260"
-          class="mt-12 grid gap-x-8 gap-y-6 border-t border-white/10 pt-8 sm:grid-cols-2"
+          class="mt-12 grid gap-x-8 gap-y-6 border-t border-cream/12 pt-8 sm:grid-cols-2"
         >
           {
             story.facts.map((fact) => (
               <div>
-                <dt class="font-mono text-[0.65rem] tracking-[0.18em] text-steel-500 uppercase">
+                <dt class="label-caps text-[0.65rem] text-navy-300">
                   {fact.label}
                 </dt>
-                <dd class="mt-1.5 font-display text-lg font-bold tracking-tight text-white">
+                <dd class="mt-1.5 font-display text-lg font-bold tracking-tight text-cream uppercase">
                   {fact.value}
                 </dd>
               </div>
@@ -103,3 +107,46 @@ import fireImg from '../assets/firefighter.jpg';
     </div>
   </div>
 </section>
+
+<style>
+  /* The matted frame sits behind a single portrait; on desktop the figure
+     keeps the photo's natural 3:4 ratio and the column pins sticky while the
+     copy scrolls past. */
+  .portrait-figure {
+    box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.85);
+  }
+
+  /* Year plate, half-hanging off the bottom-left corner of the portrait. */
+  .portrait-badge {
+    position: absolute;
+    bottom: 1.25rem;
+    left: -0.75rem;
+    margin: 0;
+    display: flex;
+    align-items: baseline;
+    gap: 0.7rem;
+    padding: 0.65rem 1.1rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(197, 151, 148, 0.35);
+    background: rgba(17, 26, 38, 0.88);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 18px 36px -18px rgba(0, 0, 0, 0.9);
+  }
+  .portrait-badge-year {
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--color-cream);
+  }
+  .portrait-badge-text {
+    font-size: 0.6rem;
+    color: var(--color-brick-300);
+  }
+
+  @media (min-width: 640px) {
+    .portrait-badge {
+      left: -1.25rem;
+      bottom: 1.75rem;
+    }
+  }
+</style>

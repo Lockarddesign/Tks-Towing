@@ -3,21 +3,18 @@ import Icon from './Icon.astro';
 import { trustBar } from '../site.config';
 ---
 
-<section
-  aria-label="Trust signals"
-  class="border-y border-white/8 bg-steel-900"
->
-  <div class="mx-auto max-w-7xl px-5 py-10 sm:px-8 lg:py-14">
+<section aria-label="Trust signals" class="border-b border-line bg-paper">
+  <div class="mx-auto max-w-[81.25rem] px-5 py-10 sm:px-8 lg:py-14">
     <dl
-      class="grid grid-cols-2 gap-x-6 gap-y-8 lg:grid-cols-4 lg:divide-x lg:divide-white/8"
+      class="grid grid-cols-2 gap-x-6 gap-y-8 lg:grid-cols-4 lg:divide-x lg:divide-line"
     >
       {
         trustBar.items.map((item, i) => (
           <div data-reveal={i * 70} class="lg:px-8 lg:first:pl-0 lg:last:pr-0">
-            <dt class="font-display text-3xl leading-none font-extrabold tracking-tight text-signal-400 sm:text-4xl">
+            <dt class="font-display text-4xl leading-none font-bold tracking-tight text-navy-700 uppercase sm:text-5xl">
               {item.stat}
             </dt>
-            <dd class="mt-2.5 text-sm leading-snug text-steel-400">
+            <dd class="mt-2.5 text-sm leading-snug text-ink/65">
               {item.label}
             </dd>
           </div>
@@ -27,18 +24,20 @@ import { trustBar } from '../site.config';
 
     <div
       data-reveal="280"
-      class="mt-10 flex flex-col items-start gap-4 border-t border-white/8 pt-7 sm:flex-row sm:items-center sm:justify-between"
+      class="mt-10 flex flex-col items-start gap-4 border-t border-line pt-7 sm:flex-row sm:items-center sm:justify-between"
     >
-      <p class="flex items-center gap-2.5 text-sm text-steel-400">
-        <span class="flex gap-0.5 text-signal-400" aria-hidden="true">
-          {
-            Array.from({ length: 5 }).map(() => (
+      {/* Stars AND note, or neither. With the note blank the five stars would
+          still render and read as a five-star rating we have not verified. */}
+      {trustBar.reviewNote && (
+        <p class="flex items-center gap-2.5 text-sm text-ink/65">
+          <span class="flex gap-0.5 text-brick-500" aria-hidden="true">
+            {Array.from({ length: 5 }).map(() => (
               <Icon name="star" class="h-4 w-4" />
-            ))
-          }
-        </span>
-        {trustBar.reviewNote}
-      </p>
+            ))}
+          </span>
+          {trustBar.reviewNote}
+        </p>
+      )}
       <ul class="flex flex-wrap items-center gap-2">
         {
           trustBar.reviewLinks.map((link) => (
@@ -47,9 +46,11 @@ import { trustBar } from '../site.config';
                 href={link.href}
                 target={link.href.startsWith('http') ? '_blank' : undefined}
                 rel={
-                  link.href.startsWith('http') ? 'noopener noreferrer' : undefined
+                  link.href.startsWith('http')
+                    ? 'noopener noreferrer'
+                    : undefined
                 }
-                class="inline-flex items-center rounded-full border border-white/10 px-4 py-2 font-mono text-[0.65rem] tracking-[0.14em] text-steel-300 uppercase transition hover:border-signal-400/50 hover:text-white"
+                class="label-caps inline-flex items-center rounded-md border border-line px-4 py-2 text-[0.65rem] text-navy-700 transition hover:border-brick-500/60 hover:text-brick-500"
               >
                 {link.label}
               </a>

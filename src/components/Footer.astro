@@ -1,113 +1,424 @@
 ---
+/**
+ * Framed-columns footer — the design ported from the tree-site design lab
+ * (design/footers/01-framed-columns.html), rebuilt on TK's Vintage Americana
+ * tokens: navy shell on a cream page, brick accents, the real TK's wordmark,
+ * Oswald caps for heads. All copy comes from site.config.ts.
+ */
+import { Image } from 'astro:assets';
 import Icon from './Icon.astro';
 import { business, footer } from '../site.config';
+import logo from '../assets/tks-logo.png';
 ---
 
-<footer class="border-t border-white/8 bg-steel-900">
-  <div class="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:py-20">
-    <div class="grid gap-12 lg:grid-cols-12 lg:gap-10">
-      <!-- Brand -->
-      <div class="lg:col-span-4">
-        <div class="flex items-center gap-3">
-          <span
-            class="grid h-11 w-11 place-items-center rounded-lg border border-signal-400/40 bg-signal-400/10 font-display text-sm font-extrabold tracking-tight text-signal-400"
-            >TK</span
-          >
-          <span
-            class="font-display text-xl font-extrabold tracking-tight text-white"
-            >TK&rsquo;S TOWING</span
-          >
-        </div>
-        <p class="sr-only">PLACEHOLDER — {footer.logoPlaceholder}</p>
-        <p class="mt-5 max-w-xs text-[0.95rem] leading-relaxed text-steel-400">
-          {footer.tagline}
-        </p>
-        <p
-          class="mt-5 font-mono text-[0.65rem] tracking-[0.18em] text-steel-500 uppercase"
-        >
-          {footer.meta}
-        </p>
+<div class="footer-wrap bg-cream">
+  <footer class="shell">
+    <!-- left utility rail -->
+    <div class="rail" aria-label="Social and locale">
+      <div class="rail-social">
+        {
+          business.socials.map((social) => (
+            <a
+              href={social.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`TK's Towing on ${social.label}`}
+            >
+              <Icon name={social.label.toLowerCase()} class="h-4 w-4" />
+            </a>
+          ))
+        }
       </div>
 
-      <!-- Link columns -->
-      {
-        footer.columns.map((column) => (
-          <nav class="lg:col-span-2" aria-label={column.heading}>
-            <h2 class="font-mono text-[0.65rem] tracking-[0.18em] text-steel-500 uppercase">
-              {column.heading}
-            </h2>
-            <ul class="mt-5 space-y-3">
-              {column.links.map((link) => (
-                <li>
-                  <a
-                    href={link.href}
-                    class="text-[0.95rem] text-steel-300 transition hover:text-signal-400"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        ))
-      }
+      <div class="rail-line" aria-hidden="true"></div>
+      <p class="rail-vert label-caps">{footer.railText}</p>
+      <div class="rail-line" aria-hidden="true"></div>
+      <span class="rail-mark" aria-hidden="true"></span>
+    </div>
 
-      <!-- Contact column -->
-      <div class="lg:col-span-2">
-        <h2
-          class="font-mono text-[0.65rem] tracking-[0.18em] text-steel-500 uppercase"
-        >
-          {footer.contactHeading}
-        </h2>
-        <ul class="mt-5 space-y-4">
-          <li>
-            <a
-              href={business.phoneHref}
-              class="inline-flex items-center gap-2 font-display text-lg font-bold tracking-tight text-white transition hover:text-signal-400"
-            >
-              <Icon name="phone" class="h-4 w-4 text-signal-400" />
+    <!-- body -->
+    <div class="flex flex-col">
+      <div class="inner">
+        <div class="grid-cols">
+          <!-- brand -->
+          <div class="col">
+            <Image
+              src={logo}
+              alt="TK's Towing Service"
+              widths={[180, 270, 360]}
+              sizes="180px"
+              class="h-auto w-[180px]"
+            />
+            <div class="brick-rule" aria-hidden="true"></div>
+            <p class="blurb">{footer.tagline}</p>
+            <a class="phone font-display" href={business.phoneHref}>
               {business.phone}
             </a>
-          </li>
-          <li>
-            <address class="text-[0.95rem] leading-relaxed text-steel-300 not-italic">
+            <div class="meta-row label-caps">
+              <span>{footer.meta}</span>
+              <span>{business.hoursShort}</span>
+            </div>
+            <address class="not-italic mt-4 text-[0.82rem] leading-relaxed text-navy-300">
               {business.address.street}<br />
               {business.address.city}, {business.address.state}
               {business.address.zip}
             </address>
-          </li>
-          <li class="text-[0.95rem] text-steel-300">{business.hoursShort}</li>
-          <li class="flex gap-2 pt-1">
-            {
-              business.socials.map((social) => (
-                <a
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="grid h-10 w-10 place-items-center rounded-full border border-white/12 text-steel-300 transition hover:border-signal-400/50 hover:text-signal-400"
-                >
-                  <Icon name={social.label.toLowerCase()} class="h-4 w-4" />
-                  <span class="sr-only">{social.label}</span>
-                </a>
-              ))
-            }
-          </li>
-        </ul>
+          </div>
+
+          <!-- link columns -->
+          {
+            footer.columns.map((column) => (
+              <nav class="col" aria-label={column.heading}>
+                <h3 class="col-head label-caps">{column.heading}</h3>
+                <ul class="links">
+                  {column.links.map((link) => (
+                    <li>
+                      <a href={link.href}>{link.label}</a>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="legal">
+        <p>{footer.copyright}</p>
+        <nav class="legal-links" aria-label="Credit">
+          <a href={footer.creditHref} target="_blank" rel="noopener noreferrer">
+            {footer.credit}
+          </a>
+        </nav>
       </div>
     </div>
+  </footer>
+</div>
 
-    <div
-      class="mt-14 flex flex-col gap-3 border-t border-white/8 pt-8 text-sm text-steel-500 sm:flex-row sm:items-center sm:justify-between"
-    >
-      <p>{footer.copyright}</p>
-      <p>
-        <a
-          href={footer.creditHref}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="transition hover:text-steel-300">{footer.credit}</a
-        >
-      </p>
-    </div>
-  </div>
-</footer>
+<style>
+  /* ---------- shell ---------- */
+  /* Full bleed: the navy panel runs edge to edge, no cream frame around it. */
+  .footer-wrap {
+    padding: 0;
+  }
+  .shell {
+    position: relative;
+    background: var(--color-navy-900);
+    border: 0;
+    border-top: 1px solid var(--color-navy-700);
+    border-radius: 0;
+    display: grid;
+    grid-template-columns: 76px 1fr;
+    min-height: 520px;
+    overflow: hidden;
+    color: var(--color-navy-100);
+  }
+  .shell::after {
+    /* faint architectural wash */
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      120% 90% at 88% 8%,
+      rgba(124, 78, 75, 0.28),
+      transparent 62%
+    );
+  }
+  .shell a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  /* ---------- left utility rail ---------- */
+  .rail {
+    position: relative;
+    z-index: 2;
+    border-right: 1px solid var(--color-navy-700);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.75rem 0 1.5rem;
+    gap: 1.5rem;
+  }
+  .rail-social {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    align-items: center;
+  }
+  .rail-social a {
+    width: 44px;
+    height: 44px;
+    border-radius: 2px;
+    display: grid;
+    place-items: center;
+    color: var(--color-navy-300);
+    border: 1px solid transparent;
+    transition:
+      color 0.25s ease,
+      border-color 0.25s ease,
+      background-color 0.25s ease,
+      transform 0.25s ease;
+  }
+  .rail-social a:hover,
+  .rail-social a:focus-visible {
+    color: var(--color-navy-900);
+    background: var(--color-brick-200);
+    border-color: var(--color-brick-200);
+    transform: translateY(-2px);
+  }
+  .rail-line {
+    flex: 1;
+    width: 1px;
+    background: linear-gradient(var(--color-navy-700), transparent);
+    min-height: 28px;
+  }
+  .rail-vert {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: 0.6rem;
+    letter-spacing: 0.32em;
+    color: var(--color-navy-400);
+    white-space: nowrap;
+    margin: 0;
+  }
+  .rail-mark {
+    width: 5px;
+    height: 5px;
+    background: var(--color-brick-400);
+    border-radius: 50%;
+  }
+
+  /* ---------- body ---------- */
+  .inner {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 1300px;
+    margin-inline: auto;
+    padding: clamp(2.25rem, 4vw, 3.75rem) clamp(1.5rem, 3.4vw, 3.5rem) 0;
+  }
+  .grid-cols {
+    display: grid;
+    grid-template-columns: 1.35fr 0.85fr 1fr 1.05fr;
+    gap: 0;
+    flex: 1;
+  }
+  .col {
+    padding: 0 clamp(1rem, 2.2vw, 2.25rem);
+  }
+  .col:first-child {
+    padding-left: 0;
+  }
+  .col:last-child {
+    padding-right: 0;
+  }
+  .col + .col {
+    border-left: 1px solid var(--color-navy-700);
+  }
+
+  /* brand block */
+  .brick-rule {
+    width: 56px;
+    height: 2px;
+    background: var(--color-brick-400);
+    margin: 1.15rem 0 1.25rem;
+    border-radius: 2px;
+  }
+  .blurb {
+    margin: 0;
+    font-size: 0.85rem;
+    line-height: 1.75;
+    color: var(--color-navy-200);
+    max-width: 34ch;
+  }
+  .phone {
+    display: inline-block;
+    margin-top: 1.9rem;
+    font-size: clamp(1.35rem, 2.1vw, 1.72rem);
+    font-weight: 700;
+    color: var(--color-cream);
+    border-bottom: 1px solid var(--color-navy-600);
+    padding-bottom: 0.3rem;
+    transition:
+      color 0.25s ease,
+      border-color 0.25s ease;
+  }
+  .phone:hover,
+  .phone:focus-visible {
+    color: var(--color-brick-300);
+    border-color: var(--color-brick-300);
+  }
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.4rem;
+    margin-top: 1.1rem;
+    font-size: 0.65rem;
+    color: var(--color-brick-300);
+  }
+
+  /* link columns */
+  .col-head {
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    color: var(--color-brick-300);
+    margin: 0.35rem 0 1.45rem;
+  }
+  .links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.72rem;
+  }
+  .links a {
+    font-size: 0.9rem;
+    color: var(--color-navy-100);
+    line-height: 1.35;
+    display: inline-block;
+    transition:
+      color 0.22s ease,
+      transform 0.22s ease;
+  }
+  .links a:hover,
+  .links a:focus-visible {
+    color: var(--color-cream);
+    transform: translateX(3px);
+  }
+
+  /* legal bar */
+  .legal {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1300px;
+    margin-inline: auto;
+    margin-top: clamp(2.5rem, 4vw, 3.75rem);
+    border-top: 1px solid var(--color-navy-700);
+    padding: 1.15rem clamp(1.5rem, 3.4vw, 3.5rem);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem 1.5rem;
+  }
+  .legal p {
+    margin: 0;
+    font-size: 0.72rem;
+    color: var(--color-navy-300);
+  }
+  .legal-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.4rem;
+  }
+  .legal-links a {
+    font-size: 0.72rem;
+    color: var(--color-navy-300);
+    transition: color 0.22s ease;
+  }
+  .legal-links a:hover,
+  .legal-links a:focus-visible {
+    color: var(--color-cream);
+  }
+
+  .shell :focus-visible {
+    outline: 2px solid var(--color-brick-300);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 1100px) {
+    .grid-cols {
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem 0;
+    }
+    .col {
+      padding: 0 clamp(1rem, 3vw, 2rem);
+    }
+    .col:nth-child(odd) {
+      padding-left: 0;
+      border-left: 0;
+    }
+    .col:nth-child(3),
+    .col:nth-child(4) {
+      padding-top: 2.25rem;
+      border-top: 1px solid var(--color-navy-700);
+    }
+  }
+  /* Touch sizing. Wider than the 720px layout breakpoint on purpose: a tablet
+     in portrait is still a thumb, and these links are only ~19px tall on their
+     own. The tightened list gap keeps each column's overall height about the
+     same as before. */
+  @media (max-width: 1024px) {
+    .links {
+      gap: 0.1rem;
+    }
+    .links a {
+      padding: 0.62rem 0;
+    }
+    .phone {
+      padding-bottom: 0.5rem;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .shell {
+      grid-template-columns: 1fr;
+    }
+    .rail {
+      flex-direction: row;
+      border-right: 0;
+      border-bottom: 1px solid var(--color-navy-700);
+      padding: 0.85rem 1.25rem;
+      justify-content: flex-start;
+      gap: 1rem;
+    }
+    .rail-line {
+      display: none;
+    }
+    .rail-social {
+      flex-direction: row;
+      gap: 0.35rem;
+    }
+    .rail-vert {
+      writing-mode: horizontal-tb;
+      transform: none;
+      margin-left: auto;
+      font-size: 0.56rem;
+      letter-spacing: 0.22em;
+    }
+    .grid-cols {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+    .col {
+      padding: 1.9rem 0;
+      border-left: 0 !important;
+      border-top: 1px solid var(--color-navy-700);
+    }
+    .col:first-child {
+      padding-top: 0;
+      border-top: 0;
+    }
+    .col:nth-child(3),
+    .col:nth-child(4) {
+      padding-top: 1.9rem;
+    }
+    .legal {
+      flex-direction: column;
+      align-items: flex-start;
+      padding-left: 0;
+      padding-right: 0;
+      margin-left: clamp(1.5rem, 3.4vw, 3.5rem);
+      margin-right: clamp(1.5rem, 3.4vw, 3.5rem);
+    }
+  }
+</style>

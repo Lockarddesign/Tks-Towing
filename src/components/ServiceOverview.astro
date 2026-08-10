@@ -1,0 +1,561 @@
+---
+/**
+ * The focal band on a single service page: the photo, the long-form detail and
+ * the included-items list.
+ *
+ * Related to the bands on /services but deliberately richer — this service is
+ * the whole subject of the page rather than one of four, so the photo runs
+ * larger, the facts strip sits under it, and the included list gets the full
+ * width instead of sharing a column.
+ *
+ * All copy comes from the passed service (site.config `services.items`) plus
+ * `servicePage`; this component holds none of its own.
+ */
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import { business, services, servicePage } from '../site.config';
+
+interface Props {
+  service: {
+    icon: string;
+    title: string;
+    summary: string;
+    detail: string;
+    bullets: readonly string[];
+    imageAlt: string;
+  };
+  image: ImageMetadata;
+}
+
+const { service, image } = Astro.props;
+
+/* The service photos are a mix: two are landscape (2400x1350) and two are
+   portrait phone shots (1350x1800). Forcing every one into a 4/3 frame cropped
+   ~44% off the portraits and left them looking like a flat panel. Astro hands
+   us the real dimensions at build time, so each frame takes the ratio that
+   suits its own image. */
+const isPortrait = image.height > image.width;
+---
+
+<section class="ovw">
+  <div class="ovw__inner">
+    <div class="ovw__grid">
+      <!-- Photo: accent mat behind, thin inner frame, a caption strip naming
+           the service, and an overlapping badge carrying the availability
+           fact. The plain matted photo read flat for the focal image on the
+           page. -->
+      <figure class="ovw__figure" data-reveal>
+        <span class="ovw__mat" aria-hidden="true"></span>
+
+        <div class="ovw__frame" data-orient={isPortrait ? 'portrait' : 'landscape'}>
+          <Image
+            src={image}
+            alt={service.imageAlt}
+            widths={[600, 900, 1300]}
+            sizes="(min-width: 1024px) 52vw, 100vw"
+            loading="eager"
+            fetchpriority="high"
+            class="ovw__img"
+          />
+          <span class="ovw__scrim" aria-hidden="true"></span>
+
+          <figcaption class="ovw__cap">
+            <span class="ovw__cap-ico" aria-hidden="true">
+              <Icon name={service.icon} class="h-4 w-4" />
+            </span>
+            <span class="ovw__cap-text label-caps">{service.title}</span>
+          </figcaption>
+        </div>
+
+        <!-- Availability badge, hero.proof[1] verbatim -->
+        <div class="ovw__badge" aria-hidden="true">
+          <span class="ovw__badge-value font-display">
+            {servicePage.facts[1].value}
+          </span>
+          <span class="ovw__badge-note">{servicePage.facts[1].note}</span>
+        </div>
+      </figure>
+
+      <div class="ovw__copy" data-reveal="110">
+        <p class="ovw__eyebrow label-caps">
+          <span class="ovw__eyebrow-rule" aria-hidden="true"></span>
+          {services.eyebrow}
+        </p>
+        <h2 class="ovw__heading font-display">
+          {service.title} {servicePage.overviewHeadingSuffix}
+        </h2>
+
+        <p class="ovw__lead">{service.summary}</p>
+        <p class="ovw__detail">{service.detail}</p>
+
+        <p class="ovw__points-head label-caps">
+          {servicePage.overview.pointsHeading}
+        </p>
+        <ul class="ovw__points">
+          {
+            servicePage.overview.points.map((point) => (
+              <li class="ovw__point">
+                <span class="ovw__point-ico" aria-hidden="true">
+                  <Icon name={point.icon} class="h-4 w-4" />
+                </span>
+                <span class="ovw__point-copy">
+                  <span class="ovw__point-title">{point.title}</span>
+                  <span class="ovw__point-text">{point.text}</span>
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+
+        <div class="ovw__cta">
+          <a href={business.phoneHref} class="ovw__btn ovw__btn--primary">
+            <Icon name="phone" class="h-[17px] w-[17px]" />
+            {servicePage.overview.primaryCta}
+          </a>
+          <a
+            href={servicePage.overview.secondaryHref}
+            class="ovw__btn ovw__btn--ghost"
+          >
+            {servicePage.overview.secondaryCta}
+            <Icon name="arrow" class="h-[17px] w-[17px]" />
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Facts strip — hero.proof verbatim -->
+    <dl class="ovw__facts" data-reveal="160">
+      {
+        servicePage.facts.map((fact) => (
+          <div class="ovw__fact">
+            <dt class="label-caps">{fact.label}</dt>
+            <dd>
+              <span class="ovw__fact-value font-display">{fact.value}</span>
+              <span class="ovw__fact-note">{fact.note}</span>
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+
+    <!-- Closing pair: call for anything urgent, form for anything that is not. -->
+    <div class="ovw__close" data-reveal="180">
+      <div class="ovw__close-copy">
+        <h2 class="ovw__close-heading font-display">
+          {servicePage.closing.heading}
+        </h2>
+        <p class="ovw__close-body">{servicePage.closing.body}</p>
+      </div>
+      <div class="ovw__close-actions">
+        <a href={business.phoneHref} class="ovw__btn ovw__btn--primary">
+          <Icon name="phone" class="h-[17px] w-[17px]" />
+          {servicePage.closing.primaryCta}
+        </a>
+        <a
+          href={servicePage.closing.secondaryHref}
+          class="ovw__btn ovw__btn--ghost"
+        >
+          {servicePage.closing.secondaryCta}
+          <Icon name="arrow" class="h-[17px] w-[17px]" />
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ovw {
+    background: var(--color-cream);
+    padding-block: 4.5rem;
+  }
+  .ovw__inner {
+    margin-inline: auto;
+    max-width: 1300px;
+    padding-inline: 1.25rem;
+  }
+  .ovw__grid {
+    display: grid;
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  /* ---- Photo ------------------------------------------------------- */
+  .ovw__figure {
+    position: relative;
+    margin: 0;
+  }
+  .ovw__mat {
+    position: absolute;
+    inset: 0;
+    translate: 0.9rem 0.9rem;
+    border-radius: 1rem;
+    border: 1px solid color-mix(in srgb, var(--color-brick-500) 45%, transparent);
+    pointer-events: none;
+  }
+  /* Inner frame: a hairline inset over the photo so the edge reads as a mount
+     rather than a bare crop. */
+  .ovw__frame {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1rem;
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--color-navy-950) 12%, transparent),
+      0 24px 50px -24px rgb(8 11 15 / 0.45);
+  }
+  .ovw__img {
+    display: block;
+    width: 100%;
+    object-fit: cover;
+  }
+  /* Landscape sources keep a 4/3 crop; portrait phone shots get a taller frame
+     so they are not cut in half. */
+  .ovw__frame[data-orient='landscape'] .ovw__img {
+    aspect-ratio: 4 / 3;
+  }
+  .ovw__frame[data-orient='portrait'] .ovw__img {
+    aspect-ratio: 4 / 5;
+  }
+  .ovw__scrim {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      to top,
+      rgb(8 11 15 / 0.82) 0%,
+      rgb(8 11 15 / 0.25) 26%,
+      transparent 55%
+    );
+  }
+  .ovw__cap {
+    position: absolute;
+    right: 1.1rem;
+    bottom: 1.1rem;
+    left: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+  .ovw__cap-ico {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.5rem;
+    border: 1px solid color-mix(in srgb, var(--color-cream) 25%, transparent);
+    background: rgb(8 11 15 / 0.55);
+    backdrop-filter: blur(8px);
+    color: var(--color-brick-300);
+  }
+  .ovw__cap-text {
+    font-size: 0.68rem;
+    color: var(--color-cream);
+  }
+
+  /* Availability badge, overlapping the frame's bottom-left corner. */
+  .ovw__badge {
+    position: absolute;
+    right: -0.5rem;
+    bottom: -1.4rem;
+    padding: 0.8rem 1.1rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--color-line);
+    background: var(--color-paper);
+    box-shadow: 0 14px 30px -14px rgb(8 11 15 / 0.4);
+    text-align: right;
+  }
+  .ovw__badge-value {
+    display: block;
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    color: var(--color-brick-500);
+  }
+  .ovw__badge-note {
+    display: block;
+    margin-top: 0.15rem;
+    font-size: 0.72rem;
+    color: color-mix(in srgb, var(--color-ink) 60%, transparent);
+  }
+
+  /* ---- Copy -------------------------------------------------------- */
+  .ovw__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.72rem;
+    color: var(--color-brick-500);
+  }
+  .ovw__eyebrow-rule {
+    width: 2rem;
+    height: 1px;
+    background: color-mix(in srgb, var(--color-brick-500) 50%, transparent);
+  }
+  .ovw__heading {
+    margin-top: 1.1rem;
+    font-size: clamp(1.8rem, 3.2vw, 2.5rem);
+    font-weight: 700;
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    text-wrap: balance;
+    color: var(--color-navy-700);
+  }
+  .ovw__lead {
+    margin-top: 1.3rem;
+    font-size: 1.125rem;
+    line-height: 1.6;
+    text-wrap: pretty;
+    color: color-mix(in srgb, var(--color-ink) 85%, transparent);
+  }
+
+  .ovw__detail {
+    margin-top: 1rem;
+    font-size: 1.05rem;
+    line-height: 1.75;
+    text-wrap: pretty;
+    color: color-mix(in srgb, var(--color-ink) 80%, transparent);
+  }
+
+  /* ---- Points ------------------------------------------------------ */
+  .ovw__points-head {
+    margin-top: 2rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--color-line);
+    font-size: 0.65rem;
+    color: var(--color-brick-500);
+  }
+  .ovw__points {
+    margin: 1.1rem 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 1rem 1.75rem;
+  }
+  .ovw__point {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+  }
+  .ovw__point-ico {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-line);
+    background: var(--color-paper);
+    color: var(--color-brick-500);
+  }
+  .ovw__point-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+  .ovw__point-title {
+    font-family: var(--font-display);
+    font-size: 0.92rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    line-height: 1.2;
+    color: var(--color-navy-700);
+  }
+  .ovw__point-text {
+    font-size: 0.85rem;
+    line-height: 1.45;
+    color: color-mix(in srgb, var(--color-ink) 65%, transparent);
+  }
+
+  /* Two CTAs close the band. The included list that used to sit here now lives
+     in the `includes` section below, which the second button anchors to. */
+  .ovw__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2.2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-line);
+  }
+
+  /* ---- Facts strip -------------------------------------------------- */
+  .ovw__facts {
+    margin: 3.5rem 0 0;
+    display: grid;
+    gap: 0;
+    border: 1px solid var(--color-line);
+    border-radius: 1rem;
+    overflow: hidden;
+    background: var(--color-paper);
+  }
+  .ovw__fact {
+    padding: 1.4rem 1.6rem;
+    border-top: 1px solid var(--color-line);
+  }
+  .ovw__fact:first-child {
+    border-top: 0;
+  }
+  .ovw__fact dt {
+    font-size: 0.6rem;
+    color: color-mix(in srgb, var(--color-ink) 55%, transparent);
+  }
+  .ovw__fact dd {
+    margin: 0.4rem 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+  .ovw__fact-value {
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    color: var(--color-navy-700);
+  }
+  .ovw__fact-note {
+    font-size: 0.85rem;
+    line-height: 1.4;
+    color: color-mix(in srgb, var(--color-ink) 62%, transparent);
+  }
+
+  /* ---- Closing CTA pair --------------------------------------------- */
+  .ovw__close {
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 2rem;
+    border-radius: 1rem;
+    background: var(--color-navy-900);
+  }
+  .ovw__close-heading {
+    font-size: clamp(1.4rem, 2.4vw, 1.85rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    color: var(--color-cream);
+  }
+  .ovw__close-body {
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--color-navy-100);
+  }
+  .ovw__close-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .ovw__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    padding: 1rem 1.75rem;
+    border-radius: 0.6rem;
+    border: 1px solid transparent;
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition:
+      background-color 0.25s ease,
+      border-color 0.25s ease;
+  }
+  .ovw__btn--primary {
+    background: var(--color-brick-500);
+    color: var(--color-cream);
+  }
+  .ovw__btn--primary:hover {
+    background: var(--color-brick-600);
+  }
+  /* Ghost button, dark-panel version — used inside .ovw__close. */
+  .ovw__btn--ghost {
+    border-color: color-mix(in srgb, var(--color-cream) 30%, transparent);
+    color: var(--color-cream);
+  }
+  .ovw__btn--ghost:hover {
+    border-color: var(--color-cream);
+    background: color-mix(in srgb, var(--color-cream) 8%, transparent);
+  }
+
+  /* Light-panel version. The in-copy pair sits on the cream section, where the
+     cream-on-cream ghost above was invisible. */
+  .ovw__cta .ovw__btn--ghost {
+    border-color: var(--color-line);
+    color: var(--color-navy-700);
+  }
+  .ovw__cta .ovw__btn--ghost:hover {
+    border-color: var(--color-navy-700);
+    background: color-mix(in srgb, var(--color-navy-700) 6%, transparent);
+  }
+
+  @media (min-width: 640px) {
+    .ovw {
+      padding-block: 5.5rem;
+    }
+    .ovw__close {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      padding: 2.25rem 2.5rem;
+    }
+    .ovw__inner {
+      padding-inline: 2rem;
+    }
+    .ovw__facts {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .ovw__fact {
+      border-top: 0;
+      border-left: 1px solid var(--color-line);
+    }
+    .ovw__fact:first-child {
+      border-left: 0;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .ovw {
+      padding-block: 7rem;
+    }
+    /* Equal-height columns. `stretch` makes both tracks the height of the
+       taller one; the photo then fills its column instead of stopping at its
+       own aspect ratio, so the two sides finish level. */
+    .ovw__grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 4.5rem;
+      align-items: stretch;
+    }
+    .ovw__figure,
+    .ovw__frame {
+      height: 100%;
+    }
+    /* The image is taken out of flow so it contributes no height at all. That
+       is what makes the columns equal: in flow it rendered at its own natural
+       ratio (the portrait service photos come out ~776px tall) and drove the
+       row, leaving the shorter copy column stretched with a blank gap above
+       the buttons. Absolute, it simply fills whatever height the COPY sets,
+       cropping instead of dictating. The frame is already `position:
+       relative; overflow: hidden`, so it is the crop box. */
+    .ovw__frame[data-orient='landscape'] .ovw__img,
+    .ovw__frame[data-orient='portrait'] .ovw__img {
+      position: absolute;
+      inset: 0;
+      aspect-ratio: auto;
+      width: 100%;
+      height: 100%;
+    }
+    /* Two-up points list once there is room for it. */
+    .ovw__points {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

@@ -1,0 +1,163 @@
+---
+/**
+ * Scrolling service ticker, sitting directly under the About hero in place of
+ * the old quick-facts strip.
+ *
+ * Every copy of the list slides left by exactly its own width, so as one row
+ * leaves the next lands where it started and the loop is seamless. Three copies
+ * rather than two: two only fill a viewport up to one row wide, and a wide
+ * monitor would show dead space at the moment the first row resets. The
+ * duplicates are aria-hidden — screen readers and crawlers get the list once.
+ *
+ * No JS: it is a CSS animation on a `width: max-content` flex row. With reduced
+ * motion the animation is dropped and it renders as a static row.
+ */
+import { about } from '../site.config';
+
+interface Props {
+  /** Travel right instead of left, so a second instance is not a copy-paste. */
+  reverse?: boolean;
+  /**
+   * Hide the whole band from assistive tech. Set this on any instance after
+   * the first — the service list is already announced once, and repeating it
+   * is noise in a screen reader.
+   */
+  decorative?: boolean;
+}
+
+const { reverse = false, decorative = false } = Astro.props;
+const { label, items } = about.marquee;
+---
+
+<section
+  class:list={['marquee', reverse && 'marquee--reverse']}
+  aria-label={decorative ? undefined : label}
+  aria-hidden={decorative ? 'true' : undefined}
+>
+  {
+    [0, 1, 2].map((copy) => (
+      <ul class="marquee__row" aria-hidden={copy > 0 ? 'true' : undefined}>
+        {items.map((item) => (
+          <li class="marquee__item">
+            <span class="marquee__mark" aria-hidden="true" />
+            {item}
+          </li>
+        ))}
+      </ul>
+    ))
+  }
+</section>
+
+<style>
+  .marquee {
+    position: relative;
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+    background: var(--color-brick-500);
+    border-top: 1px solid color-mix(in srgb, var(--color-navy-950) 22%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--color-navy-950) 22%, transparent);
+  }
+
+  /* Feather both ends so lines enter and leave instead of being chopped.
+     Gradient caps rather than a mask-image: masking the element would fade the
+     bar's own background out too, bleeding the ends to the near-white page
+     behind it. These sit on top in the bar's own colour, so only the text
+     dissolves. */
+  .marquee::before,
+  .marquee::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 2;
+    width: 6rem;
+    max-width: 22%;
+    pointer-events: none;
+  }
+  .marquee::before {
+    left: 0;
+    background: linear-gradient(
+      to right,
+      var(--color-brick-500) 0%,
+      color-mix(in srgb, var(--color-brick-500) 55%, transparent) 45%,
+      transparent 100%
+    );
+  }
+  .marquee::after {
+    right: 0;
+    background: linear-gradient(
+      to left,
+      var(--color-brick-500) 0%,
+      color-mix(in srgb, var(--color-brick-500) 55%, transparent) 45%,
+      transparent 100%
+    );
+  }
+
+  .marquee__row {
+    display: flex;
+    flex: none;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    animation: marquee-run 42s linear infinite;
+  }
+
+  .marquee:hover .marquee__row,
+  .marquee:focus-within .marquee__row {
+    animation-play-state: paused;
+  }
+
+  /* Same keyframes, played backwards — the row travels right. */
+  .marquee--reverse .marquee__row {
+    animation-direction: reverse;
+  }
+
+  .marquee__item {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: 1.6rem;
+    padding: 1.05rem 1.6rem 1.05rem 0;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--color-cream);
+  }
+
+  /* Diamond between entries. Cream, not the usual cyan accent — cyan on this
+     magenta is about 1.3:1 and effectively disappears. */
+  .marquee__mark {
+    width: 0.4rem;
+    height: 0.4rem;
+    flex: none;
+    rotate: 45deg;
+    background: color-mix(in srgb, var(--color-cream) 75%, transparent);
+  }
+
+  @media (min-width: 640px) {
+    .marquee__item {
+      gap: 2.2rem;
+      padding-right: 2.2rem;
+      /* 1.2rem bold clears the 18.66px large-text threshold, which is what
+         keeps cream on this magenta above the 3:1 contrast minimum. */
+      font-size: 1.2rem;
+    }
+  }
+
+  @keyframes marquee-run {
+    to {
+      transform: translateX(-100%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee__row {
+      animation: none;
+    }
+  }
+</style>

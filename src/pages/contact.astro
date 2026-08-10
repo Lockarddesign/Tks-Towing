@@ -1,0 +1,47 @@
+---
+/**
+ * /contact — the homepage contact section given its own page: the call panel,
+ * the details, the quote form, and the FAQ (the questions people ask right
+ * before they call, so they belong on the page where they call).
+ *
+ * The hero's quote form uses the "contact-hero" id prefix, not "contact" — the
+ * Contact section below owns that prefix for its own fields, and duplicate ids
+ * would break the <label for> pairings.
+ *
+ * `pinnedHeader` is required — this page has no tall hero for the sticky header
+ * to reveal itself after.
+ */
+import Base from '../layouts/Base.astro';
+import InnerHero from '../components/InnerHero.astro';
+import Contact from '../components/Contact.astro';
+import Faq from '../components/Faq.astro';
+import { business, contactPage, gallery } from '../site.config';
+import heroImg from '../assets/tk-night-hospital.jpg';
+---
+
+<Base
+  pinnedHeader
+  title={contactPage.meta.title}
+  description={contactPage.meta.description}
+>
+  <InnerHero
+    eyebrow={contactPage.hero.eyebrow}
+    heading={contactPage.hero.heading}
+    lead={contactPage.hero.lead}
+    body={contactPage.hero.body}
+    points={contactPage.hero.points}
+    railText={contactPage.hero.railText}
+    crumbs={contactPage.hero.crumbs}
+    meta={contactPage.hero.meta}
+    image={heroImg}
+    imageAlt={gallery.captions.e}
+    primaryCta={contactPage.primaryCta}
+    primaryHref={business.phoneHref}
+    secondaryCta={contactPage.secondaryCta}
+    secondaryHref={contactPage.secondaryCtaHref}
+    formIdPrefix="contact-hero"
+  />
+  {/* showHead off — the hero above already carries this section's heading. */}
+  <Contact showHead={false} />
+  <Faq />
+</Base>

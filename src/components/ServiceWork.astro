@@ -1,0 +1,105 @@
+---
+/**
+ * "Recent work" — the gallery photos that illustrate THIS service.
+ *
+ * Pulled from `galleryPage.items` by category, using the slug→category map in
+ * `servicePage.work`. That mapping is descriptive (a car on the deck
+ * illustrates flatbed towing), so no photo is filed under a claim about the job
+ * that is not visible in the frame.
+ *
+ * Capped at six so the section stays a taster for /gallery rather than a second
+ * copy of it. If a category ever has fewer than three photos the section hides
+ * itself — two tiles in a three-up grid reads as a mistake.
+ */
+import { Image } from 'astro:assets';
+import SectionHead from './SectionHead.astro';
+import Icon from './Icon.astro';
+import { galleryPage, servicePage } from '../site.config';
+
+import mustang from '../assets/tk-mustang-flatbed.jpg';
+import aston from '../assets/tk-aston-flatbed.jpg';
+import corvette from '../assets/tk-corvette-flatbed.jpg';
+import porsche from '../assets/tk-porsche-flatbed.jpg';
+import audi from '../assets/tk-audi-flatbed.jpg';
+import suv from '../assets/tk-suv-flatbed.jpg';
+import f250 from '../assets/tk-f250-flatbed.jpg';
+import boxVan from '../assets/tk-box-van-flatbed.jpg';
+import trailer from '../assets/tk-trailer-haul.jpg';
+import forklift from '../assets/tk-forklift-haul.jpg';
+import nightEquipment from '../assets/tk-night-equipment-haul.jpg';
+import nightHospital from '../assets/tk-night-hospital.jpg';
+import highway from '../assets/tk-highway-tow.jpg';
+import loadedRoad from '../assets/tk-truck-loaded-road.jpg';
+import garage from '../assets/tk-truck-garage.jpg';
+import fireScene from '../assets/tk-fire-scene.jpg';
+import firefighter from '../assets/tk-firefighter.jpg';
+
+const images: Record<string, ImageMetadata> = {
+  mustang,
+  aston,
+  corvette,
+  porsche,
+  audi,
+  suv,
+  f250,
+  boxVan,
+  trailer,
+  forklift,
+  nightEquipment,
+  nightHospital,
+  highway,
+  loadedRoad,
+  garage,
+  fireScene,
+  firefighter,
+};
+
+interface Props {
+  slug: string;
+}
+
+const { slug } = Astro.props;
+const { eyebrow, heading, cta, ctaHref, categoryBySlug } = servicePage.work;
+
+const category = categoryBySlug[slug];
+const shots = galleryPage.items
+  .filter((item) => item.category === category)
+  .slice(0, 6);
+---
+
+{
+  shots.length >= 3 && (
+    <section class="bg-navy-900 py-20 sm:py-24 lg:py-28">
+      <div class="mx-auto max-w-[81.25rem] px-5 sm:px-8">
+        <div class="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+          <SectionHead eyebrow={eyebrow} heading={heading} tone="dark" />
+          <a
+            href={ctaHref}
+            class="label-caps inline-flex shrink-0 items-center gap-2 text-[0.68rem] text-brick-300 transition hover:gap-3 hover:text-cream"
+          >
+            {cta}
+            <Icon name="arrow" class="h-4 w-4" />
+          </a>
+        </div>
+
+        <ul class="mt-12 grid gap-5 sm:mt-14 sm:grid-cols-2 lg:grid-cols-3">
+          {shots.map((shot, i) => (
+            <li
+              data-reveal={i * 70}
+              class="group overflow-hidden rounded-xl border border-cream/12"
+            >
+              <Image
+                src={images[shot.src]}
+                alt={shot.alt}
+                widths={[400, 700, 1000]}
+                sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                loading="lazy"
+                class="aspect-[4/3] w-full object-cover transition-transform duration-700 ease-out motion-safe:group-hover:scale-105"
+              />
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}

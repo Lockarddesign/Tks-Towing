@@ -1,0 +1,86 @@
+---
+/**
+ * Town index for /coverage — every town we serve, listed once, grouped by
+ * county. Plain text in a multi-column list: this is the section a neighbour
+ * scans for their own town, and the one a search engine reads for the service
+ * area, so it stays crawlable markup rather than chips inside a card.
+ *
+ * The towns are `coverage.regions` verbatim, including the [CONFIRM] notes —
+ * the Burlington and Gloucester lists are still placeholders and must be filled
+ * in with the real municipalities before launch.
+ *
+ * Because this section carries the towns, /coverage passes `showTowns={false}`
+ * to <Coverage>, so the same names are not printed twice on one page. The
+ * "Outside the area?" pairing is not repeated here either — <Coverage> above
+ * already closes on it.
+ */
+import SectionHead from './SectionHead.astro';
+import Icon from './Icon.astro';
+import { coveragePage } from '../site.config';
+
+const { eyebrow, heading, regions } = coveragePage.towns;
+---
+
+<section id="areas" class="bg-cream py-20 sm:py-24 lg:py-28">
+  <div class="mx-auto max-w-[81.25rem] px-5 sm:px-8">
+    <SectionHead eyebrow={eyebrow} heading={heading} tone="light" />
+
+    <div class="mt-14 grid gap-10 sm:mt-16 lg:grid-cols-3 lg:gap-12">
+      {
+        regions.map((region) => (
+          <div data-reveal>
+            <div class="flex items-center justify-between gap-4 border-b border-line pb-4">
+              <div class="flex items-center gap-3.5">
+                <span
+                  class:list={[
+                    'grid h-11 w-11 shrink-0 place-items-center rounded-xl',
+                    region.status === 'Full coverage'
+                      ? 'bg-brick-500/10 text-brick-500'
+                      : 'border border-line bg-paper text-navy-500',
+                  ]}
+                >
+                  <Icon name="map" class="h-5 w-5" />
+                </span>
+                <h3 class="font-display text-xl font-bold tracking-tight text-navy-700 uppercase sm:text-2xl">
+                  {region.name}
+                </h3>
+              </div>
+              <span
+                class:list={[
+                  'label-caps shrink-0 text-[0.6rem]',
+                  region.status === 'Full coverage'
+                    ? 'text-brick-500'
+                    : 'text-navy-500',
+                ]}
+              >
+                {region.status}
+              </span>
+            </div>
+
+            <p class="mt-4 text-[0.92rem] leading-relaxed text-ink/70">
+              {region.note}
+            </p>
+
+            <ul class="mt-6 columns-2 gap-6 [column-fill:balance]">
+              {region.towns.map((town) => (
+                <li class="mb-2.5 flex break-inside-avoid items-start gap-2 text-[0.95rem] text-ink/80">
+                  <Icon
+                    name="pin"
+                    class="mt-0.5 h-3.5 w-3.5 shrink-0 text-brick-500"
+                  />
+                  <span>{town}</span>
+                </li>
+              ))}
+            </ul>
+
+            {region.townsNote && (
+              <p class="label-caps mt-4 text-[0.58rem] leading-relaxed text-ink/50">
+                {region.townsNote}
+              </p>
+            )}
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,182 @@
+---
+import Icon from './Icon.astro';
+import PlaceholderFigure from './PlaceholderFigure.astro';
+import { intro, business } from '../site.config';
+import aboutImg from '../assets/about-firefighter.png';
+---
+
+<!-- overflow-clip, not overflow-hidden: hidden creates a scroll container and
+     silently kills the sticky photo column; clip crops the glow without it. -->
+<section id="about" class="relative overflow-clip bg-paper py-16 sm:py-20 lg:py-24">
+  <!-- faint vintage corner rule -->
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full bg-navy-700/4 blur-3xl"
+  >
+  </div>
+
+  <div class="mx-auto max-w-[81.25rem] px-5 sm:px-8">
+    <div class="grid gap-14 lg:grid-cols-12 lg:items-start lg:gap-16">
+      <!-- Image + seal. The photo is landscape, so on desktop it keeps a
+           near-natural 4:3 frame instead of stretching to the copy's height
+           (which cropped half the frame away). The whole column pins sticky
+           while the longer copy scrolls past. -->
+      <div
+        data-reveal
+        class="relative lg:sticky lg:top-28 lg:col-span-5 lg:self-start"
+      >
+        <div
+          class="relative rounded-xl border border-line bg-cream p-2.5 shadow-sm"
+        >
+          <PlaceholderFigure
+            src={aboutImg}
+            label=""
+            alt={intro.imageAlt}
+            class="aspect-4/5 rounded-lg lg:aspect-[4/3]"
+            sizes="(min-width: 1024px) 40vw, 100vw"
+          />
+          <!-- Brand caption tying the image to the community-service story -->
+          <!-- From sm up the seal sits at the bottom-right, so the caption ends
+               short of it. On mobile the seal moves to the top-right instead
+               (see below) and the caption gets the full width back. -->
+          <div
+            class="absolute right-5 bottom-5 left-5 rounded-lg border border-cream/15 bg-navy-950/70 px-4 py-3 backdrop-blur-sm sm:right-[9.5rem]"
+          >
+            <p class="label-caps text-[0.6rem] text-brick-300">
+              {intro.imageKicker}
+            </p>
+            <p class="mt-1 font-display text-sm font-bold tracking-wide text-cream uppercase">
+              {intro.imageCaption}
+            </p>
+          </div>
+        </div>
+
+        <!-- Vintage seal stamp. Top-right on mobile: at the bottom it sat over
+             the caption and covered the end of the firefighter line. -->
+        <div
+          class="absolute -top-7 -right-4 h-28 w-28 drop-shadow-lg sm:top-auto sm:-right-8 sm:-bottom-8 sm:h-40 sm:w-40 lg:-right-10"
+        >
+          <svg viewBox="0 0 200 200" class="h-full w-full" role="img" aria-label="Established 1996, family owned">
+            <defs>
+              <path
+                id="intro-seal-curve"
+                d="M100,100 m-74,0 a74,74 0 1,1 148,0 a74,74 0 1,1 -148,0"
+                fill="none"
+              ></path>
+            </defs>
+            <circle cx="100" cy="100" r="97" fill="var(--color-navy-700)"></circle>
+            <circle
+              cx="100"
+              cy="100"
+              r="97"
+              fill="none"
+              stroke="var(--color-brick-500)"
+              stroke-width="5"></circle>
+            <circle
+              cx="100"
+              cy="100"
+              r="60"
+              fill="none"
+              stroke="var(--color-brick-300)"
+              stroke-width="1.25"
+              stroke-dasharray="2 4"></circle>
+            <text
+              fill="var(--color-cream)"
+              style="font-family:var(--font-display);font-weight:600;font-size:13px;letter-spacing:2.4px;text-transform:uppercase;"
+            >
+              <textPath href="#intro-seal-curve" startOffset="0"
+                >{intro.seal.ring}</textPath
+              >
+            </text>
+            <!-- center star -->
+            <path
+              d="M100 70 l5.6 11.4 12.6 1.8 -9.1 8.9 2.2 12.5 -11.3 -5.9 -11.3 5.9 2.2 -12.5 -9.1 -8.9 12.6 -1.8 Z"
+              fill="var(--color-brick-500)"></path>
+            <text
+              x="100"
+              y="120"
+              text-anchor="middle"
+              fill="var(--color-brick-300)"
+              style="font-family:var(--font-display);font-weight:600;font-size:11px;letter-spacing:3px;text-transform:uppercase;"
+              >{intro.seal.centerTop}</text
+            >
+            <text
+              x="100"
+              y="140"
+              text-anchor="middle"
+              fill="var(--color-cream)"
+              style="font-family:var(--font-display);font-weight:700;font-size:26px;letter-spacing:1px;"
+              >{intro.seal.centerBig}</text
+            >
+          </svg>
+        </div>
+      </div>
+
+      <!-- Copy -->
+      <div class="lg:col-span-7 lg:pl-4">
+        <p data-reveal class="label-caps flex items-center gap-3 text-xs text-brick-500">
+          <span class="h-px w-8 bg-brick-500/50"></span>
+          {intro.eyebrow}
+        </p>
+
+        <h2
+          data-reveal="80"
+          class="mt-5 font-display text-[clamp(2rem,4.6vw,3.4rem)] leading-[1.02] font-bold tracking-tight text-navy-700 uppercase text-balance"
+        >
+          {intro.heading}
+        </h2>
+
+        <p
+          data-reveal="130"
+          class="mt-7 font-display text-xl leading-snug font-medium tracking-tight text-brick-600 text-pretty sm:text-2xl"
+        >
+          {intro.lead}
+        </p>
+        <p data-reveal="170" class="mt-4 text-[1.02rem] leading-relaxed text-ink/75 text-pretty">
+          {intro.body}
+        </p>
+
+        <!-- Pillars -->
+        <ul
+          data-reveal="220"
+          class="mt-9 grid gap-x-8 gap-y-6 border-t border-line pt-8 sm:grid-cols-2"
+        >
+          {
+            intro.pillars.map((p) => (
+              <li class="flex items-start gap-4">
+                <span class="grid h-11 w-11 shrink-0 place-items-center rounded-lg border border-navy-700/15 bg-navy-700/6 text-navy-700">
+                  <Icon name={p.icon} class="h-5 w-5" />
+                </span>
+                <div>
+                  <h3 class="font-display text-base font-bold tracking-wide text-navy-700 uppercase">
+                    {p.title}
+                  </h3>
+                  <p class="mt-1 text-sm leading-relaxed text-ink/65">
+                    {p.text}
+                  </p>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+
+        <div data-reveal="280" class="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+          <a
+            href={intro.primaryHref}
+            class="inline-flex items-center justify-center gap-2 rounded-md bg-navy-700 px-7 py-4 font-display font-bold tracking-tight text-cream uppercase transition hover:bg-navy-800"
+          >
+            {intro.primaryCta}
+            <Icon name="arrow" class="h-4 w-4" />
+          </a>
+          <a
+            href={business.phoneHref}
+            class="inline-flex items-center justify-center gap-2 rounded-md border border-brick-500/40 px-7 py-4 font-display font-bold tracking-tight text-brick-500 uppercase transition hover:bg-brick-500 hover:text-cream"
+          >
+            <Icon name="phone" class="h-4 w-4" />
+            {intro.secondaryCta}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

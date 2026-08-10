@@ -1,0 +1,55 @@
+---
+/**
+ * /coverage — the area page.
+ *
+ * Runs map → proof and pillar icon strips → what we run across the area →
+ * the full town index → how a call goes → emergency CTA. The icon strips and
+ * service boxes are the homepage idiom, carried onto this page so it reads as
+ * a real area page rather than one map and a list.
+ *
+ * `pinnedHeader` is required — this page has no tall hero for the sticky header
+ * to reveal itself after.
+ */
+import Base from '../layouts/Base.astro';
+import InnerHero from '../components/InnerHero.astro';
+import Coverage from '../components/Coverage.astro';
+import CoverageHighlights from '../components/CoverageHighlights.astro';
+import CoverageServices from '../components/CoverageServices.astro';
+import CoverageTowns from '../components/CoverageTowns.astro';
+import Process from '../components/Process.astro';
+import EmergencyCta from '../components/EmergencyCta.astro';
+import { business, coveragePage, hero } from '../site.config';
+import heroImg from '../assets/tk-highway-tow.jpg';
+---
+
+<Base
+  pinnedHeader
+  title={coveragePage.meta.title}
+  description={coveragePage.meta.description}
+>
+  <InnerHero
+    eyebrow={coveragePage.hero.eyebrow}
+    heading={coveragePage.hero.heading}
+    lead={coveragePage.hero.lead}
+    body={coveragePage.hero.body}
+    points={coveragePage.hero.points}
+    railText={coveragePage.hero.railText}
+    crumbs={coveragePage.hero.crumbs}
+    meta={coveragePage.hero.meta}
+    image={heroImg}
+    imageAlt={hero.slideshow.slides[2].alt}
+    primaryCta={coveragePage.primaryCta}
+    primaryHref={business.phoneHref}
+    secondaryCta={coveragePage.secondaryCta}
+    secondaryHref={coveragePage.secondaryCtaHref}
+    formIdPrefix="coverage"
+  />
+  {/* showHead off — the hero above already carries this section's heading.
+      showTowns off — CoverageTowns below is the full town index. */}
+  <Coverage showHead={false} showTowns={false} />
+  <CoverageHighlights />
+  <CoverageServices />
+  <CoverageTowns />
+  <Process />
+  <EmergencyCta />
+</Base>

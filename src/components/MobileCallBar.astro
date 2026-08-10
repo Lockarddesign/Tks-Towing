@@ -8,18 +8,16 @@ import { business } from '../site.config';
   roadside, so this never leaves the screen on mobile.
 -->
 <div
-  class="fixed inset-x-0 bottom-0 z-50 border-t border-signal-500/30 bg-steel-950/95 px-4 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] backdrop-blur-xl lg:hidden"
+  class="fixed inset-x-0 bottom-0 z-50 border-t border-brick-700/40 bg-navy-800/97 px-4 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] backdrop-blur-xl lg:hidden"
 >
   <a
     href={business.phoneHref}
-    class="flex items-center justify-center gap-3 rounded-full bg-signal-400 px-6 py-4 font-display text-lg font-extrabold tracking-tight text-steel-950 shadow-lg shadow-signal-500/25 active:bg-signal-500"
+    class="flex items-center justify-center gap-3 rounded-md bg-brick-500 px-6 py-4 font-display text-lg font-bold tracking-tight text-cream uppercase shadow-lg shadow-navy-950/30 active:bg-brick-600"
   >
     <Icon name="phone" class="h-5 w-5" />
     Call {business.phone}
   </a>
-  <p
-    class="mt-2 text-center font-mono text-[0.65rem] tracking-[0.18em] text-steel-400 uppercase"
-  >
+  <p class="label-caps mt-2 text-center text-[0.65rem] text-navy-200">
     {business.hoursShort} · Someone answers
   </p>
 </div>

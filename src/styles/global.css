@@ -6,61 +6,82 @@
 
 @theme {
   /* ---- Type -------------------------------------------------------- */
-  --font-display: 'Archivo Variable', 'Archivo', system-ui, sans-serif;
-  --font-sans: 'IBM Plex Sans', system-ui, sans-serif;
-  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  /* Oswald: condensed americana signage face — echoes the logo lettering.
+     Libre Franklin: a Franklin Gothic revival, the classic US body face. */
+  --font-display: 'Oswald Variable', 'Oswald', 'Arial Narrow', sans-serif;
+  --font-sans: 'Libre Franklin Variable', system-ui, sans-serif;
 
-  /* ---- Steel: the dark industrial base ----------------------------- */
-  --color-steel-950: #070a0e;
-  --color-steel-900: #0d1219;
-  --color-steel-850: #131a23;
-  --color-steel-800: #1a2430;
-  --color-steel-700: #263444;
-  --color-steel-600: #35485c;
-  --color-steel-500: #536679;
-  --color-steel-400: #7d8d9e;
-  --color-steel-300: #a7b3c0;
-  --color-steel-200: #cfd6de;
-  --color-steel-100: #e6eaee;
+  /* ── Palette: sampled straight out of src/assets/tks-logo.png ────────
+     cyan    #00BEF7   the dominant lettering colour
+     magenta #F5288F   the outline / shadow accent
+     black   #201820   the "TOWING" letterforms
+     The `navy-*` / `brick-*` / `cream` names are historical — they are the
+     role slots every component already paints with, so the palette lives
+     here and nowhere else. */
 
-  /* ---- Bone: the warm light sections ------------------------------- */
-  --color-bone-50: #faf9f7;
-  --color-bone-100: #f4f2ee;
-  --color-bone-200: #e8e5df;
+  /* ---- Navy slot: PRIMARY, gloss-black graphite structure ---------- */
+  /* Headers, navigation, buttons, icons, links, and dark anchor sections. */
+  --color-navy-50: #eef3f7;
+  --color-navy-100: #d8e1e8;
+  --color-navy-200: #b6c3cd;
+  --color-navy-300: #8797a5;
+  --color-navy-400: #5a6b7a;
+  --color-navy-500: #384957;
+  --color-navy-600: #26333f;
+  --color-navy-700: #1b2530;
+  --color-navy-800: #141c25;
+  --color-navy-900: #0d1219;
+  --color-navy-950: #080b0f;
 
-  /* ---- Signal: the action accent. Reserved for CALL/CTA. ----------- */
-  --color-signal-300: #ffcf6b;
-  --color-signal-400: #ffbb33;
-  --color-signal-500: #ffa60d;
-  --color-signal-600: #e08c00;
+  /* ---- Brick slot: cyan at the light end, magenta at the solid end -- */
+  /* Mirrors how the logo itself uses the two accents: cyan for accents on
+     dark (eyebrows, rules, ticks), magenta for solid CTA fills. */
+  --color-brick-50: #e8f9fe;
+  --color-brick-100: #c9f1fd;
+  --color-brick-200: #92e4fb;
+  --color-brick-300: #00bef7; /* the logo cyan — accents on dark */
+  --color-brick-400: #f857a4; /* hover partner for the CTA below */
+  --color-brick-500: #f5288f; /* the logo magenta — CTA */
+  --color-brick-600: #d81478;
+  --color-brick-700: #ad0d5f;
+  --color-brick-800: #85094a;
 
-  /* ---- Brand blue: carried over from the old site (#0074e0) -------- */
-  --color-brand-300: #6bb6ff;
-  --color-brand-400: #2a93ff;
-  --color-brand-500: #0074e0;
-  --color-brand-600: #005cb3;
+  /* ---- Neutrals: cool near-white page ------------------------------ */
+  --color-cream: #f2f6f9; /* main page background */
+  --color-cream-100: #e7eef3; /* deeper tint for subtle banding */
+  --color-cream-200: #dae4eb;
+  --color-paper: #ffffff; /* cards & content sections */
+  --color-line: #cbd6de; /* borders & dividers */
+  --color-ink: #12181e; /* body text */
 
   /* ---- Motion ------------------------------------------------------ */
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
-  --animate-rise: rise 0.7s var(--ease-out-soft) both;
+}
 
-  @keyframes rise {
-    from {
-      opacity: 0;
-      transform: translate3d(0, 1.25rem, 0);
-    }
-    to {
-      opacity: 1;
-      transform: none;
-    }
+/* Reveal-on-scroll keyframe. Defined at the top level (NOT inside @theme) so
+   Tailwind always emits it — the reveal is triggered from JS via
+   `style.animation = 'rise ...'`, not an `animate-*` utility, and Tailwind
+   only ships @theme keyframes that a utility actually references. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1.25rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
   }
 }
 
-/* Reveal-on-scroll: elements start hidden only when JS + motion are on. */
 @layer base {
   html {
     scroll-behavior: smooth;
     scroll-padding-top: 5.5rem;
+  }
+
+  /* Oswald runs tall and narrow; nudge tracking in for headline polish. */
+  .font-display {
+    letter-spacing: -0.01em;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -74,5 +95,24 @@
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
     }
+  }
+}
+
+/* Small tracked-caps label used for eyebrows and meta lines — the vintage
+   signage detail, replacing the old monospace treatment. */
+@utility label-caps {
+  font-family: var(--font-display);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+}
+
+/* Desktop density: composition signed off at the 85% simulation; root scaling
+   reproduces that look at 100% zoom. Mobile stays full size. Works because
+   type, spacing, and containers are all rem-based (1300px containers were
+   converted to 81.25rem). */
+@media (min-width: 1024px) {
+  html {
+    font-size: 85%;
   }
 }

@@ -1,0 +1,109 @@
+---
+/**
+ * /services/[slug] — one page per service, generated from `services.items`.
+ *
+ * One template covers all four, so the design is shared: a tweak here applies to
+ * every service rather than needing four edits.
+ *
+ * Section order is the order the questions get asked: what is it → what exactly
+ * does it cover → show me → how does a call go → do you come to me → why you →
+ * what else do you do → call now.
+ *
+ * Three of those bands are genuinely per-service (overview, includes, work);
+ * the rest are shared supporting content, which is normal for service pages —
+ * they answer the same questions no matter which service brought you here.
+ *
+ * Meta title and description are composed from the service's own title and
+ * summary — no hand-written marketing copy per page.
+ *
+ * `pinnedHeader` is required — no tall hero for the sticky header to reveal
+ * itself after.
+ */
+import type { ImageMetadata } from 'astro';
+import Base from '../../layouts/Base.astro';
+import InnerHero from '../../components/InnerHero.astro';
+import ServiceOverview from '../../components/ServiceOverview.astro';
+import ServiceIncludes from '../../components/ServiceIncludes.astro';
+import ServiceWork from '../../components/ServiceWork.astro';
+import Process from '../../components/Process.astro';
+import ServiceAreas from '../../components/ServiceAreas.astro';
+import WhyUs from '../../components/WhyUs.astro';
+import Faq from '../../components/Faq.astro';
+import ServiceRelated from '../../components/ServiceRelated.astro';
+import EmergencyCta from '../../components/EmergencyCta.astro';
+import { business, services, servicePage } from '../../site.config';
+
+// Same representative jobs the /services bands use, keyed by slug so the
+// mapping survives any reordering of services.items.
+import imgFlatbed from '../../assets/tk-audi-flatbed.jpg';
+import imgRoadside from '../../assets/tk-highway-tow.jpg';
+import imgDistance from '../../assets/tk-truck-loaded-road.jpg';
+import imgEquipment from '../../assets/tk-forklift-haul.jpg';
+
+const serviceImages: Record<string, ImageMetadata> = {
+  'flatbed-towing': imgFlatbed,
+  'roadside-assistance': imgRoadside,
+  'long-distance-towing': imgDistance,
+  'equipment-transport': imgEquipment,
+};
+
+export function getStaticPaths() {
+  return services.items.map((service) => ({
+    params: { slug: service.slug },
+    props: { service },
+  }));
+}
+
+const { service } = Astro.props;
+const image = serviceImages[service.slug];
+
+/* The bare service name is a weak h1 for local search — it names no place.
+   "in Camden County & South Jersey" restates coverage.intro, which already
+   asserts exactly that area, so this adds no new claim. */
+const heading = `${service.title} in Camden County & South Jersey`;
+const title = `${service.title} in South Jersey | ${business.name}`;
+const description = `${service.summary} ${business.name} — ${business.address.city}, ${business.address.state}. ${business.hoursShort}. Call ${business.phone}.`;
+
+const crumbs = [...servicePage.breadcrumb, { label: service.title }];
+---
+
+<Base pinnedHeader title={title} description={description}>
+  <InnerHero
+    eyebrow={services.eyebrow}
+    heading={heading}
+    lead={service.summary}
+    body={service.detail}
+    points={service.bullets}
+    railText={servicePage.railText}
+    crumbs={crumbs}
+    meta={servicePage.meta}
+    image={image}
+    imageAlt={service.imageAlt}
+    primaryCta={servicePage.primaryCta}
+    primaryHref={business.phoneHref}
+    secondaryCta={servicePage.secondaryCta}
+    secondaryHref={servicePage.secondaryCtaHref}
+    formIdPrefix="service"
+  />
+
+  <ServiceOverview service={service} image={image} />
+
+  {/* Per-service: the bullets given room, then photos of this kind of job. */}
+  <ServiceIncludes bullets={service.bullets} />
+  <ServiceWork slug={service.slug} />
+
+  {/* "How it works" — what happens once you have picked this service. */}
+  <Process />
+
+  <ServiceAreas />
+  <WhyUs />
+
+  {/* The questions people ask right before they call — same set the homepage
+      and /contact carry, and the last thing standing between reading and
+      dialling. */}
+  <Faq />
+
+  <ServiceRelated currentSlug={service.slug} items={services.items} />
+
+  <EmergencyCta />
+</Base>

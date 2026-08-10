@@ -14,8 +14,25 @@ parts of Burlington & Gloucester.
 - **Fonts** (Archivo + IBM Plex) are imported in `src/layouts/Base.astro`, not in
   `global.css`. A CSS `@import` of the fontsource files does not get its `.woff2`
   URLs rewritten by PostCSS, so the fonts 404 in the build. Keep the JS imports.
-- Design tokens live in the `@theme` block of `src/styles/global.css`
-  (steel / bone / signal / brand palettes).
+- **Brand: the logo palette** — cyan `#00BEF7`, hot magenta `#F5288F`, gloss
+  black, sampled out of `src/assets/tks-logo.png`. It is the site-wide palette;
+  there is no theme switch and no second homepage. Design tokens live in the
+  `@theme` block of `src/styles/global.css`, and the `navy-*`/`brick-*`/`cream`
+  names are historical role slots, not colour descriptions:
+  - `navy-*` — PRIMARY, gloss-black graphite (#1B2530 at `navy-700`): headers,
+    nav, buttons, icons, links, and dark anchor sections (hero, story, gallery,
+    footer).
+  - `brick-*` — ACCENT/CTA, split like the logo: cyan (#00BEF7 at `brick-300`)
+    for accents on dark — eyebrows, rules, ticks; magenta (#F5288F at
+    `brick-500`) for solid CTA fills and their hovers.
+  - `cream` (#F2F6F9) cool near-white page bg, `paper` (#fff) cards, `line`
+    (#CBD6DE) borders, `ink` (#12181E) text.
+  - `Hero.astro` keeps `*-rgb` channel triplets of four of these tokens (its
+    scrims need alpha). Retune a token, retune the triplet.
+  - Fonts: **Oswald** (`font-display`, condensed americana signage — echoes the
+    logo) + **Libre Franklin** (`font-sans`, Franklin Gothic revival body).
+    `.label-caps` utility = tracked uppercase Oswald for eyebrows/meta.
+- Logo is the real badge at `src/assets/tks-logo.png`, used in Header + Footer.
 
 ## Content
 

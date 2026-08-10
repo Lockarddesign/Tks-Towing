@@ -1,26 +1,54 @@
 ---
+/** Closing CTA — same fixed photo treatment as the emergency band. */
 import Icon from './Icon.astro';
+import FixedPhotoBg from './FixedPhotoBg.astro';
 import { business, finalCta } from '../site.config';
+import ctaImg from '../assets/tk-truck-loaded-road.jpg';
 ---
 
-<section class="border-t border-white/8 bg-steel-950 py-20 sm:py-24">
+<section class="relative isolate overflow-hidden py-16 sm:py-20 lg:py-24">
+  <FixedPhotoBg src={ctaImg} position="center 60%" strength={0.86} />
+
   <div
-    class="mx-auto flex max-w-7xl flex-col items-start gap-8 px-5 sm:px-8 lg:flex-row lg:items-center lg:justify-between"
+    class="relative mx-auto flex max-w-[81.25rem] flex-col items-start gap-10 px-5 sm:px-8 lg:flex-row lg:items-center lg:justify-between"
   >
-    <h2
-      data-reveal
-      class="font-display text-[clamp(1.9rem,4.5vw,3.25rem)] leading-[1.02] font-extrabold tracking-[-0.03em] text-white text-balance"
-    >
-      {finalCta.heading}
-      <span class="text-signal-400">{finalCta.sub}</span>
-    </h2>
+    <div>
+      <h2
+        data-reveal
+        class="font-display text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.02] font-bold tracking-tight text-cream uppercase text-balance drop-shadow-[0_4px_20px_rgba(0,0,0,0.55)]"
+      >
+        {finalCta.heading}
+        <span class="text-brick-300">{finalCta.sub}</span>
+      </h2>
+      <p
+        data-reveal="60"
+        class="label-caps mt-5 text-[0.7rem] text-cream/70"
+      >
+        {business.hoursShort} · {business.yearsInBusiness} · {business.address.city}, {business.address.state}
+      </p>
+    </div>
+
     <a
       data-reveal="100"
       href={business.phoneHref}
-      class="inline-flex shrink-0 items-center gap-3 rounded-full bg-signal-400 px-8 py-5 font-display text-xl font-extrabold tracking-tight text-steel-950 shadow-xl shadow-signal-500/20 transition hover:bg-signal-300 sm:text-2xl"
+      class="call inline-flex w-full shrink-0 items-center justify-center gap-3 rounded-md bg-brick-500 px-8 py-5 font-display text-xl font-bold tracking-tight text-cream uppercase transition hover:bg-brick-400 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cream sm:w-auto sm:text-2xl"
     >
       <Icon name="phone" class="h-6 w-6" />
       {finalCta.cta}
     </a>
   </div>
 </section>
+
+<style>
+  .call {
+    box-shadow: 0 22px 48px -18px rgba(0, 0, 0, 0.85);
+  }
+  .call:hover {
+    transform: translateY(-2px);
+  }
+  @media (hover: none), (prefers-reduced-motion: reduce) {
+    .call:hover {
+      transform: none;
+    }
+  }
+</style>

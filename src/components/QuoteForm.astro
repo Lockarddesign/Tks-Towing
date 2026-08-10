@@ -1,0 +1,131 @@
+---
+/**
+ * Quote form card, used in the right column of both the About and Services
+ * heroes. A plain flat card — an earlier version tilted in perspective with
+ * offset colour plates behind it, which read as gimmicky, so it is straight.
+ *
+ * Copy is contact.form verbatim. This is a shorter version of the full form in
+ * Contact.astro (no file upload), not new wording.
+ *
+ * Delivery: wired to Netlify Forms (name="quote"). Submissions land under the
+ * site's Forms tab. Registration is guaranteed by public/__forms.html because
+ * CLI (--dir) deploys skip Netlify's live form detection.
+ */
+import Icon from './Icon.astro';
+import { contact } from '../site.config';
+
+interface Props {
+  /** Namespaces the field ids so two forms can coexist on one page. */
+  idPrefix?: string;
+}
+
+const { idPrefix = 'quote' } = Astro.props;
+
+const inputClass =
+  'mt-2 w-full rounded-lg border border-line bg-cream px-4 py-3 text-ink placeholder:text-ink/40 transition focus:border-brick-500/60 focus:bg-paper focus:outline-2 focus:outline-offset-2 focus:outline-brick-500/40';
+const labelClass = 'label-caps block text-[0.62rem] text-navy-600';
+---
+
+<div class="quote-card relative">
+  <div class="relative rounded-2xl bg-paper p-6 sm:p-8">
+    <h2
+      class="font-display text-2xl leading-tight font-bold tracking-tight text-navy-700 uppercase"
+    >
+      {contact.form.heading}
+    </h2>
+    <p class="mt-2 text-[0.88rem] leading-relaxed text-ink/70">
+      {contact.form.note}
+    </p>
+
+    <form
+      class="mt-6 space-y-4"
+      name="quote"
+      method="POST"
+      data-netlify="true"
+      data-netlify-honeypot="bot-field"
+    >
+      <input type="hidden" name="form-name" value="quote" />
+      <p class="hidden">
+        <label>Leave this field empty: <input name="bot-field" /></label>
+      </p>
+      <div class="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label class={labelClass} for={`${idPrefix}-name`}>
+            {contact.form.fields.name}
+          </label>
+          <input
+            class={inputClass}
+            id={`${idPrefix}-name`}
+            name="name"
+            type="text"
+            autocomplete="name"
+            required
+          />
+        </div>
+        <div>
+          <label class={labelClass} for={`${idPrefix}-phone`}>
+            {contact.form.fields.phone}
+          </label>
+          <input
+            class={inputClass}
+            id={`${idPrefix}-phone`}
+            name="phone"
+            type="tel"
+            autocomplete="tel"
+          />
+        </div>
+      </div>
+
+      <div>
+        <label class={labelClass} for={`${idPrefix}-email`}>
+          {contact.form.fields.email}
+        </label>
+        <input
+          class={inputClass}
+          id={`${idPrefix}-email`}
+          name="email"
+          type="email"
+          autocomplete="email"
+          required
+        />
+      </div>
+
+      <div>
+        <label class={labelClass} for={`${idPrefix}-message`}>
+          {contact.form.fields.message}
+        </label>
+        <textarea
+          class={inputClass}
+          id={`${idPrefix}-message`}
+          name="message"
+          rows="3"
+          placeholder={contact.form.fields.messagePlaceholder}
+          required></textarea>
+      </div>
+
+      <button
+        type="submit"
+        class="flex w-full items-center justify-center gap-2.5 rounded-lg bg-brick-500 px-6 py-4 font-display font-bold tracking-wider text-cream uppercase shadow-lg shadow-brick-500/25 transition hover:bg-brick-600 hover:shadow-brick-500/35"
+      >
+        {contact.form.submit}
+        <Icon name="arrow" class="h-[17px] w-[17px]" />
+      </button>
+
+      {/* Guarded: the disclaimer is blank until the form is wired up, and an
+          empty paragraph would still add a gap under the button. */}
+      {contact.form.disclaimer && (
+        <p class="text-[0.7rem] leading-relaxed text-ink/45">
+          {contact.form.disclaimer}
+        </p>
+      )}
+    </form>
+  </div>
+</div>
+
+<style>
+  /* A single soft shadow to lift the card off the dark hero — no tilt, no
+     stacked plates. navy-950 as channels because box-shadow needs alpha. */
+  .quote-card > div {
+    box-shadow: 0 24px 50px -18px rgb(8 11 15 / 0.55);
+  }
+</style>

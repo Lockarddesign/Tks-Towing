@@ -1,0 +1,269 @@
+---
+/**
+ * /gallery — filterable photo grid, three across on desktop.
+ *
+ * Tabs are a real ARIA tablist driven by a small inline script. Every photo is
+ * in the DOM at all times and filtering only toggles a `hidden` attribute, so
+ * with JS off you get the complete grid (all tiles visible, tabs simply do
+ * nothing) and crawlers always see every image. No layout library, no fetch.
+ *
+ * Counts come from the data, not from the DOM, so they are right on first paint
+ * rather than after hydration.
+ */
+import Icon from './Icon.astro';
+import { Image } from 'astro:assets';
+import { galleryPage } from '../site.config';
+
+import mustang from '../assets/tk-mustang-flatbed.jpg';
+import aston from '../assets/tk-aston-flatbed.jpg';
+import corvette from '../assets/tk-corvette-flatbed.jpg';
+import porsche from '../assets/tk-porsche-flatbed.jpg';
+import audi from '../assets/tk-audi-flatbed.jpg';
+import suv from '../assets/tk-suv-flatbed.jpg';
+import f250 from '../assets/tk-f250-flatbed.jpg';
+import boxVan from '../assets/tk-box-van-flatbed.jpg';
+import trailer from '../assets/tk-trailer-haul.jpg';
+import forklift from '../assets/tk-forklift-haul.jpg';
+import nightEquipment from '../assets/tk-night-equipment-haul.jpg';
+import nightHospital from '../assets/tk-night-hospital.jpg';
+import highway from '../assets/tk-highway-tow.jpg';
+import loadedRoad from '../assets/tk-truck-loaded-road.jpg';
+import garage from '../assets/tk-truck-garage.jpg';
+import fireScene from '../assets/tk-fire-scene.jpg';
+import firefighter from '../assets/tk-firefighter.jpg';
+
+const images: Record<string, ImageMetadata> = {
+  mustang,
+  aston,
+  corvette,
+  porsche,
+  audi,
+  suv,
+  f250,
+  boxVan,
+  trailer,
+  forklift,
+  nightEquipment,
+  nightHospital,
+  highway,
+  loadedRoad,
+  garage,
+  fireScene,
+  firefighter,
+};
+
+const { categories, items, countLabel, emptyNote } = galleryPage;
+
+// Tab counts, resolved at build time. 'all' counts everything.
+const counts = Object.fromEntries(
+  categories.map((c) => [
+    c.key,
+    c.key === 'all'
+      ? items.length
+      : items.filter((i) => i.category === c.key).length,
+  ])
+);
+
+// The label a tile shows on hover — its own category, never "All work".
+const labelFor = Object.fromEntries(
+  categories.filter((c) => c.key !== 'all').map((c) => [c.key, c.label])
+);
+---
+
+<section id="work" class="bg-cream py-16 sm:py-20 lg:py-24">
+  <div class="mx-auto max-w-[81.25rem] px-5 sm:px-8">
+    <!-- Tabs -->
+    <div
+      class="flex flex-wrap gap-2.5 border-b border-line pb-6"
+      role="tablist"
+      aria-label="Filter photos by category"
+      data-gallery-tabs
+    >
+      {
+        categories.map((cat, i) => (
+          <button
+            type="button"
+            role="tab"
+            id={`gtab-${cat.key}`}
+            aria-controls="gallery-grid"
+            aria-selected={i === 0 ? 'true' : 'false'}
+            tabindex={i === 0 ? 0 : -1}
+            data-cat={cat.key}
+            class="gtab group inline-flex items-center gap-2.5 rounded-full border px-5 py-3 font-display text-[0.72rem] font-semibold tracking-[0.1em] uppercase transition"
+          >
+            {/* `in` rather than a plain property read: the "all" category has
+                no icon, so the union does not carry the key on every member. */}
+            {'icon' in cat && <Icon name={cat.icon} class="gtab-ico h-4 w-4" />}
+            {cat.label}
+            <span class="gtab-count tabular-nums">{counts[cat.key]}</span>
+          </button>
+        ))
+      }
+    </div>
+
+    <!-- Grid: 3 across on desktop -->
+    <div
+      id="gallery-grid"
+      role="tabpanel"
+      aria-labelledby={`gtab-${categories[0].key}`}
+      class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
+      data-gallery-grid
+    >
+      {
+        items.map((item, i) => (
+          <figure
+            class="gcard group relative overflow-hidden rounded-xl border border-line bg-paper shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-brick-500/35 hover:shadow-xl hover:shadow-navy-950/10"
+            data-cat={item.category}
+          >
+            <Image
+              src={images[item.src]}
+              alt={item.alt}
+              widths={[400, 700, 1000]}
+              sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+              loading={i < 6 ? 'eager' : 'lazy'}
+              class="aspect-[4/3] w-full object-cover transition-transform duration-700 ease-out motion-safe:group-hover:scale-105"
+            />
+
+            {/* Caption plate — the alt text, so the description is visible and
+                not only announced to screen readers. */}
+            <figcaption class="gcard-cap absolute inset-x-0 bottom-0 translate-y-2 p-5 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+              <span class="label-caps text-[0.55rem] text-brick-300">
+                {labelFor[item.category]}
+              </span>
+              <p class="mt-1.5 text-[0.85rem] leading-snug text-cream">
+                {item.alt}
+              </p>
+            </figcaption>
+          </figure>
+        ))
+      }
+    </div>
+
+    <p
+      class="mt-10 hidden text-center text-[0.95rem] text-ink/60"
+      data-gallery-empty
+    >
+      {emptyNote}
+    </p>
+
+    <p class="mt-8 text-center label-caps text-[0.62rem] text-navy-600">
+      <span data-gallery-count>{items.length}</span>
+      {' '}{countLabel}
+    </p>
+  </div>
+</section>
+
+<style>
+  /* Tabs: unselected reads as a quiet outline, selected fills with the CTA. */
+  .gtab {
+    border-color: var(--color-line);
+    background: var(--color-paper);
+    color: var(--color-navy-600);
+  }
+  .gtab:hover {
+    border-color: color-mix(in srgb, var(--color-brick-500) 40%, transparent);
+    color: var(--color-navy-700);
+  }
+  .gtab-ico {
+    color: var(--color-brick-500);
+  }
+  .gtab-count {
+    font-size: 0.62rem;
+    color: color-mix(in srgb, var(--color-ink) 45%, transparent);
+  }
+
+  .gtab[aria-selected='true'] {
+    border-color: var(--color-brick-500);
+    background: var(--color-brick-500);
+    color: var(--color-cream);
+  }
+  .gtab[aria-selected='true'] .gtab-ico,
+  .gtab[aria-selected='true'] .gtab-count {
+    color: color-mix(in srgb, var(--color-cream) 80%, transparent);
+  }
+
+  .gtab:focus-visible {
+    outline: 2px solid var(--color-brick-500);
+    outline-offset: 3px;
+  }
+
+  /* Caption plate needs its own scrim — it sits over the photo, and the photos
+     run light (snow, daylight) as often as dark. */
+  .gcard-cap {
+    background: linear-gradient(
+      to top,
+      color-mix(in srgb, var(--color-navy-950) 94%, transparent) 0%,
+      color-mix(in srgb, var(--color-navy-950) 74%, transparent) 55%,
+      transparent 100%
+    );
+  }
+
+  /* Touch devices have no hover — show the plate rather than hide the caption
+     behind an interaction that never fires. */
+  @media (hover: none) {
+    .gcard-cap {
+      translate: 0 0;
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gcard,
+    .gcard-cap {
+      transition: none;
+    }
+  }
+</style>
+
+<script is:inline>
+  (() => {
+    const tabs = document.querySelector('[data-gallery-tabs]');
+    const grid = document.querySelector('[data-gallery-grid]');
+    const empty = document.querySelector('[data-gallery-empty]');
+    const count = document.querySelector('[data-gallery-count]');
+    if (!tabs || !grid) return;
+
+    const buttons = Array.from(tabs.querySelectorAll('[data-cat]'));
+    const cards = Array.from(grid.querySelectorAll('[data-cat]'));
+
+    const select = (key) => {
+      let shown = 0;
+      cards.forEach((card) => {
+        const match = key === 'all' || card.dataset.cat === key;
+        card.hidden = !match;
+        if (match) shown++;
+      });
+
+      buttons.forEach((btn) => {
+        const on = btn.dataset.cat === key;
+        btn.setAttribute('aria-selected', String(on));
+        btn.tabIndex = on ? 0 : -1;
+        if (on) grid.setAttribute('aria-labelledby', btn.id);
+      });
+
+      if (empty) empty.classList.toggle('hidden', shown > 0);
+      if (count) count.textContent = String(shown);
+    };
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => select(btn.dataset.cat));
+    });
+
+    // Left/Right move between tabs, Home/End jump to the ends — the standard
+    // tablist keyboard contract. Moving focus also selects, which is correct
+    // for tabs whose panels are already in the DOM.
+    tabs.addEventListener('keydown', (e) => {
+      const i = buttons.indexOf(document.activeElement);
+      if (i === -1) return;
+      let next = null;
+      if (e.key === 'ArrowRight') next = (i + 1) % buttons.length;
+      else if (e.key === 'ArrowLeft') next = (i - 1 + buttons.length) % buttons.length;
+      else if (e.key === 'Home') next = 0;
+      else if (e.key === 'End') next = buttons.length - 1;
+      if (next === null) return;
+      e.preventDefault();
+      buttons[next].focus();
+      select(buttons[next].dataset.cat);
+    });
+  })();
+</script>

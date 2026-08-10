@@ -1,0 +1,312 @@
+---
+/**
+ * The four services, one full-width band each, alternating light/dark and
+ * flipping the photo side as they go.
+ *
+ * Rebuilt from four near-identical light rows. Two things carry the upgrade:
+ * the bands alternate tone, so the page has a rhythm rather than one long cream
+ * field; and each block reads as a spec sheet — oversized index numeral, a
+ * matted photo, and the included-items list on hairline-ruled rows instead of a
+ * plain bulleted list.
+ *
+ * Tone is driven by a `data-tone` attribute feeding CSS variables, which keeps
+ * the markup from carrying two parallel sets of colour classes.
+ *
+ * Everything the homepage cards keep behind an accordion is open here — that is
+ * the point of the page. Copy is `services` verbatim.
+ *
+ * Each block's id is the service slug, so /services#flatbed-towing (linked from
+ * the footer, the homepage cards and the hero jump list) lands on it.
+ */
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import { servicesPage, business } from '../site.config';
+
+// Same representative jobs the homepage cards use, in the same order.
+import imgFlatbed from '../assets/tk-audi-flatbed.jpg';
+import imgRoadside from '../assets/tk-highway-tow.jpg';
+import imgDistance from '../assets/tk-truck-loaded-road.jpg';
+import imgEquipment from '../assets/tk-forklift-haul.jpg';
+
+const serviceImages = [imgFlatbed, imgRoadside, imgDistance, imgEquipment];
+---
+
+<div id="services">
+  {
+    servicesPage.items.map((service, i) => (
+      <section
+        id={service.slug}
+        class="svc scroll-mt-24"
+        data-tone={i % 2 === 1 ? 'dark' : 'light'}
+      >
+        <div class="svc__inner">
+          <div class:list={['svc__grid', i % 2 === 1 && 'svc__grid--flip']}>
+            {/* Photo, sitting on an offset accent mat */}
+            <figure class="svc__figure" data-reveal>
+              <span class="svc__mat" aria-hidden="true" />
+              <Image
+                src={serviceImages[i]}
+                alt={service.imageAlt}
+                widths={[600, 900, 1300]}
+                sizes="(min-width: 1024px) 50vw, 100vw"
+                loading={i === 0 ? 'eager' : 'lazy'}
+                class="svc__img"
+              />
+            </figure>
+
+            {/* Copy */}
+            <div class="svc__copy" data-reveal="110">
+              <div class="svc__meta">
+                <span class="svc__index" aria-hidden="true">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <span class="svc__icon">
+                  <Icon name={service.icon} class="h-5 w-5" />
+                </span>
+              </div>
+
+              <h2 class="svc__title font-display">{service.title}</h2>
+
+              <p class="svc__lead">{service.summary}</p>
+              <p class="svc__detail">{service.detail}</p>
+
+              <p class="svc__label label-caps">{servicesPage.detailLabel}</p>
+              <ul class="svc__list">
+                {service.bullets.map((bullet) => (
+                  <li class="svc__item">
+                    <span class="svc__check" aria-hidden="true">
+                      <Icon name="check" class="h-3.5 w-3.5" />
+                    </span>
+                    <span>{bullet}</span>
+                  </li>
+                ))}
+              </ul>
+
+              {/* Route into the service's own page — this band is the summary,
+                  that page is the full thing. */}
+              <a href={`/services/${service.slug}/`} class="svc__more label-caps">
+                {service.title} details
+                <Icon name="arrow" class="h-4 w-4" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    ))
+  }
+
+  <!-- Footnote / CTA bar — the same pairing the homepage section closes on. -->
+  <section class="svc" data-tone="light">
+    <div class="svc__inner">
+      <div
+        data-reveal
+        class="flex flex-col gap-6 rounded-2xl bg-navy-800 p-8 shadow-lg shadow-navy-950/15 sm:flex-row sm:items-center sm:justify-between sm:p-10"
+      >
+        <p class="max-w-2xl text-sm leading-relaxed text-navy-100">
+          {servicesPage.footnote}
+        </p>
+        <a
+          href={business.phoneHref}
+          class="inline-flex shrink-0 items-center justify-center gap-2.5 rounded-md bg-brick-500 px-7 py-4 font-display font-bold tracking-tight text-cream uppercase transition hover:bg-brick-600"
+        >
+          <Icon name="phone" class="h-4 w-4" />
+          Ask us — {business.phone}
+        </a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<style>
+  /* One set of tokens per tone; every rule below reads from these. */
+  .svc[data-tone='light'] {
+    --svc-bg: var(--color-cream);
+    --svc-title: var(--color-navy-700);
+    --svc-lead: color-mix(in srgb, var(--color-ink) 85%, transparent);
+    --svc-body: color-mix(in srgb, var(--color-ink) 70%, transparent);
+    --svc-rule: var(--color-line);
+    --svc-chip-bg: var(--color-paper);
+    --svc-index: color-mix(in srgb, var(--color-navy-700) 12%, transparent);
+    --svc-accent: var(--color-brick-500);
+  }
+  .svc[data-tone='dark'] {
+    --svc-bg: var(--color-navy-950);
+    --svc-title: var(--color-cream);
+    --svc-lead: color-mix(in srgb, var(--color-cream) 88%, transparent);
+    --svc-body: var(--color-navy-100);
+    --svc-rule: color-mix(in srgb, var(--color-cream) 13%, transparent);
+    --svc-chip-bg: color-mix(in srgb, var(--color-cream) 6%, transparent);
+    --svc-index: color-mix(in srgb, var(--color-cream) 10%, transparent);
+    --svc-accent: var(--color-brick-300);
+  }
+
+  .svc {
+    background: var(--svc-bg);
+    padding-block: 4.5rem;
+  }
+  .svc__inner {
+    margin-inline: auto;
+    max-width: 1300px;
+    padding-inline: 1.25rem;
+  }
+
+  .svc__grid {
+    display: grid;
+    align-items: center;
+    gap: 2.5rem;
+  }
+
+  /* ---- Photo ------------------------------------------------------- */
+  .svc__figure {
+    position: relative;
+    margin: 0;
+  }
+  /* Offset mat, like a print mount — depth without a drop shadow. */
+  .svc__mat {
+    position: absolute;
+    inset: 0;
+    translate: 0.9rem 0.9rem;
+    border-radius: 1rem;
+    border: 1px solid color-mix(in srgb, var(--color-brick-500) 45%, transparent);
+    pointer-events: none;
+  }
+  .svc__img {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: 1rem;
+    object-fit: cover;
+  }
+
+  /* ---- Copy -------------------------------------------------------- */
+  .svc__meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .svc__index {
+    font-family: var(--font-display);
+    font-size: 3.4rem;
+    font-weight: 700;
+    line-height: 0.8;
+    letter-spacing: -0.03em;
+    color: var(--svc-index);
+  }
+  .svc__icon {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 0.65rem;
+    border: 1px solid var(--svc-rule);
+    background: var(--svc-chip-bg);
+    color: var(--svc-accent);
+  }
+
+  .svc__title {
+    margin-top: 1.1rem;
+    font-size: clamp(1.9rem, 3.4vw, 2.7rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    text-wrap: balance;
+    color: var(--svc-title);
+  }
+  .svc__lead {
+    margin-top: 1.4rem;
+    font-size: 1.125rem;
+    line-height: 1.6;
+    text-wrap: pretty;
+    color: var(--svc-lead);
+  }
+  .svc__detail {
+    margin-top: 1rem;
+    font-size: 0.98rem;
+    line-height: 1.7;
+    text-wrap: pretty;
+    color: var(--svc-body);
+  }
+
+  .svc__label {
+    margin-top: 2.2rem;
+    padding-top: 1.4rem;
+    border-top: 1px solid var(--svc-rule);
+    font-size: 0.68rem;
+    color: var(--svc-accent);
+  }
+
+  /* Ruled rows rather than loose bullets — reads as a spec list. */
+  .svc__list {
+    margin: 0.4rem 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+  }
+  .svc__item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    padding-block: 0.8rem;
+    border-bottom: 1px solid var(--svc-rule);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--svc-body);
+  }
+  .svc__check {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--svc-accent) 15%, transparent);
+    color: var(--svc-accent);
+  }
+
+  .svc__more {
+    margin-top: 1.8rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding-block: 0.6rem;
+    font-size: 0.68rem;
+    color: var(--svc-accent);
+    transition: gap 0.3s ease;
+  }
+  .svc__more:hover,
+  .svc__more:focus-visible {
+    gap: 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .svc {
+      padding-block: 5.5rem;
+    }
+    .svc__inner {
+      padding-inline: 2rem;
+    }
+    .svc__list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 2.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .svc {
+      padding-block: 7rem;
+    }
+    .svc__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 4.5rem;
+    }
+    /* Flip puts the photo second in the visual order on alternating bands. */
+    .svc__grid--flip .svc__figure {
+      order: 2;
+    }
+    .svc__grid--flip .svc__mat {
+      translate: -0.9rem 0.9rem;
+    }
+  }
+</style>

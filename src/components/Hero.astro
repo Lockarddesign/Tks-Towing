@@ -1,96 +1,1607 @@
 ---
 import { Image } from 'astro:assets';
 import Icon from './Icon.astro';
-import { business, hero } from '../site.config';
-import heroImg from '../assets/hero-truck.jpg';
+import { business, nav, hero } from '../site.config';
+import logo from '../assets/tks-logo.png';
+
+// Slideshow frames — real TK's work, paired with the labels in site.config.
+// Pre-cropped to 16:9 in src/assets (sources are portrait phone photos).
+import slide1 from '../assets/tk-truck-garage.jpg';
+import slide2 from '../assets/tk-porsche-flatbed.jpg';
+import slide3 from '../assets/tk-highway-tow.jpg';
+import slide4 from '../assets/tk-truck-loaded-road.jpg';
+import slide5 from '../assets/tk-night-equipment-haul.jpg';
+
+const slideImages = [slide1, slide2, slide3, slide4, slide5];
+const slides = hero.slideshow.slides.map((s, i) => ({
+  ...s,
+  img: slideImages[i],
+  alt: s.alt,
+}));
+
+const socialCode: Record<string, string> = { Facebook: 'FB', Yelp: 'YELP' };
 ---
 
-<section id="top" class="relative isolate flex min-h-[100svh] flex-col justify-end overflow-hidden bg-steel-950">
-  <!-- Full-bleed hero photo -->
-  <div class="absolute inset-0 -z-10">
-    <Image
-      src={heroImg}
-      alt={hero.imageAlt}
-      widths={[800, 1280, 1920, 2400]}
-      sizes="100vw"
-      loading="eager"
-      fetchpriority="high"
-      decoding="sync"
-      class="h-full w-full object-cover object-center"
-    />
-    <div class="absolute inset-0 bg-steel-950/70"></div>
-    <div
-      class="absolute inset-0 bg-gradient-to-t from-steel-950 via-steel-950/60 to-steel-950/30"
-    >
-    </div>
-    <div
-      class="absolute inset-0 bg-gradient-to-r from-steel-950/90 via-steel-950/30 to-transparent"
-    >
-    </div>
-  </div>
+<section id="top" class="hero-wrap">
+  <div class="shell">
+    <!-- LEFT UTILITY RAIL -->
+    <aside class="rail">
+      <button class="burger" id="hero-burger" aria-label="Open menu" aria-expanded="false" aria-controls="hero-menu">
+        <i></i><i></i><i></i>
+      </button>
+      <div>
+        <div class="rail-rule"></div>
+        <div class="rail-social">
+          {
+            business.socials.map((s) => (
+              <a
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={s.label}
+              >
+                {socialCode[s.label] ?? s.label.slice(0, 2).toUpperCase()}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+      <div class="rail-vert">{hero.rail.vertical}</div>
+    </aside>
 
-  <div class="mx-auto w-full max-w-7xl px-5 pt-28 pb-14 sm:px-8 lg:pt-32 lg:pb-20">
-    <p
-      data-reveal
-      class="flex items-center gap-3 font-mono text-xs tracking-[0.22em] text-signal-400 uppercase sm:text-sm"
-    >
-      <span class="relative flex h-2 w-2">
-        <span
-          class="absolute inline-flex h-full w-full animate-ping rounded-full bg-signal-400 opacity-75"
-        ></span>
-        <span class="relative inline-flex h-2 w-2 rounded-full bg-signal-400"
-        ></span>
-      </span>
-      {hero.eyebrow}
-    </p>
+    <div class="main">
+      <!-- TOP NAVIGATION -->
+      <header class="topnav">
+        <a href="#top" class="brand" aria-label="TK's Towing Service — home">
+          <Image
+            src={logo}
+            alt="TK's Towing Service"
+            widths={[120, 180, 240, 360]}
+            sizes="120px"
+            loading="eager"
+            class="brand-badge"
+          />
+        </a>
+        <nav class="navlinks" aria-label="Primary">
+          {
+            nav.links.map((link, i) =>
+              'children' in link ? (
+                <div class="navdrop">
+                  <a href={link.href} class={i === 0 ? 'is-active' : ''}>
+                    {link.label}
+                    <Icon name="chevron" class="navdrop-caret" />
+                  </a>
+                  <div class="navdrop-panel">
+                    <ul>
+                      {link.children.map((child) => (
+                        <li>
+                          <a href={child.href}>
+                            <Icon name={child.icon} class="navdrop-ico" />
+                            {child.label}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              ) : (
+                <a href={link.href} class={i === 0 ? 'is-active' : ''}>
+                  {link.label}
+                </a>
+              )
+            )
+          }
+        </nav>
+        <a href={business.phoneHref} class="nav-call">
+          <Icon name="phone" class="nav-call-ico" />
+          {nav.callCta}
+        </a>
+      </header>
 
-    <h1
-      data-reveal="80"
-      class="mt-6 max-w-4xl font-display text-[clamp(2.75rem,8.5vw,6.5rem)] leading-[0.92] font-extrabold tracking-[-0.035em] text-white text-balance"
-    >
-      {hero.heading}
-    </h1>
-
-    <p
-      data-reveal="160"
-      class="mt-7 max-w-xl text-lg leading-relaxed text-steel-200 text-pretty sm:text-xl"
-    >
-      {hero.sub}
-    </p>
-
-    <div data-reveal="240" class="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
-      <a
-        href={business.phoneHref}
-        class="group inline-flex items-center justify-center gap-3 rounded-full bg-signal-400 px-8 py-5 font-display text-xl font-extrabold tracking-tight text-steel-950 shadow-2xl shadow-signal-500/25 transition hover:bg-signal-300 hover:shadow-signal-400/40 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-signal-300 sm:text-2xl"
-      >
-        <Icon name="phone" class="h-6 w-6" />
-        {hero.primaryCta}
-      </a>
-      <a
-        href={hero.secondaryCtaHref}
-        class="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 px-8 py-5 font-display text-lg font-bold tracking-tight text-white transition hover:border-white/40 hover:bg-white/5"
-      >
-        {hero.secondaryCta}
-        <Icon name="chevron" class="h-5 w-5" />
-      </a>
-    </div>
-
-    <ul
-      data-reveal="320"
-      class="mt-12 flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-white/10 pt-7 font-mono text-[0.7rem] tracking-[0.16em] text-steel-300 uppercase sm:gap-x-5 sm:text-xs"
-    >
-      {
-        hero.trustLine.map((item, i) => (
-          <>
-            {i > 0 && (
-              <li aria-hidden="true" class="text-signal-400/60">
-                ·
+      <!-- Burger-triggered menu (all viewports). The scrim sits behind the
+           panel and closes it on click. -->
+      <div class="hero-menu-scrim" id="hero-menu-scrim" hidden></div>
+      <nav id="hero-menu" class="hero-menu" aria-label="Menu" hidden>
+        <ul>
+          {
+            nav.links.map((link) => (
+              <li>
+                <a href={link.href} data-hero-menu-link>
+                  {link.label}
+                  <Icon name="arrow" class="hero-menu-arrow" />
+                </a>
+                {/* Sub-items inline rather than behind a second toggle — one
+                    tap to any service instead of two. */}
+                {'children' in link && (
+                  <ul class="hero-menu-sub">
+                    {link.children.map((child) => (
+                      <li>
+                        <a href={child.href} data-hero-menu-link>
+                          <Icon name={child.icon} class="hero-menu-subico" />
+                          {child.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </li>
-            )}
-            <li>{item}</li>
-          </>
-        ))
-      }
-    </ul>
+            ))
+          }
+        </ul>
+        <a href={business.phoneHref} class="hero-menu-call">
+          <Icon name="phone" class="nav-call-ico" />
+          {nav.callCta}
+        </a>
+      </nav>
+
+      <!-- STAGE -->
+      <section
+        class="stage"
+        id="hero-stage"
+        aria-label="Slideshow of recent TK's Towing work"
+      >
+        <!-- PHOTO STACK -->
+        <div class="slides" id="hero-slides">
+          {
+            slides.map((s, i) => (
+              <div class={`slide${i === 0 ? ' is-active' : ''}`}>
+                <Image
+                  src={s.img}
+                  alt={s.alt}
+                  widths={[900, 1440, 2000]}
+                  sizes="100vw"
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                  fetchpriority={i === 0 ? 'high' : undefined}
+                />
+              </div>
+            ))
+          }
+        </div>
+
+        <div class="scrim"></div>
+
+        <!-- PAUSED AFFORDANCE -->
+        <div class="paused" aria-hidden="true"><b><s></s><s></s></b> Paused</div>
+
+        <!-- PROGRESS TICKS -->
+        <div class="ticks" id="hero-ticks">
+          <div class="ticks-label">01 / {String(slides.length).padStart(2, '0')}</div>
+          {
+            slides.map((s, i) => (
+              <button
+                class={`tick${i === 0 ? ' is-active' : ''}`}
+                type="button"
+                aria-label={`Show slide ${i + 1}: ${s.label}`}
+              >
+                <span class="tick-n">{String(i + 1).padStart(2, '0')}</span>
+                <i />
+              </button>
+            ))
+          }
+        </div>
+
+        <!-- SLIDE CAPTION -->
+        <div class="caps" id="hero-caps">
+          {
+            slides.map((s, i) => (
+              <div class={`cap${i === 0 ? ' is-active' : ''}`}>
+                <span class="cap-k">{hero.slideshow.kicker}</span>
+                <span class="cap-v">{s.label}</span>
+              </div>
+            ))
+          }
+        </div>
+
+        <!-- EDITORIAL -->
+        <div class="stage-inner">
+          <div class="editorial">
+            <div class="eyebrow rise rise-1">{hero.eyebrow}</div>
+            <h1 class="rise rise-2">{hero.heading}</h1>
+            <p class="rise rise-3">{hero.sub}</p>
+            <div class="actions rise rise-4">
+              <a href={business.phoneHref} class="btn btn-primary">
+                <Icon name="phone" class="btn-ico" />
+                {hero.primaryCta}
+              </a>
+              <a href={hero.secondaryCtaHref} class="btn btn-ghost">
+                {hero.secondaryCta}
+                <Icon name="chevron" class="btn-ico" />
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- PROOF STRIP -->
+        <div class="strip">
+          {
+            hero.proof.map((cell) => (
+              <div class="cell">
+                <div class="cell-label">{cell.label}</div>
+                <div class="cell-value">
+                  {cell.value}
+                  <small>{cell.note}</small>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </section>
+    </div>
   </div>
 </section>
+
+<style>
+  /* ── Palette ─────────────────────────────────────────────────────────
+     Every colour resolves from a theme token, so retuning the tokens in
+     src/styles/global.css retunes the whole hero. The `*-rgb` triplets exist
+     because the scrims and hairlines need alpha, and you cannot take a
+     channel out of a hex token. Keep each triplet in sync with the token
+     above it. */
+  .hero-wrap {
+    --frame: var(--color-navy-950); /* outer stage */
+    --frame-rgb: 8 11 15;
+    --shell: var(--color-navy-900); /* frame chrome */
+    --shell-rgb: 13 18 25;
+    --shell-2: var(--color-navy-800); /* rail / strip */
+    --ink: var(--color-cream);
+    --ink-rgb: 242 246 249;
+    --accent: var(--color-brick-300); /* reads on the dark shell */
+    --accent-rgb: 0 190 247;
+    --line: rgb(var(--ink-rgb) / 0.14);
+    --ink-dim: rgb(var(--ink-rgb) / 0.66);
+    --ink-faint: rgb(var(--ink-rgb) / 0.38);
+    --brass: var(--accent); /* ticks / rules */
+    --cta: var(--color-brick-500);
+    --cta-hi: var(--color-brick-600);
+    --fade: 1600ms;
+
+    display: block;
+    background: var(--frame);
+    padding: 0;
+    /* Fill the viewport so nothing below the hero peeks above the fold.
+       lvh = largest viewport height, so a retracting mobile URL bar can't
+       expose the next section. */
+    min-height: 100vh;
+    min-height: 100lvh;
+  }
+  .hero-wrap *,
+  .hero-wrap *::before,
+  .hero-wrap *::after {
+    box-sizing: border-box;
+  }
+
+  /* ── SHELL ───────────────────────────────────────────────────────── */
+  .shell {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100lvh;
+    background: var(--shell);
+    color: var(--ink);
+    border: 0;
+    display: grid;
+    grid-template-columns: 76px 1fr;
+    overflow: hidden;
+    font-family: var(--font-sans);
+    line-height: 1.6;
+  }
+  .shell a {
+    text-decoration: none;
+    color: inherit;
+  }
+  .shell ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* ── RAIL ────────────────────────────────────────────────────────── */
+  .rail {
+    background: var(--shell-2);
+    border-right: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 0 28px;
+  }
+  .burger {
+    width: 100%;
+    height: 96px; /* must match .topnav height so the rail rule lines up */
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    background: none;
+    cursor: pointer;
+    transition: background 0.25s;
+  }
+  .burger:hover {
+    background: rgb(var(--accent-rgb) / 0.12);
+  }
+  .burger i {
+    display: block;
+    height: 1.5px;
+    background: var(--ink);
+    border-radius: 2px;
+    transition: width 0.25s;
+  }
+  .burger i:nth-child(1) {
+    width: 22px;
+  }
+  .burger i:nth-child(2) {
+    width: 14px;
+  }
+  .burger i:nth-child(3) {
+    width: 18px;
+  }
+  .burger:hover i:nth-child(2) {
+    width: 22px;
+  }
+  .rail-vert {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-family: var(--font-display);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    white-space: nowrap;
+  }
+  .rail-social {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+    margin-top: 32px;
+  }
+  .rail-social a {
+    font-family: var(--font-display);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    font-weight: 600;
+    color: var(--ink-faint);
+    transition: color 0.2s;
+  }
+  .rail-social a:hover {
+    color: var(--accent);
+  }
+  .rail-rule {
+    width: 1px;
+    height: 56px;
+    background: var(--line);
+    margin: 0 auto;
+  }
+
+  /* ── MAIN COLUMN ─────────────────────────────────────────────────── */
+  .main {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    /* Containing block for the burger menu overlay + its scrim. */
+    position: relative;
+  }
+
+  /* Top navigation */
+  .topnav {
+    height: 96px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    padding: 0 clamp(20px, 3vw, 44px);
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    white-space: nowrap;
+  }
+  /* Real TK's wordmark — the logo carries the name, so no text lockup. */
+  .brand-badge {
+    height: 72px;
+    width: auto;
+  }
+  .navlinks {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin-left: auto;
+  }
+
+  /* ── Services dropdown ─────────────────────────────────────────────
+     Opens on hover and on focus-within, so it is keyboard reachable with no
+     JS. The panel's top padding bridges the gap to the trigger — a real gap
+     would close the menu as the pointer travelled across it. */
+  .navdrop {
+    position: relative;
+  }
+  .navdrop > a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  /* :global — these are <svg>s rendered inside Icon.astro, so they never carry
+     this component's scope attribute (see the .btn-ico note above). */
+  .hero-wrap :global(.navdrop-caret) {
+    width: 11px;
+    height: 11px;
+    transition: transform 0.3s;
+  }
+  .navdrop:hover :global(.navdrop-caret),
+  .navdrop:focus-within :global(.navdrop-caret) {
+    transform: rotate(180deg);
+  }
+  .navdrop-panel {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    z-index: 60;
+    width: 268px;
+    padding-top: 16px;
+    transform: translateX(-50%) translateY(4px);
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.2s,
+      transform 0.2s,
+      visibility 0.2s;
+  }
+  .navdrop:hover .navdrop-panel,
+  .navdrop:focus-within .navdrop-panel {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+  .navdrop-panel ul {
+    padding: 8px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: rgb(var(--shell-rgb) / 0.98);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow: 0 24px 50px -18px rgb(var(--frame-rgb) / 0.75);
+  }
+  .navdrop-panel li a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 11.5px;
+    letter-spacing: 0.1em;
+    color: var(--ink-dim);
+    transition:
+      background-color 0.2s,
+      color 0.2s;
+  }
+  .navdrop-panel li a::after {
+    content: none;
+  }
+  .navdrop-panel li a:hover,
+  .navdrop-panel li a:focus-visible {
+    background: rgb(var(--ink-rgb) / 0.08);
+    color: var(--ink);
+  }
+  .hero-wrap :global(.navdrop-ico) {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    color: var(--accent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-wrap :global(.navdrop-caret),
+    .navdrop-panel {
+      transition: none;
+    }
+  }
+  .navlinks a {
+    font-family: var(--font-display);
+    font-size: 12.5px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    padding-bottom: 4px;
+    position: relative;
+    transition: color 0.2s;
+  }
+  .navlinks a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 1.5px;
+    width: 0;
+    background: var(--brass);
+    transition: width 0.3s;
+  }
+  .navlinks a:hover,
+  .navlinks a.is-active {
+    color: var(--ink);
+  }
+  .navlinks a.is-active::after,
+  .navlinks a:hover::after {
+    width: 100%;
+  }
+  .nav-call {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    margin-left: 10px;
+    padding: 11px 20px;
+    border: 1px solid var(--line);
+    font-family: var(--font-display);
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: all 0.25s;
+    white-space: nowrap;
+  }
+  .nav-call:hover {
+    background: var(--cta);
+    color: #fff;
+    border-color: var(--cta);
+  }
+  /* :global() is required for every icon rule below. The <svg> is rendered
+     inside Icon.astro, so it never carries this component's data-astro-cid —
+     a plain `.nav-call-ico` selector compiles to `.nav-call-ico[data-astro-cid-…]`
+     and silently matches nothing, leaving the icon with no width at all.
+     Anchoring on .hero-wrap keeps the rule confined to this component. */
+  .hero-wrap :global(.nav-call-ico) {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+  }
+
+  /* Burger menu — an overlay on every viewport, absolutely positioned so
+     opening it never pushes the stage down. `top` must match .topnav's
+     height at each breakpoint (.main is a flex container, so the static
+     position of an abspos child is the container's top, not below its
+     siblings). Was `display: none !important` above 900px, which is why
+     the desktop burger did nothing. */
+  .hero-menu {
+    position: absolute;
+    top: 96px; /* .topnav height */
+    left: 0;
+    right: 0;
+    z-index: 70;
+    max-height: calc(100dvh - 140px);
+    overflow-y: auto;
+    border-bottom: 1px solid var(--line);
+    background: var(--shell-2);
+    padding: 8px clamp(20px, 3vw, 44px) 20px;
+    box-shadow: 0 30px 60px -20px rgb(var(--frame-rgb) / 0.8);
+  }
+  /* Click-to-close backdrop behind the open menu. */
+  .hero-menu-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 65;
+    background: rgb(var(--frame-rgb) / 0.55);
+  }
+  .hero-menu li + li {
+    border-top: 1px solid var(--line);
+  }
+  /* Sub-list under Services in the burger menu. */
+  .hero-menu-sub {
+    margin: 0 0 12px;
+    padding-left: 16px;
+    border-left: 1px solid var(--line);
+  }
+  .hero-menu-sub li + li {
+    border-top: 0;
+  }
+  .hero-menu .hero-menu-sub li a {
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 11px 0;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: var(--ink-dim);
+  }
+  .hero-wrap :global(.hero-menu-subico) {
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+    color: var(--accent);
+  }
+
+  .hero-menu li a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 0;
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .hero-wrap :global(.hero-menu-arrow) {
+    width: 18px;
+    height: 18px;
+    color: var(--accent);
+  }
+  .hero-menu-call {
+    margin-top: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 15px;
+    background: var(--cta);
+    color: #fff;
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ── STAGE ───────────────────────────────────────────────────────── */
+  .stage {
+    position: relative;
+    flex: 1;
+    min-height: clamp(560px, 74vh, 760px);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .slides {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: var(--frame);
+  }
+  .slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    z-index: 0;
+    transition: opacity var(--fade) cubic-bezier(0.4, 0, 0.25, 1);
+    will-change: opacity;
+  }
+  .slide.is-out {
+    z-index: 1;
+  }
+  .slide.is-active {
+    opacity: 1;
+    z-index: 2;
+  }
+  .slide :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform-origin: center;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .slide.is-active :global(img),
+    .slide.is-out :global(img) {
+      will-change: transform;
+    }
+    .slide:nth-child(1).is-active :global(img),
+    .slide:nth-child(1).is-out :global(img) {
+      animation: kb1 15s linear forwards;
+    }
+    .slide:nth-child(2).is-active :global(img),
+    .slide:nth-child(2).is-out :global(img) {
+      animation: kb2 15s linear forwards;
+    }
+    .slide:nth-child(3).is-active :global(img),
+    .slide:nth-child(3).is-out :global(img) {
+      animation: kb3 15s linear forwards;
+    }
+    .slide:nth-child(4).is-active :global(img),
+    .slide:nth-child(4).is-out :global(img) {
+      animation: kb4 15s linear forwards;
+    }
+    .slide:nth-child(5).is-active :global(img),
+    .slide:nth-child(5).is-out :global(img) {
+      animation: kb5 15s linear forwards;
+    }
+    .stage.is-paused .slide :global(img) {
+      animation-play-state: paused;
+    }
+  }
+  @keyframes kb1 {
+    from {
+      transform: scale(1.05) translate3d(0, 0, 0);
+    }
+    to {
+      transform: scale(1.22) translate3d(-2.6%, -2%, 0);
+    }
+  }
+  @keyframes kb2 {
+    from {
+      transform: scale(1.24) translate3d(2.4%, 1.4%, 0);
+    }
+    to {
+      transform: scale(1.04) translate3d(0, 0, 0);
+    }
+  }
+  @keyframes kb3 {
+    from {
+      transform: scale(1.13) translate3d(3.4%, -0.6%, 0);
+    }
+    to {
+      transform: scale(1.17) translate3d(-3.4%, 0.6%, 0);
+    }
+  }
+  @keyframes kb4 {
+    from {
+      transform: scale(1.06) translate3d(-1.2%, -2.6%, 0);
+    }
+    to {
+      transform: scale(1.2) translate3d(1.2%, 2.4%, 0);
+    }
+  }
+  @keyframes kb5 {
+    from {
+      transform: scale(1.2) rotate(0.5deg) translate3d(-2%, 1.6%, 0);
+    }
+    to {
+      transform: scale(1.06) rotate(0deg) translate3d(1.6%, -1.2%, 0);
+    }
+  }
+
+  /* Scrim so the copy always reads */
+  .scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    background:
+      linear-gradient(
+        100deg,
+        rgb(var(--frame-rgb) / 0.94) 0%,
+        rgb(var(--frame-rgb) / 0.74) 30%,
+        rgb(var(--frame-rgb) / 0.2) 62%,
+        rgb(var(--frame-rgb) / 0.62) 100%
+      ),
+      linear-gradient(to top, rgb(var(--frame-rgb) / 0.92) 0%, rgb(var(--frame-rgb) / 0) 52%);
+  }
+
+  /* Progress ticks */
+  .ticks {
+    position: absolute;
+    top: clamp(20px, 3vw, 38px);
+    right: clamp(20px, 3vw, 44px);
+    z-index: 6;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+  }
+  .ticks-label {
+    font-family: var(--font-display);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 4px;
+  }
+  .tick {
+    position: relative;
+    width: 3px;
+    height: 38px;
+    padding: 0;
+    border: 0;
+    cursor: pointer;
+    background: rgb(var(--ink-rgb) / 0.2);
+    overflow: hidden;
+    transition:
+      width 0.3s,
+      background 0.3s;
+  }
+  .tick:hover {
+    background: rgb(var(--ink-rgb) / 0.42);
+    width: 5px;
+  }
+  .tick.is-active {
+    width: 5px;
+  }
+  .tick i {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 0;
+    background: var(--brass);
+    display: block;
+  }
+  .tick-n {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: var(--font-display);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--ink-faint);
+    opacity: 0;
+    transition: opacity 0.25s;
+    pointer-events: none;
+  }
+  .tick:hover .tick-n,
+  .tick.is-active .tick-n {
+    opacity: 1;
+  }
+  .tick.is-active .tick-n {
+    color: var(--brass);
+  }
+
+  /* Paused affordance */
+  .paused {
+    position: absolute;
+    top: clamp(20px, 3vw, 38px);
+    left: clamp(20px, 3vw, 44px);
+    z-index: 6;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 14px;
+    border: 1px solid var(--line);
+    background: rgb(var(--frame-rgb) / 0.62);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    font-family: var(--font-display);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    opacity: 0;
+    transform: translateY(-6px);
+    transition:
+      opacity 0.3s,
+      transform 0.3s;
+    pointer-events: none;
+  }
+  .stage.is-paused .paused {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .paused b {
+    display: flex;
+    gap: 2.5px;
+  }
+  .paused b s {
+    display: block;
+    width: 2.5px;
+    height: 9px;
+    background: var(--brass);
+    text-decoration: none;
+  }
+
+  /* Editorial */
+  .stage-inner {
+    position: relative;
+    z-index: 5;
+    padding: clamp(28px, 4vw, 56px) clamp(20px, 3vw, 44px) clamp(20px, 2.6vw, 34px);
+    width: 100%;
+  }
+  .editorial {
+    max-width: 660px;
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 22px;
+  }
+  .eyebrow::before {
+    content: '';
+    width: 34px;
+    height: 1px;
+    background: var(--accent);
+  }
+  .editorial h1 {
+    font-family: var(--font-display);
+    /* The vh term keeps the headline from outgrowing a short laptop window —
+       on a wide-but-short screen 5.4vw alone wraps to four tall lines and
+       pushes the proof strip below the fold. */
+    /* px-clamped, so the desktop density root-scale doesn't reach it — the
+       66px cap is the 85%-density equivalent of the old 78px. */
+    font-size: clamp(40px, min(5.4vw, 9.2vh), 66px);
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .editorial p {
+    font-size: clamp(15px, 1.15vw, 17px);
+    color: var(--ink-dim);
+    max-width: 52ch;
+    line-height: 1.72;
+    margin-bottom: 34px;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 16px 30px;
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: all 0.25s;
+    cursor: pointer;
+    border: 1px solid transparent;
+  }
+  .hero-wrap :global(.btn-ico) {
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+  }
+  .btn-primary {
+    background: var(--cta);
+    color: #fff;
+  }
+  .btn-primary:hover {
+    background: var(--cta-hi);
+    transform: translateY(-2px);
+  }
+  .btn-ghost {
+    border-color: rgb(var(--ink-rgb) / 0.32);
+    color: var(--ink);
+    background: transparent;
+  }
+  .btn-ghost:hover {
+    background: rgb(var(--ink-rgb) / 0.09);
+    border-color: var(--ink);
+  }
+
+  /* One-time entrance */
+  @media (prefers-reduced-motion: no-preference) {
+    .rise {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: heroRise 0.85s cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
+    }
+    .rise-1 {
+      animation-delay: 0.1s;
+    }
+    .rise-2 {
+      animation-delay: 0.22s;
+    }
+    .rise-3 {
+      animation-delay: 0.36s;
+    }
+    .rise-4 {
+      animation-delay: 0.48s;
+    }
+    @keyframes heroRise {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .slides {
+      animation: stageIn 1.2s ease forwards;
+    }
+    @keyframes stageIn {
+      from {
+        opacity: 0;
+        filter: saturate(0.4);
+      }
+      to {
+        opacity: 1;
+        filter: none;
+      }
+    }
+  }
+
+  /* Slide caption */
+  .caps {
+    position: absolute;
+    right: clamp(20px, 3vw, 44px);
+    bottom: calc(clamp(20px, 2.6vw, 34px) + 108px);
+    z-index: 6;
+    text-align: right;
+    height: 44px;
+  }
+  .cap {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+      opacity var(--fade) cubic-bezier(0.4, 0, 0.25, 1),
+      transform var(--fade) cubic-bezier(0.4, 0, 0.25, 1);
+  }
+  .cap.is-active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .cap-k {
+    font-family: var(--font-display);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    display: block;
+    margin-bottom: 5px;
+  }
+  .cap-v {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink);
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+  }
+  .cap-v::before {
+    content: '';
+    width: 22px;
+    height: 1px;
+    background: var(--brass);
+  }
+
+  /* Proof strip */
+  .strip {
+    position: relative;
+    z-index: 5;
+    border-top: 1px solid var(--line);
+    background: rgb(var(--shell-rgb) / 0.62);
+    backdrop-filter: blur(18px) saturate(1.2);
+    -webkit-backdrop-filter: blur(18px) saturate(1.2);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .cell {
+    padding: 22px clamp(20px, 3vw, 40px);
+    border-right: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .cell:last-child {
+    border-right: 0;
+  }
+  .cell-label {
+    font-family: var(--font-display);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .cell-value {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+  }
+  .cell-value small {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--ink-dim);
+    letter-spacing: 0;
+    text-transform: none;
+    margin-top: 3px;
+  }
+
+  /* ── RESPONSIVE ──────────────────────────────────────────────────── */
+
+  /* Below lg the fixed tap-to-call bar (MobileCallBar) floats over the bottom
+     of the viewport, which was hiding the proof strip entirely. Reserve its
+     height — 7rem matches that component's spacer — so the hero ends where the
+     bar begins. svh rather than lvh: it makes the hero fit exactly on first
+     paint, while the browser's URL bar is still on screen. */
+  @media (max-width: 1023px) {
+    .hero-wrap,
+    .shell {
+      min-height: calc(100svh - 7rem - env(safe-area-inset-bottom, 0px));
+    }
+  }
+
+  /* Short windows (laptops, split screens): tighten the vertical rhythm so the
+     editorial block and the proof strip still fit inside one screen. */
+  @media (min-width: 901px) and (max-height: 860px) {
+    .topnav {
+      height: 78px;
+    }
+    .burger {
+      height: 78px;
+    }
+    .hero-menu {
+      top: 78px;
+    }
+    .brand-badge {
+      height: 58px;
+    }
+    .stage {
+      min-height: 0;
+    }
+    .stage-inner {
+      padding-top: clamp(18px, 2.4vw, 32px);
+      padding-bottom: clamp(14px, 1.8vw, 22px);
+    }
+    .editorial h1 {
+      margin-bottom: 16px;
+    }
+    .editorial p {
+      margin-bottom: 22px;
+      line-height: 1.6;
+    }
+    .cell {
+      padding-top: 15px;
+      padding-bottom: 15px;
+    }
+  }
+
+  @media (max-width: 1180px) {
+    .stage {
+      min-height: 620px;
+    }
+    .editorial {
+      max-width: 580px;
+    }
+  }
+  @media (max-width: 900px) {
+    .hero-wrap {
+      padding: 0;
+    }
+    .shell {
+      max-width: none;
+      border: 0;
+      grid-template-columns: 1fr;
+      box-shadow: none;
+    }
+    .rail {
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+      padding: 0;
+    }
+    .burger {
+      width: 64px;
+      height: 62px;
+      border-bottom: 0;
+      border-right: 1px solid var(--line);
+    }
+    .rail-vert,
+    .rail-rule {
+      display: none;
+    }
+    .rail-social {
+      flex-direction: row;
+      gap: 10px;
+      margin: 0 0 0 12px;
+    }
+    /* Padding rather than font-size: the labels stay small, the tap area
+       reaches ~44px. */
+    .rail-social a {
+      display: flex;
+      align-items: center;
+      padding: 13px 14px;
+    }
+    .topnav {
+      height: 72px;
+      gap: 16px;
+    }
+    .hero-menu {
+      top: 72px;
+    }
+    .navlinks {
+      display: none;
+    }
+    .brand-badge {
+      height: 54px;
+    }
+    .nav-call {
+      margin-left: auto;
+      padding: 15px 16px;
+      font-size: 11.5px;
+    }
+    .stage {
+      min-height: 580px;
+    }
+    /* On phones the caption and ticks join the stage's flow instead of being
+       absolutely pinned. The old `bottom: calc(... + 236px)` offsets were
+       tuned to the stacked proof strip, so any change to the strip's height
+       silently dropped them on top of it. In flow they simply stack:
+       editorial → caption → ticks → strip. */
+    .caps {
+      position: relative;
+      order: 2;
+      inset: auto;
+      height: 44px;
+      margin: 0 clamp(20px, 3vw, 44px) 10px;
+      text-align: left;
+    }
+    .cap {
+      right: auto;
+      left: 0;
+    }
+    .ticks {
+      position: relative;
+      order: 3;
+      inset: auto;
+      flex-direction: row;
+      align-items: center;
+      gap: 14px;
+      margin: 0 clamp(20px, 3vw, 44px) 18px;
+    }
+    .ticks-label {
+      margin: 0 4px 0 0;
+    }
+    .stage-inner {
+      order: 1;
+    }
+    .strip {
+      order: 4;
+    }
+    /* Horizontal bars on touch: the visible rule stays hairline-thin while
+       ::after carries a ~44px target. Safe to unclip because .tick i is sized
+       in %, so it never escapes the button, and .tick-n is hidden here. */
+    .tick {
+      width: 34px;
+      height: 3px;
+      overflow: visible;
+    }
+    .tick:hover,
+    .tick.is-active {
+      width: 34px;
+      height: 5px;
+    }
+    .tick i {
+      width: 0;
+      height: 100%;
+    }
+    .tick::after {
+      content: '';
+      position: absolute;
+      inset: -20px -3px;
+    }
+    .tick-n {
+      display: none;
+    }
+    /* Stacking these three cells cost ~334px and pushed the strip off a phone
+       screen entirely. Three columns keeps the whole hero on one screen. */
+    .strip {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .cell {
+      padding: 14px 12px;
+      gap: 4px;
+    }
+    .cell-label {
+      font-size: 9px;
+      letter-spacing: 0.16em;
+    }
+    .cell-value {
+      font-size: 15px;
+      line-height: 1.15;
+    }
+    .cell-value small {
+      font-size: 11px;
+      margin-top: 2px;
+    }
+  }
+  /* Desktop: the panel attaches to the burger's rail edge — compact and
+     left-anchored for straight-down travel, not a full-width curtain. */
+  @media (min-width: 901px) {
+    .hero-menu {
+      right: auto;
+      width: min(400px, 100%);
+      max-height: calc(100vh - 96px);
+      padding: 8px 28px 24px;
+      border-right: 1px solid var(--line);
+    }
+  }
+  /* Narrow phones. The tick / caption / strip rules above already apply here;
+     this block only handles what genuinely differs at this width. */
+  @media (max-width: 520px) {
+    .stage {
+      min-height: 0;
+    }
+    /* At 360px the headline was wrapping to five 40px lines and pushing the
+       whole hero ~90px past the fold. Scaling with vw keeps it on screen. */
+    .editorial h1 {
+      font-size: clamp(30px, 8.6vw, 42px);
+      margin-bottom: 15px;
+    }
+    .editorial p {
+      font-size: 14.5px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .eyebrow {
+      margin-bottom: 14px;
+      font-size: 10px;
+    }
+    .stage-inner {
+      padding-top: 20px;
+      padding-bottom: 14px;
+    }
+    .actions {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
+    }
+    .btn {
+      justify-content: center;
+      padding: 15px 24px;
+    }
+    .caps {
+      margin-bottom: 6px;
+    }
+    .ticks {
+      margin-bottom: 12px;
+    }
+    .cell {
+      padding: 12px 9px;
+    }
+    /* Three stat columns on a 360px screen leaves no room for the sub-notes. */
+    .cell-value small {
+      display: none;
+    }
+  }
+
+  /* 360px-class phones. Everything above fits a 390px screen with a few px to
+     spare, but at 360 the headline takes an extra line and "Camden County"
+     wraps, which together pushed the proof strip ~53px underneath the fixed
+     call bar. Trimmed here rather than globally so larger phones keep the
+     roomier spacing. */
+  @media (max-width: 400px) {
+    .eyebrow {
+      margin-bottom: 10px;
+    }
+    .editorial h1 {
+      margin-bottom: 12px;
+    }
+    .editorial p {
+      line-height: 1.5;
+      margin-bottom: 14px;
+    }
+    .stage-inner {
+      padding-top: 14px;
+      padding-bottom: 10px;
+    }
+    .caps {
+      height: 30px;
+      margin-bottom: 4px;
+    }
+    .ticks {
+      margin-bottom: 10px;
+    }
+    .cell {
+      padding: 10px 8px;
+    }
+    /* 13px keeps "Camden County" on one line in a 120px column. */
+    .cell-value {
+      font-size: 13px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .slide,
+    .cap {
+      transition: none;
+    }
+    .slide :global(img) {
+      animation: none;
+      transform: scale(1.03);
+    }
+    .tick i {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    var stage = document.getElementById('hero-stage');
+    if (!stage) return;
+
+    var DUR = 6000; // dwell per slide
+    var fadeMs = 1600;
+    var slides = Array.from(stage.querySelectorAll<HTMLElement>('.slide'));
+    var caps = Array.from(stage.querySelectorAll<HTMLElement>('.cap'));
+    var ticks = Array.from(stage.querySelectorAll<HTMLElement>('.tick'));
+    var label = stage.querySelector('.ticks-label');
+    var idx = 0,
+      timer: number | null = null,
+      outTimer: number | null = null,
+      startedAt = 0,
+      remain = DUR,
+      paused = false;
+
+    var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function pad(n: number) {
+      return (n < 10 ? '0' : '') + n;
+    }
+
+    function fill(i: number, ms: number) {
+      ticks.forEach(function (t, n) {
+        var bar = t.querySelector('i') as HTMLElement;
+        var vertical = t.offsetHeight >= t.offsetWidth;
+        var prop = vertical ? 'height' : 'width';
+        bar.style.height = vertical ? '0%' : '100%';
+        bar.style.width = vertical ? '100%' : '0%';
+        if (n === i) {
+          t.classList.add('is-active');
+          bar.style.transition = 'none';
+          void bar.offsetHeight;
+          bar.style.transition = prop + ' ' + ms + 'ms linear';
+          bar.style.setProperty(prop, '100%');
+        } else {
+          t.classList.remove('is-active');
+          bar.style.transition = prop + ' .35s ease';
+          bar.style.setProperty(prop, '0%');
+        }
+      });
+    }
+
+    function schedule(ms: number) {
+      if (timer) clearTimeout(timer);
+      timer = window.setTimeout(function () {
+        show((idx + 1) % slides.length);
+      }, ms);
+    }
+
+    function show(i: number) {
+      var prev = idx;
+      idx = i;
+      if (prev !== i) {
+        slides[prev].classList.remove('is-active');
+        slides[prev].classList.add('is-out');
+        if (outTimer) clearTimeout(outTimer);
+        outTimer = window.setTimeout(function () {
+          slides.forEach(function (s) {
+            if (!s.classList.contains('is-active')) s.classList.remove('is-out');
+          });
+        }, fadeMs);
+      }
+      slides[i].classList.remove('is-out');
+      slides[i].classList.add('is-active');
+      caps.forEach(function (c, n) {
+        c.classList.toggle('is-active', n === i);
+      });
+      if (label) label.textContent = pad(i + 1) + ' / ' + pad(slides.length);
+      fill(i, DUR);
+      remain = DUR;
+      startedAt = Date.now();
+      if (!paused) schedule(DUR);
+    }
+
+    function pause() {
+      if (paused || still) return;
+      paused = true;
+      if (timer) clearTimeout(timer);
+      remain = Math.max(0, remain - (Date.now() - startedAt));
+      var bar = ticks[idx].querySelector('i') as HTMLElement;
+      var vertical = ticks[idx].offsetHeight >= ticks[idx].offsetWidth;
+      var cs = window.getComputedStyle(bar);
+      var frozen = vertical ? cs.height : cs.width;
+      bar.style.transition = 'none';
+      bar.style.setProperty(vertical ? 'height' : 'width', frozen);
+      stage!.classList.add('is-paused');
+    }
+
+    function resume() {
+      if (!paused || still) return;
+      paused = false;
+      stage!.classList.remove('is-paused');
+      var bar = ticks[idx].querySelector('i') as HTMLElement;
+      var vertical = ticks[idx].offsetHeight >= ticks[idx].offsetWidth;
+      var prop = vertical ? 'height' : 'width';
+      void bar.offsetHeight;
+      bar.style.transition = prop + ' ' + remain + 'ms linear';
+      bar.style.setProperty(prop, '100%');
+      startedAt = Date.now();
+      schedule(remain);
+    }
+
+    ticks.forEach(function (t, n) {
+      t.addEventListener('click', function () {
+        paused = false;
+        stage!.classList.remove('is-paused');
+        show(n);
+      });
+    });
+
+    stage.addEventListener('mouseenter', pause);
+    stage.addEventListener('mouseleave', resume);
+    stage.addEventListener('focusin', pause);
+    stage.addEventListener('focusout', resume);
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) pause();
+      else resume();
+    });
+
+    if (still) {
+      var bar0 = ticks[0].querySelector('i') as HTMLElement;
+      bar0.style.height = '100%';
+      if (label) label.textContent = '01 / ' + pad(slides.length);
+    } else {
+      fill(0, DUR);
+      remain = DUR;
+      startedAt = Date.now();
+      schedule(DUR);
+    }
+
+    // Burger → overlay menu (all viewports)
+    var burger = document.getElementById('hero-burger');
+    var menu = document.getElementById('hero-menu') as HTMLElement | null;
+    var menuScrim = document.getElementById('hero-menu-scrim');
+    if (burger && menu) {
+      var setOpen = function (open: boolean) {
+        menu!.hidden = !open;
+        if (menuScrim) menuScrim.hidden = !open;
+        burger!.setAttribute('aria-expanded', String(open));
+        if (open) {
+          var first = menu!.querySelector<HTMLElement>('a');
+          if (first) first.focus();
+        }
+      };
+      var closeMenu = function () {
+        setOpen(false);
+        (burger as HTMLElement).focus();
+      };
+      burger.addEventListener('click', function () {
+        setOpen(menu!.hidden);
+      });
+      // Any link tap closes it (call CTA included).
+      menu.querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () {
+          setOpen(false);
+        });
+      });
+      if (menuScrim) menuScrim.addEventListener('click', closeMenu);
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !menu!.hidden) closeMenu();
+      });
+      // Click anywhere outside the panel (scrim covers most of it, but the
+      // topnav sits above the scrim's z-index) also closes.
+      document.addEventListener('click', function (e) {
+        if (menu!.hidden) return;
+        var t = e.target as Node;
+        if (!menu!.contains(t) && !burger!.contains(t)) setOpen(false);
+      });
+    }
+  })();
+</script>

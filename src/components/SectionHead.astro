@@ -3,7 +3,7 @@ interface Props {
   eyebrow?: string;
   heading: string;
   intro?: string;
-  /** 'dark' sits on steel, 'light' sits on bone. */
+  /** 'dark' sits on navy, 'light' sits on cream/paper. */
   tone?: 'dark' | 'light';
   align?: 'left' | 'center';
   class?: string;
@@ -13,7 +13,7 @@ const {
   eyebrow,
   heading,
   intro,
-  tone = 'dark',
+  tone = 'light',
   align = 'left',
   class: className = '',
 } = Astro.props;
@@ -33,15 +33,15 @@ const isDark = tone === 'dark';
     eyebrow && (
       <p
         class:list={[
-          'flex items-center gap-3 font-mono text-xs tracking-[0.22em] uppercase',
+          'label-caps flex items-center gap-3 text-xs',
           align === 'center' && 'justify-center',
-          isDark ? 'text-signal-400' : 'text-brand-500',
+          isDark ? 'text-brick-300' : 'text-brick-500',
         ]}
       >
         <span
           class:list={[
             'h-px w-8',
-            isDark ? 'bg-signal-400/60' : 'bg-brand-500/40',
+            isDark ? 'bg-brick-300/60' : 'bg-brick-500/50',
           ]}
         />
         {eyebrow}
@@ -50,8 +50,8 @@ const isDark = tone === 'dark';
   }
   <h2
     class:list={[
-      'mt-5 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[0.98] font-extrabold tracking-[-0.02em] text-balance',
-      isDark ? 'text-white' : 'text-steel-900',
+      'mt-5 font-display text-[clamp(2.25rem,5.5vw,4rem)] leading-[0.98] font-bold tracking-tight text-balance uppercase',
+      isDark ? 'text-cream' : 'text-navy-700',
     ]}
   >
     {heading}
@@ -61,7 +61,7 @@ const isDark = tone === 'dark';
       <p
         class:list={[
           'mt-6 text-lg leading-relaxed text-pretty sm:text-xl',
-          isDark ? 'text-steel-300' : 'text-steel-600',
+          isDark ? 'text-navy-100' : 'text-ink/75',
         ]}
       >
         {intro}

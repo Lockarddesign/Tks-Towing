@@ -1,0 +1,51 @@
+---
+/**
+ * /services — the homepage services section given its own page, with every
+ * service's detail and bullet list open instead of behind an accordion.
+ *
+ * Masthead is InnerHero (the framed-shell shape, echoing the homepage hero)
+ * rather than PageHero. This is the trial page for that treatment — if it is
+ * approved the other inner pages move to it too, and PageHero/ServicesHero can
+ * both be retired.
+ *
+ * `pinnedHeader` is required — this page has no tall hero for the sticky header
+ * to reveal itself after.
+ */
+import Base from '../layouts/Base.astro';
+import InnerHero from '../components/InnerHero.astro';
+import ServicesJumpStrip from '../components/ServicesJumpStrip.astro';
+import ServicesDetail from '../components/ServicesDetail.astro';
+import Process from '../components/Process.astro';
+import EmergencyCta from '../components/EmergencyCta.astro';
+import { business, servicesPage } from '../site.config';
+import heroImg from '../assets/tk-truck-loaded-road.jpg';
+---
+
+<Base
+  pinnedHeader
+  title={servicesPage.meta.title}
+  description={servicesPage.meta.description}
+>
+  <InnerHero
+    eyebrow={servicesPage.hero.eyebrow}
+    heading={servicesPage.hero.heading}
+    lead={servicesPage.hero.lead}
+    railText={servicesPage.hero.railText}
+    crumbs={servicesPage.hero.crumbs}
+    meta={servicesPage.hero.meta}
+    image={heroImg}
+    imageAlt={servicesPage.items[2].imageAlt}
+    primaryCta={servicesPage.primaryCta}
+    primaryHref={business.phoneHref}
+    secondaryCta={servicesPage.secondaryCta}
+    secondaryHref={servicesPage.secondaryCtaHref}
+    formIdPrefix="services"
+  >
+    <ServicesJumpStrip />
+  </InnerHero>
+
+  <ServicesDetail />
+  {/* "How it works" belongs here — it is what happens after you pick one. */}
+  <Process />
+  <EmergencyCta />
+</Base>
