@@ -1,3 +1,5 @@
+> **Canonical client brain:** `~/Lockard Vault/Clients/TKS Towing/`. Read its `README.md`, `CLIENT.md` and `LOG.md` first.
+
 # TK's Towing — site repo notes
 
 Astro 6.1 + Tailwind 4.3 rebuild of tkstowing.biz. Family-owned flatbed towing &

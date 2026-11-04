@@ -26,6 +26,8 @@ const {
 // Keep in step with --color-navy-900 in src/styles/global.css.
 const themeColor = '#0d1219';
 
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
+
 const localBusiness = {
   '@context': 'https://schema.org',
   '@type': 'AutoRepair',
@@ -50,11 +52,9 @@ const localBusiness = {
       'Wednesday',
       'Thursday',
       'Friday',
-      'Saturday',
-      'Sunday',
     ],
-    opens: '00:00',
-    closes: '23:59',
+    opens: '07:00',
+    closes: '19:00',
   },
   areaServed: [
     { '@type': 'AdministrativeArea', name: 'Camden County, NJ' },
@@ -76,6 +76,7 @@ const localBusiness = {
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
     <meta name="theme-color" content={themeColor} />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />

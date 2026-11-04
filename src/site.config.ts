@@ -666,7 +666,7 @@ export const whyUs = {
     {
       title: 'Honest pricing',
       icon: 'tag',
-      body: 'You get the price before the truck rolls. No surprise line items when it is time to settle up.',
+      body: 'You get the price before the tow truck rolls. No surprise line items when it is time to settle up.',
     },
   ],
 } as const;
@@ -691,7 +691,7 @@ export const process = {
     {
       title: 'We dispatch fast',
       icon: 'clock',
-      summary: 'A truck starts rolling from Haddon Township.',
+      summary: 'A tow truck starts rolling from Haddon Township.',
       detail:
         'We confirm the price and send the nearest available flatbed. We tell you what to expect instead of leaving you guessing.',
     },
@@ -854,7 +854,7 @@ export const galleryPage = {
 /* ------------------------------------------------------------------ */
 
 export const emergency = {
-  eyebrow: 'Need a truck right now?',
+  eyebrow: 'Need a tow truck right now?',
   heading: "Stranded? We'll come to you.",
   body: 'Open Monday through Friday, 7am to 7pm. One call gets a flatbed moving your way.',
   cta: `Call ${business.phone}`,
@@ -871,7 +871,7 @@ export const faq = {
   items: [
     {
       q: 'What are your hours?',
-      a: 'We are open Monday through Friday, 7am to 7pm. Call during business hours and you get a real person and a truck moving your way.',
+      a: 'We are open Monday through Friday, 7am to 7pm. Call during business hours and you get a real person and a tow truck moving your way.',
     },
     {
       q: 'What areas do you cover?',
@@ -920,7 +920,7 @@ export const contact = {
   callNote: 'Tap to call. A real person answers.',
   form: {
     heading: 'Request a quote',
-    note: 'For non-urgent quotes and equipment transport questions. If you need a truck now, call instead.',
+    note: 'For non-urgent quotes and equipment transport questions. If you need a tow truck now, call instead.',
     fields: {
       name: 'Name',
       email: 'Email',
@@ -1018,7 +1018,7 @@ export const quoteDrawer = {
   heading: contact.form.heading,
   /* Second sentence of contact.form.note, verbatim — the drawer header is
      capped at one short reassurance line. */
-  note: 'If you need a truck now, call instead.',
+  note: 'If you need a tow truck now, call instead.',
   closeLabel: 'Close quote form',
   fields: {
     name: contact.form.fields.name,

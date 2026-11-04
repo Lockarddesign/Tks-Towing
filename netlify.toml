@@ -1,0 +1,7 @@
+# The automatic *.netlify.app redirect was not firing: the subdomain served
+# 200 copies of every page. Force it to the live domain.
+[[redirects]]
+  from = "https://tks-towing.netlify.app/*"
+  to = "https://tkstowing.biz/:splat"
+  status = 301
+  force = true

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://tkstowing.biz/sitemap-index.xml

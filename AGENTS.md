@@ -1,3 +1,5 @@
+> **Canonical client brain:** `~/Lockard Vault/Clients/TKS Towing/`. Read its `README.md`, `CLIENT.md` and `LOG.md` first.
+
 ## Development
 
 When starting the dev server, use background mode:
