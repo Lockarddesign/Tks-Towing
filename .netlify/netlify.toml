@@ -1,13 +1,13 @@
+redirectsOrigin = "config"
 plugins = []
 headers = []
-redirects = []
 
 [functions]
 
 [functions."*"]
 
 [build]
-publish = "/Users/willlockard/Projects/tks-towing/dist"
+publish = "/Users/willsmacmini/Projects/tks-towing/dist"
 publishOrigin = "ui"
 commandOrigin = "ui"
 command = "npm run build"
@@ -25,3 +25,15 @@ command = "npm run build"
 [build.processing.js]
 
 [build.services]
+
+[[redirects]]
+from = "https://tks-towing.netlify.app/*"
+to = "https://tkstowing.biz/:splat"
+status = 301.0
+force = true
+
+[redirects.query]
+
+[redirects.conditions]
+
+[redirects.headers]
